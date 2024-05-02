@@ -303,7 +303,7 @@ struct DocDashView: View {
                         .padding(.vertical, 20)
                     }
                 }
-                .padding(.leading, 40.5)
+                .padding(.leading, 4.5)
                 .padding(.trailing, 4.5)
             }
             .background(Color.white)

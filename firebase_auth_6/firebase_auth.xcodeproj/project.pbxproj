@@ -36,10 +36,10 @@
 		3FB3F0B82BDA47EC004C0790 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B72BDA47EC004C0790 /* AccountView.swift */; };
 		3FB3F0BA2BDABD0A004C0790 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */; };
 		3FB3F0BC2BDAC2E7004C0790 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0BB2BDAC2E7004C0790 /* TabBarView.swift */; };
+		8401021F2BE3947200FB6F00 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8401021E2BE3947100FB6F00 /* GoogleService-Info.plist */; };
 		840346912BDA1D32000D6055 /* DoctorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346902BDA1D32000D6055 /* DoctorDetailView.swift */; };
 		840346932BDA1D7E000D6055 /* ViewDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346922BDA1D7E000D6055 /* ViewDoc.swift */; };
 		840346952BDA1D9E000D6055 /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346942BDA1D9E000D6055 /* AppointmentView.swift */; };
-		843D00312BE38A3F00D594A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843D00302BE38A3F00D594A9 /* GoogleService-Info.plist */; };
 		8453FF622BE24AE9008CDEE7 /* DocNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF612BE24AE9008CDEE7 /* DocNav.swift */; };
 		8453FF662BE25B2D008CDEE7 /* PatientHistoryUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */; };
 /* End PBXBuildFile section */
@@ -70,10 +70,10 @@
 		3FB3F0B72BDA47EC004C0790 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
 		3FB3F0BB2BDAC2E7004C0790 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		8401021E2BE3947100FB6F00 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		840346902BDA1D32000D6055 /* DoctorDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetailView.swift; sourceTree = "<group>"; };
 		840346922BDA1D7E000D6055 /* ViewDoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDoc.swift; sourceTree = "<group>"; };
 		840346942BDA1D9E000D6055 /* AppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
-		843D00302BE38A3F00D594A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8453FF612BE24AE9008CDEE7 /* DocNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocNav.swift; sourceTree = "<group>"; };
 		8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHistoryUpdate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,7 +127,6 @@
 			children = (
 				3F399D932BD97392008AD694 /* Firebase */,
 				3F399D872BD971A9008AD694 /* Assets.xcassets */,
-				843D00302BE38A3F00D594A9 /* GoogleService-Info.plist */,
 				3F399D892BD971A9008AD694 /* Preview Content */,
 			);
 			path = firebase_auth;
@@ -150,6 +149,7 @@
 				3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */,
 				3F399DAA2BD97502008AD694 /* RegistrationView.swift */,
 				3F399DAC2BD97530008AD694 /* ProfileView.swift */,
+				8401021E2BE3947100FB6F00 /* GoogleService-Info.plist */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -273,7 +273,7 @@
 			files = (
 				3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */,
 				3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */,
-				843D00312BE38A3F00D594A9 /* GoogleService-Info.plist in Resources */,
+				8401021F2BE3947200FB6F00 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

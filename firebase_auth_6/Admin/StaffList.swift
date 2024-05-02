@@ -129,6 +129,13 @@ struct StaffList: View {
     @State private var doctors: [Doctor1] = []
     @State private var patients: [Patient1] = []
     @State private var appointments: [Appointment1] = []
+    let totalPatientsVisited = 100
+        let activeAppointmentsCount = 20
+        let closedAppointmentsCount = 30
+        let scheduledAppointmentsCount = 50
+        
+        let doctorsAppointments = [("Dr. John Doe", 5), ("Dr. Jane Smith", 8),("Dr. Varad Kadtan", 14)] // Sample data
+        
 
     var body: some View {
         VStack {
@@ -149,7 +156,8 @@ struct StaffList: View {
                         }
                     }
                 }
-            } else if selectedTab == 2 {
+            }
+            else if selectedTab == 2 {
                 ScrollView {
                     LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
                         ForEach(patients.indices, id: \.self) { index in
@@ -166,6 +174,19 @@ struct StaffList: View {
                     }
                 }
             }
+            else {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        OverviewTabView(totalPatientsVisited: totalPatientsVisited,
+                                                        activeAppointmentsCount: activeAppointmentsCount,
+                                                        closedAppointmentsCount: closedAppointmentsCount,
+                                                        scheduledAppointmentsCount: scheduledAppointmentsCount,
+                                                        doctorsAppointments: doctorsAppointments)
+                    }
+                    .padding()
+                }
+            }
+
             
             Spacer()
             
@@ -173,9 +194,9 @@ struct StaffList: View {
                 isAddStaffSheetPresented.toggle()
             }) {
                 Text("Add New Staff")
+                    .foregroundColor(.white)
                     .padding()
-                    .background(Color.blue.opacity(0.2))
-                    .foregroundColor(.blue)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
         }
@@ -250,6 +271,103 @@ struct StaffList: View {
                 return Appointment1(data: data)
             }
         }
+    }
+}
+struct OverviewTabView: View {
+    var totalPatientsVisited: Int
+    var activeAppointmentsCount: Int
+    var closedAppointmentsCount: Int
+    var scheduledAppointmentsCount: Int
+    var doctorsAppointments: [(doctorName: String, appointmentsCount: Int)]
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 30) {
+                Text("Overview")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 30)
+                
+                HStack(spacing: 30) {
+                    OverviewCard(title: "Total Patients Visited", count: totalPatientsVisited, icon: "person.fill")
+                    OverviewCard(title: "Active Appointments", count: activeAppointmentsCount, icon: "calendar.circle.fill")
+                }
+                
+                HStack(spacing: 30) {
+                    OverviewCard(title: "Closed Appointments", count: closedAppointmentsCount, icon: "checkmark.circle.fill")
+                    OverviewCard(title: "Scheduled Appointments", count: scheduledAppointmentsCount, icon: "clock.fill")
+                }
+                
+                
+             
+            }
+            .padding(.horizontal,20)
+            .padding(.bottom,20)
+
+            
+        }
+        .frame(maxWidth: 3000, maxHeight: 2500)
+        .background(Color.white)
+    }
+}
+
+struct OverviewCard: View {
+    var title: String
+    var count: Int
+    var icon: String
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.system(size: 60))
+                    .foregroundColor(Color.blue)
+                
+                Text(title)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color.gray)
+            }
+            
+            Text("\(count)")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            LineGraphView(count: count) // Line graph visualization
+            
+        }
+        .padding(20)
+        .frame(width: 500, height:300) // Fixed size for consistency
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(radius: 5)
+    }
+}
+
+struct LineGraphView: View {
+    var count: Int
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                let stepWidth = geometry.size.width / CGFloat(count)
+                
+                // Move to the starting point
+                path.move(to: CGPoint(x: 0, y: geometry.size.height))
+                
+                // Iterate through each step and add points to the path
+                for i in 0..<count {
+                    let x = CGFloat(i) * stepWidth
+                    let y = CGFloat.random(in: geometry.size.height * 0.2...geometry.size.height * 0.8) // Randomize the y-coordinate
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+                
+                // Add a final line to the end of the view
+                path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height))
+            }
+            .stroke(Color.blue, lineWidth: 2)
+        }
+        .padding(20)
     }
 }
 
