@@ -21,30 +21,83 @@ struct Appointment: Identifiable {
 struct AppointmentCard: View {
     let appointment: Appointment
 
+   
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
+        
+        ZStack {
+             RoundedRectangle(cornerRadius: 10)
+                 .fill(Color.blue.opacity(0.2))
+                 .frame(width: 300, height: 150)
+                 .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.blue, lineWidth: 1) // Adjust the border width as needed
+                        )
+            
+                 
+             
+            HStack(spacing: 10) {
                 Image("doc")
                     .resizable()
-                    .frame(width: 50, height: 50)
-                
-                VStack(alignment: .leading) {
+                    .frame(width: 80, height: 80) // Adjust the width and height values
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(Color.blue.opacity(0.2), lineWidth: 2)
+                    )
+                    .padding(.leading, 50)
+                    
+              
+                VStack(alignment: .leading, spacing: 5) {
                     Text(appointment.name)
-                        .font(.headline)
+                        .font(.title3).bold()
                     Text(appointment.department)
                         .font(.subheadline)
+                    Text(" \(appointment.time)")
+                        .frame(width: 90)
+                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                        .background(Color.blue.opacity(0.2))
+                        .foregroundColor(.blue)
+                        .cornerRadius(10)
+                        .font(.subheadline)
+                    
+                    Text("\(appointment.date)")
+                        .frame(width:90)
+                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                        .background(Color.blue.opacity(0.2))
+                        .foregroundColor(.blue)
+                        .cornerRadius(10)
+                        .font(.subheadline)
                 }
-            }
-            
-            Text("Time Slot : \(appointment.time)")
-                .font(.subheadline)
-            Text("Date : \(appointment.date)")
-                .font(.subheadline)
-        }
-        .frame(width: 300)
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue).opacity(0.2))
-        .padding(.horizontal)
+                .frame(maxWidth: .infinity)
+             
+             }
+         }
+        
+//        HStack(spacing: 15) {
+//            Image("doc")
+//                .resizable()
+//                .frame(width: 50, height: 50)
+//                .cornerRadius(10)
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .stroke(Color.blue.opacity(0.2), lineWidth: 2)
+//                )
+//
+//            VStack(alignment: .leading, spacing: 5) {
+//                Text(appointment.name)
+//                    .font(.headline)
+//                Text(appointment.department)
+//                    .font(.subheadline)
+//                Text("Time Slot: \(appointment.time)")
+//                    .font(.subheadline)
+//                Text("Date: \(appointment.date)")
+//                    .font(.subheadline)
+//            }
+//        }
+//        .padding()
+//        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue.opacity(0.2)))
+//        .padding(.horizontal)
+//        .frame(width: 280)
     }
 }
 
