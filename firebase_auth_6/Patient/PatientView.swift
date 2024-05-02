@@ -13,11 +13,9 @@ struct PatientView: View {
     @State private var latestLabTestReports: String = ""
     @State private var showImagePicker: Bool = false
     
-    
-    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var showProfileView = false // State variable to control the visibility of the PatientProfileView
-
+    
     var popularDoctors: [Doctor] = [
         Doctor(name: "Dr. Smith", specialization: "Dentist", photo: "doc"),
         Doctor(name: "Dr. Johnson", specialization: "Ophthalmologist", photo: "doc"),
@@ -29,13 +27,7 @@ struct PatientView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                //  GeometryReader { reader in
-                //                  Color.blue
-                //                     .frame(height: reader.safeAreaInsets.top, alignment: .top)
-                //                      .ignoresSafeArea()
-                //            }
                 ScrollView {
-                    
                     VStack(alignment: .leading) {
                         VStack{
                             Text("Patient View")
@@ -43,7 +35,6 @@ struct PatientView: View {
                                 .foregroundStyle(.white)
                                 .font(.title)
                                 .padding(.top)
-                            
                             
                             Text("Get Health Checkup done today!")
                                 .font(.headline)
@@ -58,8 +49,6 @@ struct PatientView: View {
                                     .background(Color.blue)
                                     .cornerRadius(10)
                             }
-                                
-                            
                         }
                         .foregroundColor(.clear)
                         .frame(width: 398, height: 300)
@@ -75,7 +64,6 @@ struct PatientView: View {
                             )
                         )
                         .cornerRadius(42)
-                        
                         .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
                         .ignoresSafeArea()
                         .offset(y:-59)
@@ -130,19 +118,38 @@ struct PatientView: View {
                                     .padding(.vertical)
                                     .frame(maxWidth: .infinity,alignment: .leading)
                             }
-                            
-                            
-                            
                         }
                         .padding()
                         .offset(y:-59)
                     }
-                    
-                    
                 }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                                                                        guard let phoneNum = URL(string: "tel://102") else { return }
+                                                                        UIApplication.shared.open(phoneNum)
+                        }) {
+                            Image(systemName: "phone.fill")
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                                .foregroundColor(.blue)
+                                .padding()
+                                .background(Color.blue.opacity(0.2))
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                                .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+                                .offset(y:-50)
+                        }
+                    }
+                }
+                .edgesIgnoringSafeArea(.bottom)
             }
         }
-        }
+    }
 }
 
 
