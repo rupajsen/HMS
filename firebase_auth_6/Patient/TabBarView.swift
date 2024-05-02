@@ -8,7 +8,7 @@ struct TabBarView: View {
     var body: some View {
 
                 TabView {
-                    PatientView()
+                    ProfileView()
                         .tabItem {
                             Image(systemName: "house.fill")
                             Text("Dashboard")

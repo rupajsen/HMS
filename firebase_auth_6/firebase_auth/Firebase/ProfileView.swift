@@ -15,7 +15,7 @@ struct ProfileView: View {
         if let user = viewModel.currentUser {
                         switch user.userType {
                         case .patient:
-                            TabBarView()
+                            PatientView()
                         case .doctor:
                             DocDashView()
                         case .admin:
