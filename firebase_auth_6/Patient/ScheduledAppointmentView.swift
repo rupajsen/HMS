@@ -286,7 +286,7 @@ struct ScheduledAppointmentView: View {
             
             let data = document.data()
             let name = data?["fullName"] as? String ?? ""
-            let specialization = data?["specialisation"] as? String ?? ""
+            let specialization = data?["specialization"] as? String ?? ""
             let photo = data?["photo"] as? String ?? ""
             
             let doctor = Doctor(name: name, specialization: specialization, photo: photo)
