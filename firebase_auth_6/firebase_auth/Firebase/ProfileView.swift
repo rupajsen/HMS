@@ -17,9 +17,9 @@ struct ProfileView: View {
                         case .patient:
                             PatientView()
                         case .doctor:
-                            DocNav()
+                           DocView()
                         case .admin:
-                            StaffList()
+                            AdView()
                         }
                     }
     }

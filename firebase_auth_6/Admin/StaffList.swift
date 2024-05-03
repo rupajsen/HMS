@@ -124,7 +124,7 @@ import SwiftUI
 import Firebase
 
 struct StaffList: View {
-    @State private var selectedTab = 1
+    @State private var selectedTab = 0
     @State private var isAddStaffSheetPresented = false
     @State private var doctors: [Doctor1] = []
     @State private var patients: [Patient1] = []
