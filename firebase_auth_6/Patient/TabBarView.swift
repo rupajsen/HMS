@@ -19,6 +19,11 @@ struct TabBarView: View {
                             Image(systemName: "calendar")
                             Text("Appointments")
                         }
+                    ReportView(appointmentDate: "May 10, 2024", doctorName: "Dr. Smith")
+                        .tabItem {
+                            Image(systemName: "newspaper.fill")
+                            Text("Reports")
+                        }
                     
                     AccountView()
                         .tabItem {
