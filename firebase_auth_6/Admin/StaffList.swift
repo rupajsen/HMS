@@ -202,11 +202,7 @@ struct StaffList: View {
             else {
                 ScrollView {
                     VStack(spacing: 20) {
-                        OverviewTabView(totalPatientsVisited: totalPatientsVisited,
-                                                        activeAppointmentsCount: activeAppointmentsCount,
-                                                        closedAppointmentsCount: closedAppointmentsCount,
-                                                        scheduledAppointmentsCount: scheduledAppointmentsCount,
-                                                        doctorsAppointments: doctorsAppointments)
+                        OverviewTabView()
                     }
                     .padding()
                 }
@@ -320,43 +316,246 @@ struct StaffList: View {
         }
     }
 }
+import SwiftUI
+
 struct OverviewTabView: View {
-    var totalPatientsVisited: Int
-    var activeAppointmentsCount: Int
-    var closedAppointmentsCount: Int
-    var scheduledAppointmentsCount: Int
-    var doctorsAppointments: [(doctorName: String, appointmentsCount: Int)]
-    
     var body: some View {
         ScrollView {
-            VStack(spacing: 30) {
-                Text("Overview")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top, 30)
-                
-                HStack(spacing: 30) {
-                    OverviewCard(title: "Total Patients Visited", count: totalPatientsVisited, icon: "person.fill")
-                    OverviewCard(title: "Active Appointments", count: activeAppointmentsCount, icon: "calendar.circle.fill")
-                }
-                
-                HStack(spacing: 30) {
-                    OverviewCard(title: "Closed Appointments", count: closedAppointmentsCount, icon: "checkmark.circle.fill")
-                    OverviewCard(title: "Scheduled Appointments", count: scheduledAppointmentsCount, icon: "clock.fill")
-                }
-                
-                
-             
-            }
-            .padding(.horizontal,20)
-            .padding(.bottom,20)
-
             
+            HStack(){
+                
+            VStack(alignment: .leading) {
+                GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
+                                        .frame(width: 755, height: 150)
+                                        .padding()
+                   
+                
+            
+                
+                HStack() {// Total Bookings Card
+                    TotalBookingsCard(title: "Total Bookings", value: "220") {
+                                                // Action to add appointment
+                                            }
+                                            .padding(.horizontal)
+                    TotalBookingsCard(title: "Total patients", value: "170") {
+                                                // Action to add appointment
+                                            }
+                                            .padding(.horizontal)
+                    TotalBookingsCard(title: "Doctors Available", value: "40") {
+                                                // Action to add appointment
+                                            }
+                                            .padding(.horizontal)
+                }
+                
+                
+                // Summary Statistics
+                
+                HStack() {
+                    // Patient List
+                    PatientListView()
+                    
+                    // Doctors List
+                    
+                }
+                
+            }
+            
+                VStack(){
+                    SummaryStatisticsView()
+                        .offset(y:-60)
+                    
+                    DoctorListView()
+                        .offset(y:-70)
+                }
+                .offset(y:60)
         }
-        .frame(maxWidth: 3000, maxHeight: 2500)
-        .background(Color.white)
+        }
     }
 }
+
+struct TotalBookingsCard: View {
+    var title: String
+    var value: String
+    var buttonAction: () -> Void
+    
+    var body: some View {
+        VStack {
+            Text(title)
+                .font(.system(size: 20, weight: .bold, design: .default))
+                .fontWeight(.bold)
+                .foregroundColor(.black)
+            
+            Text(value)
+                .font(.system(size: 20, weight: .bold, design: .default))
+                .foregroundColor(.black)
+            
+            Button(action: buttonAction) {
+                Text("View Appointments")
+                    .foregroundColor(.white)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 30)
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+            .shadow(color: Color.gray.opacity(0.3), radius: 10, x: 0, y: 5)
+        }
+        .padding()
+        
+        .frame(width:230 ,height: 180)
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
+    }
+}
+
+
+struct SummaryStatisticsView: View {
+    var body: some View {
+        VStack {
+            // Summary Card
+            VStack(alignment: .leading) {
+                Text("Summary")
+                    .font(.headline)
+                Divider()
+                SummaryRow(status: "Pending", count: "35", color: .yellow)
+                SummaryRow(status: "Confirmed", count: "70", color: .green)
+                SummaryRow(status: "Canceled", count: "10", color: .red)
+                SummaryRow(status: "Rescheduled", count: "5", color: .orange)
+            }
+            .frame(width: 260)
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            
+        }
+        .offset(y:-60)
+        .padding()
+    }
+}
+
+struct SummaryRow: View {
+    var status: String
+    var count: String
+    var color: Color
+    
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(color)
+                .frame(width: 10, height: 10)
+            Text("\(status): \(count)")
+        }
+    }
+}
+
+struct PatientListView: View {
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Patients")
+                .font(.headline)
+            Divider()
+            // Static list of patients
+            ForEach(0..<5) { _ in
+                HStack {
+                    Text("John Doe")
+                    Spacer()
+                    Text("01/01/1990")
+                    Spacer()
+                    Text("M")
+                }
+                Divider()
+            }
+        }
+        
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+        .padding()
+    }
+}
+
+struct DoctorListView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Doctors")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                Spacer()
+                // Add any action buttons here if needed
+            }
+            
+            Divider()
+            
+            // Circular Pie Chart Placeholder
+            ZStack {
+                Circle()
+                    .stroke(Color.blue.opacity(0.3), lineWidth: 12)
+                    .frame(width: 150, height: 150)
+                    .rotationEffect(.degrees(-90))
+                
+                Circle()
+                    .trim(from: 0, to: 0.7)
+                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+                    .frame(width: 150, height: 150)
+                    .rotationEffect(.degrees(-90))
+                
+                Text("80%") // Placeholder text for percentage
+                    .font(.title)
+                    .foregroundColor(.blue)
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(75)
+            
+            // Doctor list
+            VStack(alignment: .leading, spacing: 8) {
+                DoctorListItemm()
+                Divider()
+                DoctorListItemm()
+                Divider()
+                DoctorListItemm()
+            }
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
+        .padding()
+        .frame(width: 320, height: 320)
+    }
+}
+
+
+struct DoctorListItemm: View {
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "person")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                .foregroundColor(.blue)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Dr. Smith")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                Text("Specialty: Cardiology")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+
+
+// Preview
+
+
 
 struct OverviewCard: View {
     var title: String
@@ -417,6 +616,31 @@ struct LineGraphView: View {
         .padding(20)
     }
 }
+
+struct GreetingCard: View {
+    var title: String
+    var subtitle: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.largeTitle)
+                .padding(.leading) // Add padding to align with the left edge
+                .foregroundColor(.primary)
+            
+            Text(subtitle)
+                .font(.system(size: 20))
+                .padding(.leading) // Add padding to align with the left edge
+                .foregroundColor(.primary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(width: 760,height: 150)// Align VStack contents to the left
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+    }
+}
+
 
 struct AppointmentCard1: View {
     let appointment: Appointment1
