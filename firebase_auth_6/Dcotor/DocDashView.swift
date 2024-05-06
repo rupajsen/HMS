@@ -233,7 +233,6 @@
 //}
 //
 
-
 import SwiftUI
 import Firebase
 import FirebaseFirestore
@@ -292,8 +291,8 @@ struct DocDashView: View {
                             .background(Color.white)
                             
                             // List of appointments
-                            ForEach(filteredAppointments(), id: \.id) { appointment in
-                                AppointmentRow(appointment: appointment)
+                            ForEach(appointments.indices, id: \.self) { index in
+                                AppointmentRow(appointment: appointments[index], serialNumber: index + 1)
                             }
                             .padding(.horizontal, 10)
                             .cornerRadius(10)
@@ -349,32 +348,20 @@ struct DocDashView: View {
             self.appointments = fetchedAppointments
         }
     }
-    
-    func filteredAppointments() -> [AppointmentForDoctor] {
-        switch selectedFilterIndex {
-        case 0: // Today's Appointments
-            let today = Calendar.current.startOfDay(for: Date())
-            return appointments.filter { Calendar.current.isDate($0.date.dateValue(), inSameDayAs: today) }
-        case 1: // This Week's Appointments
-            let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
-            let endOfWeek = Calendar.current.date(byAdding: .day, value: 7, to: startOfWeek)!
-            return appointments.filter { $0.date.dateValue() >= startOfWeek && $0.date.dateValue() < endOfWeek }
-        default: // All Appointments
-            return appointments
-        }
-    }
 }
 
 struct AppointmentRow: View {
     let appointment: AppointmentForDoctor
+    let serialNumber: Int
+    @State private var patientName: String = ""
     
     var body: some View {
         HStack {
-            Text(appointment.id)
+            Text("\(serialNumber)")
                 .frame(width: 80, alignment: .center)
                 .foregroundColor(.black)
             
-            Text(appointment.userId)
+            Text(patientName)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 20)
                 .foregroundColor(.black)
@@ -396,6 +383,25 @@ struct AppointmentRow: View {
             RoundedRectangle(cornerRadius: 0)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 0.2)
         )
+        .onAppear {
+            fetchPatientName()
+        }
+    }
+    
+    func fetchPatientName() {
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(appointment.userId)
+        
+        userRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                if let fullname = data?["fullname"] as? String {
+                    self.patientName = fullname
+                }
+            } else {
+                print("User document does not exist for userID: \(appointment.userId)")
+            }
+        }
     }
     
     func formatDate(_ date: Timestamp) -> String {
@@ -404,6 +410,7 @@ struct AppointmentRow: View {
         return dateFormatter.string(from: date.dateValue())
     }
 }
+
 
 struct DashboardCard: View {
     var title: String
