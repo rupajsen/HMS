@@ -215,9 +215,9 @@ struct StaffList: View {
                 isAddStaffSheetPresented.toggle()
             }) {
                 Text("Add New Staff")
-                    .foregroundColor(.white)
+                    .foregroundColor(.blue)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.blue.opacity(0.2))
                     .cornerRadius(10)
             }
         }
@@ -675,7 +675,7 @@ struct AppointmentCard1: View {
                 Text("View Details")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.purple)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
         }
@@ -749,7 +749,7 @@ struct DoctorCard1: View {
                 Text("View Details")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.purple)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
         }
@@ -792,7 +792,7 @@ struct PatientCard1: View {
                 Text("View Details")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.purple)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
         }
