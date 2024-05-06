@@ -90,8 +90,9 @@ struct PatientDashView: View {
                             
                             VStack(alignment: .leading) {
                                 Text("Medication Entries")
-                                    .font(.title)
-                                    .padding()
+                                    .font(.title2)
+                                    .padding(.vertical)
+                                    .frame(maxWidth: .infinity,alignment: .leading)
                                 
                                 ScrollView(.horizontal) {
                                     ScrollViewReader { proxy in
@@ -106,8 +107,6 @@ struct PatientDashView: View {
                                         }
                                     }
                                 }
-
-                                
                             }
                             
                             
