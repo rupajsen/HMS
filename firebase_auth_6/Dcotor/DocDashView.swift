@@ -291,9 +291,10 @@ struct DocDashView: View {
                             .background(Color.white)
                             
                             // List of appointments
-                            ForEach(appointments.indices, id: \.self) { index in
+                            ForEach(filteredAppointments().indices, id: \.self) { index in
                                 AppointmentRow(appointment: appointments[index], serialNumber: index + 1)
                             }
+
                             .padding(.horizontal, 10)
                             .cornerRadius(10)
                             .background(Color.white)
@@ -348,7 +349,23 @@ struct DocDashView: View {
             self.appointments = fetchedAppointments
         }
     }
+    
+    func filteredAppointments() -> [AppointmentForDoctor] {
+        switch selectedFilterIndex {
+        case 0: // Today's Appointments
+            let today = Calendar.current.startOfDay(for: Date())
+            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+            return appointments.filter { $0.date.dateValue() >= today && $0.date.dateValue() < endOfDay }
+        case 1: // This Week's Appointments
+            let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+            let endOfWeek = Calendar.current.date(byAdding: .day, value: 7, to: startOfWeek)!
+            return appointments.filter { $0.date.dateValue() >= startOfWeek && $0.date.dateValue() < endOfWeek }
+        default: // All Appointments
+            return appointments
+        }
+    }
 }
+
 
 struct AppointmentRow: View {
     let appointment: AppointmentForDoctor
