@@ -129,6 +129,10 @@ struct StaffList: View {
     @State private var doctors: [Doctor1] = []
     @State private var patients: [Patient1] = []
     @State private var appointments: [Appointment1] = []
+    @State private var searchText: String = ""
+    @State private var searchTextDoctor = ""
+    @State private var searchTextPatient = ""
+    
     let totalPatientsVisited = 100
         let activeAppointmentsCount = 20
         let closedAppointmentsCount = 30
@@ -136,6 +140,22 @@ struct StaffList: View {
         
         let doctorsAppointments = [("Dr. John Doe", 5), ("Dr. Jane Smith", 8),("Dr. Varad Kadtan", 14)] // Sample data
         
+    var filteredDoctors: [Doctor1] {
+           if searchTextDoctor.isEmpty {
+               return doctors
+           } else {
+               return doctors.filter { $0.name.localizedCaseInsensitiveContains(searchTextDoctor) }
+           }
+       }
+
+       var filteredPatients: [Patient1] {
+           if searchTextPatient.isEmpty {
+               return patients
+           } else {
+               return patients.filter { $0.name.localizedCaseInsensitiveContains(searchTextPatient) }
+           }
+       }
+
 
     var body: some View {
         VStack {
@@ -149,19 +169,24 @@ struct StaffList: View {
             .padding()
             
             if selectedTab == 1 {
-                ScrollView {
-                    LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-                        ForEach(doctors.indices, id: \.self) { index in
-                            DoctorCard1(doctor: doctors[index])
+                VStack {
+                    SearchBar(text: $searchTextDoctor, placeholder: "Search Doctors")
+                    ScrollView {
+                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
+                            ForEach(filteredDoctors.indices, id: \.self) { index in
+                                DoctorCard1(doctor: filteredDoctors[index])
+                            }
                         }
                     }
                 }
-            }
-            else if selectedTab == 2 {
-                ScrollView {
-                    LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-                        ForEach(patients.indices, id: \.self) { index in
-                            PatientCard1(patient: patients[index])
+            } else if selectedTab == 2 {
+                VStack {
+                    SearchBar(text: $searchTextPatient, placeholder: "Search Patients")
+                    ScrollView {
+                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
+                            ForEach(filteredPatients.indices, id: \.self) { index in
+                                PatientCard1(patient: filteredPatients[index])
+                            }
                         }
                     }
                 }
@@ -269,6 +294,28 @@ struct StaffList: View {
             self.appointments = documents.compactMap { queryDocumentSnapshot in
                 let data = queryDocumentSnapshot.data()
                 return Appointment1(data: data)
+            }
+        }
+    }
+    struct SearchBar: View {
+        @Binding var text: String
+        var placeholder: String
+        
+        var body: some View {
+            HStack {
+                TextField(placeholder, text: $text)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                Button(action: {
+                    self.text = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .padding(.trailing)
+                        .onTapGesture {
+                            self.text = "" // Clear the search text
+                        }
+                }
             }
         }
     }

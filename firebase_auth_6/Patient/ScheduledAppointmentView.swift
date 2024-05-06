@@ -101,36 +101,71 @@ struct AppointmentCard: View {
     }
 }
 
+struct SearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            TextField("Search Doctors", text: $text)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.horizontal)
+            Button(action: {
+                self.text = ""
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.gray)
+                    .padding(.trailing)
+                    .onTapGesture {
+                        self.text = "" // Clear the search text
+                    }
+            }
+        }
+    }
+}
+
 struct ScheduledAppointmentView: View {
     @State var userUID : String?
     @State var appointmentsBooked : [Appointment] = []
+    @State private var searchText: String = ""
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Appointments")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.vertical)
-                .frame(maxWidth: .infinity,alignment: .leading)
-            
-            ScrollView {
-                VStack {
-                    ForEach(appointmentsBooked) { appointment in
-                        AppointmentCard(appointment: appointment)
+            VStack(alignment: .leading) {
+                Text("Appointments")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                SearchBar(text: $searchText)
+
+                ScrollView {
+                    VStack {
+                        ForEach(filteredAppointments) { appointment in
+                            AppointmentCard(appointment: appointment)
+                        }
                     }
                 }
             }
+            .onAppear {
+                getUserUID()
+                fetchAppointments(forUserID: userUID ?? "") { dataFetched, error in
+                    if let fetchedAppointments = dataFetched {
+                        self.appointmentsBooked = fetchedAppointments
+                    }
+                }
+            }
+            .padding()
         }
-        .onAppear{
-            getUserUID()
-            fetchAppointments(forUserID: userUID ?? "") { dataFetched, error in
-                print(dataFetched)
-                
-                self.appointmentsBooked = dataFetched ??     [Appointment(name: "Dr. Name : John Soliya", department: "Dept1 : General", time: "11:00 AM", date: "11/02/2023")]
 
+        // Filter appointments based on search query and doctor's name
+        private var filteredAppointments: [Appointment] {
+            if searchText.isEmpty {
+                return appointmentsBooked
+            } else {
+                return appointmentsBooked.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
             }
         }
-        .padding()
-    }
+
+    
     
     func getUserUID(){
         guard let user = Auth.auth().currentUser else {
