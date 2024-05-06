@@ -38,10 +38,10 @@
 		3F5723C32BE3606A00FCE093 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */; };
 		3FB3F0B82BDA47EC004C0790 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B72BDA47EC004C0790 /* AccountView.swift */; };
 		3FB3F0BA2BDABD0A004C0790 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */; };
-		3FC0A25E2BE8B0B700B8435D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FC0A25D2BE8B0B700B8435D /* GoogleService-Info.plist */; };
 		840346912BDA1D32000D6055 /* DoctorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346902BDA1D32000D6055 /* DoctorDetailView.swift */; };
 		840346932BDA1D7E000D6055 /* ViewDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346922BDA1D7E000D6055 /* ViewDoc.swift */; };
 		840346952BDA1D9E000D6055 /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346942BDA1D9E000D6055 /* AppointmentView.swift */; };
+		842685EF2BE8CE2E00DFE4F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */; };
 		84467EC02BE4BC320090A238 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84467EBF2BE4BC320090A238 /* ReportView.swift */; };
 		8453FF622BE24AE9008CDEE7 /* DocNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF612BE24AE9008CDEE7 /* DocNav.swift */; };
 		8453FF662BE25B2D008CDEE7 /* PatientHistoryUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */; };
@@ -75,10 +75,10 @@
 		3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FB3F0B72BDA47EC004C0790 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
-		3FC0A25D2BE8B0B700B8435D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		840346902BDA1D32000D6055 /* DoctorDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetailView.swift; sourceTree = "<group>"; };
 		840346922BDA1D7E000D6055 /* ViewDoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDoc.swift; sourceTree = "<group>"; };
 		840346942BDA1D9E000D6055 /* AppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
+		842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84467EBF2BE4BC320090A238 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		8453FF612BE24AE9008CDEE7 /* DocNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocNav.swift; sourceTree = "<group>"; };
 		8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHistoryUpdate.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 			children = (
 				3F399D932BD97392008AD694 /* Firebase */,
 				3F399D872BD971A9008AD694 /* Assets.xcassets */,
-				3FC0A25D2BE8B0B700B8435D /* GoogleService-Info.plist */,
+				842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */,
 				3F399D892BD971A9008AD694 /* Preview Content */,
 			);
 			path = firebase_auth;
@@ -282,7 +282,7 @@
 			files = (
 				3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */,
 				3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */,
-				3FC0A25E2BE8B0B700B8435D /* GoogleService-Info.plist in Resources */,
+				842685EF2BE8CE2E00DFE4F5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
