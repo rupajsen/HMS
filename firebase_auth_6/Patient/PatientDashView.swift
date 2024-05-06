@@ -83,6 +83,23 @@ struct PatientDashView: View {
                             
                             TestView()
                             
+                            
+                            VStack{
+                                Text("Medication")
+                                    .font(.title2)
+                                    .padding(.vertical)
+                                    .frame(maxWidth: .infinity,alignment: .leading)
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 20) {
+                                        MedicationCard(timeOfDay: "Morning", medications: [("Med1", "2 tablets"), ("Med2", "1 tablet"), ("Med3", "2 tablets")])
+                                        MedicationCard(timeOfDay: "Afternoon", medications: [("Med4", "1 tablet"), ("Med5", "2 tablets"), ("Med6", "1 tablet")])
+                                        MedicationCard(timeOfDay: "Night", medications: [("Med7", "2 tablets"), ("Med8", "1 tablet"), ("Med9", "2 tablets")])
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
+                            
+                            
                             HStack{
                                 Text("Doctor Speciality")
                                     .font(.title2)
@@ -119,12 +136,7 @@ struct PatientDashView: View {
                                 }
                             }
                             
-                            HStack{
-                                Text("Medication")
-                                    .font(.title2)
-                                    .padding(.vertical)
-                                    .frame(maxWidth: .infinity,alignment: .leading)
-                            }
+                            
                         }
                         .padding()
                         .offset(y:-59)
@@ -159,6 +171,50 @@ struct PatientDashView: View {
     }
 }
 
+struct MedicationCard: View {
+    var timeOfDay: String
+    var medications: [(name: String, quantity: String)]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(timeOfDay.uppercased())
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.horizontal)
+                .padding(.vertical, 5)
+                .background(LinearGradient(
+                    stops: [
+                        Gradient.Stop(color: Color(red: 0.05, green: 0.51, blue: 0.99), location: 0.00),
+                        Gradient.Stop(color: Color(red: 0.03, green: 0.3, blue: 0.59), location: 1.00),
+                    ],
+                    startPoint: UnitPoint(x: 0.5, y: 0),
+                    endPoint: UnitPoint(x: 0.5, y: 1)
+                ))
+                .cornerRadius(8)
+                .shadow(radius: 3)
+                .frame(width: 200)
+            
+            ForEach(medications, id: \.name) { medication in
+                HStack {
+                    Text(medication.name)
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text(medication.quantity)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .padding(.trailing)
+                }
+                .padding(.horizontal)
+            }
+        }
+        .padding(.vertical)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .frame(width: 200, height: 150)
+    }
+}
 
 #Preview {
     PatientDashView()
