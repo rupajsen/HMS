@@ -18,10 +18,7 @@ struct ReportView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             VStack(alignment: .leading) {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Appointment Date: \(appointmentDate)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Text("Doctor: \(doctorName)")
+                    Text("Add Test Reports")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
