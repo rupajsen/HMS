@@ -109,6 +109,7 @@ struct SearchBar: View {
             TextField("Search Doctors", text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
+                .padding(.leading,20)
             Button(action: {
                 self.text = ""
             }) {
@@ -135,7 +136,7 @@ struct ScheduledAppointmentView: View {
                     .padding(.vertical)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                SearchBar(text: $searchText)
+                SearchBar(text: $searchText).padding(.bottom,20)
 
                 ScrollView {
                     VStack {

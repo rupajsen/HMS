@@ -52,7 +52,7 @@ struct PatientDashView: View {
                                                     .padding()
                                             }
                             
-                            Text("Get Health Checkup done today!")
+                            Text("Get Your Health Checkup done today")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .padding(.bottom)
@@ -85,7 +85,7 @@ struct PatientDashView: View {
                         .offset(y:-59)
                         
                         VStack{
-                            Text("Your upcoming Appointments")
+                            Text("My upcoming Appointments")
                                 .font(.title2)
                                 .padding(.vertical)
                                 .frame(maxWidth: .infinity,alignment: .leading)
@@ -94,7 +94,7 @@ struct PatientDashView: View {
                             
                             
                             VStack{
-                                Text("Medication")
+                                Text("My Medication")
                                     .font(.title2)
                                     .padding(.vertical)
                                     .frame(maxWidth: .infinity,alignment: .leading)
@@ -136,7 +136,7 @@ struct PatientDashView: View {
                                                     .font(.subheadline)
                                             }
                                             .padding()
-                                            .background(Color.gray.opacity(0.2))
+                                            .background(Color.blue.opacity(0.2))
                                             .cornerRadius(10)
                                             .padding(.horizontal, 8)
                                             
@@ -187,20 +187,22 @@ struct MedicationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(timeOfDay.uppercased())
+            
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(.blue)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
-                .background(LinearGradient(
-                    stops: [
-                        Gradient.Stop(color: Color(red: 0.05, green: 0.51, blue: 0.99), location: 0.00),
-                        Gradient.Stop(color: Color(red: 0.03, green: 0.3, blue: 0.59), location: 1.00),
-                    ],
-                    startPoint: UnitPoint(x: 0.5, y: 0),
-                    endPoint: UnitPoint(x: 0.5, y: 1)
-                ))
+                .background(Color.blue.opacity(0.2))
+//                .background(LinearGradient(
+//                    stops: [
+//                        Gradient.Stop(color: Color(red: 0.05, green: 0.51, blue: 0.99), location: 0.00),
+//                        Gradient.Stop(color: Color(red: 0.03, green: 0.3, blue: 0.59), location: 1.00),
+//                    ],
+//                    startPoint: UnitPoint(x: 0.5, y: 0),
+//                    endPoint: UnitPoint(x: 0.5, y: 1)
+//                ))
                 .cornerRadius(8)
-                .shadow(radius: 3)
+//                .shadow(radius: 3)
                 .frame(width: 200)
             
             ForEach(medications, id: \.name) { medication in
@@ -217,11 +219,13 @@ struct MedicationCard: View {
                 .padding(.horizontal)
             }
         }
+        .padding(.top,10)
+
         .padding(.vertical)
         .background(Color.white)
         .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .frame(width: 200, height: 150)
+        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+        .frame(width: 200, height: 170)
     }
 }
 
