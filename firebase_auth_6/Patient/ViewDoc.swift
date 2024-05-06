@@ -109,32 +109,32 @@ struct ViewDoc: View {
     var department: String // Department name
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                ForEach(doctors, id: \.doctorId) { doctor in
-                    DoctorListItem(doctor: doctor)
-                        .onTapGesture {
-                            print("Selected Doctor ID:", doctor.doctorId ?? "N/A")
-                            doctorAppointmentStates[doctor.doctorId ?? ""] = true // Set appointment view state for selected doctor
-                        }
-                        .sheet(isPresented: Binding(
-                            get: {
-                                doctorAppointmentStates[doctor.doctorId ?? ""] ?? false // Get appointment view state for selected doctor
-                            },
-                            set: { newValue in
-                                doctorAppointmentStates[doctor.doctorId ?? ""] = newValue // Update appointment view state for selected doctor
-                            }
-                        )) {
-                            AppointmentView(selectedDoctorId: doctor.doctorId ?? "")
-                        }
-                }
-            }
-            .padding()
-        }
-        .onAppear {
-            fetchDoctorsFromFirestore()
-        }
-    }
+     
+         ScrollView {
+             VStack(alignment: .leading){
+                 Text("Available Doctors") // Title added here
+                     .font(.largeTitle).bold()
+                                .padding(.horizontal)
+                 VStack(spacing: 20) {
+                     ForEach(doctors, id: \.doctorId) { doctor in
+                         DoctorListItem(doctor: doctor)
+ //                            .onTapGesture {
+ //                                print("Selected Doctor ID:", doctor.doctorId ?? "N/A")
+ //                                isShowingAppointmentView = true
+ //                            }
+ //                            .sheet(isPresented: $isShowingAppointmentView) {
+ //                                AppointmentView(selectedDoctorId: doctor.doctorId ?? "")
+ //                            }
+                     }
+                 }
+                 .padding()
+             }
+         }
+         .onAppear {
+             fetchDoctorsFromFirestore()
+         }
+     }
+     
 
     func fetchDoctorsFromFirestore() {
         let db = Firestore.firestore()
@@ -164,36 +164,57 @@ struct ViewDoc: View {
 
 struct DoctorListItem: View {
     let doctor: Doctor
+    @State private var isShowingAppointmentView = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if let photo = doctor.photo,
-               let img = UIImage(named: photo) {
-                Image(uiImage: img)
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(25)
+        HStack {
+            Image("doc")
+                .resizable()
+                .frame(width: 80, height: 80)
+                .clipShape(Circle())
+                .overlay(
+                    Circle()
+                        .stroke(Color.blue.opacity(0.2), lineWidth: 2)
+                )
+                .padding(.leading, 10)
+            
+            VStack(alignment: .leading) {
+                Text(doctor.name)
+                    .font(.title3).bold()
+                Text(doctor.specialization)
+                    .font(.subheadline)
+                
+                Button(action: {
+                    print("Selected Doctor ID:", doctor.doctorId ?? "N/A")
+                    isShowingAppointmentView = true
+                }) {
+                    Text("View slots")
+                        .font(.subheadline)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(Color.blue.opacity(0.2))
+                        .foregroundColor(.blue)
+                        .cornerRadius(10)
+                }
+                .sheet(isPresented: $isShowingAppointmentView) {
+                    AppointmentView(selectedDoctorId: doctor.doctorId ?? "")
+                }
             }
-            Text(doctor.name)
-                .font(.headline)
-            Text(doctor.specialization)
-                .font(.subheadline)
-            HStack {
-                Image(systemName: "star.fill")
-                    .foregroundColor(.yellow)
-                Text("4.8")
-                    .font(.caption)
-                Text("49 Reviews")
-                    .font(.caption)
-            }
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.white)
+        .background(Color.blue.opacity(0.1))
         .cornerRadius(10)
         .shadow(radius: 3)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.blue, lineWidth: 1)
+        )
+        .frame(width: 300, height: 140)
     }
 }
+
 
 struct ViewDoc_Previews: PreviewProvider {
     static var previews: some View {
