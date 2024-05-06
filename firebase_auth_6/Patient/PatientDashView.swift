@@ -1,12 +1,5 @@
-//
-//  PatientDashView.swift
-//  firebase_auth
-//
-//  Created by Rupaj Sen on 03/05/24.
-//
-
-
 import SwiftUI
+import FirebaseFirestore
 import Firebase
 
 struct PatientDashView: View {
@@ -21,6 +14,9 @@ struct PatientDashView: View {
     @State private var otherVitals: String = ""
     @State private var latestLabTestReports: String = ""
     @State private var showImagePicker: Bool = false
+    @State private var medicationEntries: [[String: Any]] = [] // Array to hold medication entries
+
+    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var showProfileView = false // State variable to control the visibility of the PatientProfileView
     
@@ -39,24 +35,16 @@ struct PatientDashView: View {
                     VStack(alignment: .leading) {
                         VStack{
                             Text("Patient View")
+                            Text("Welcome \(name)!")
+                                .foregroundStyle(.white)
+                                .font(.title)
+                                .padding(.top)
                             
-                            if let fullName = viewModel.currentUser?.fullname {
-                                                Text("Welcome \(fullName)!")
-                                    .foregroundColor(.white)
-                                                    .font(.title)
-                                                    .padding()
-                                            } else {
-                                                Text("Welcome!")
-                                                    .foregroundColor(.white)
-                                                    .font(.title)
-                                                    .padding()
-                                            }
-                            
-                            Text("Get Your Health Checkup done today")
+                            Text("Get Health Checkup done today!")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .padding(.bottom)
-             
+                            
                             NavigationLink(destination: DepartmentView()) {
                                 Text("Book Your Appointment")
                                     .font(.headline)
@@ -85,7 +73,7 @@ struct PatientDashView: View {
                         .offset(y:-59)
                         
                         VStack{
-                            Text("My upcoming Appointments")
+                            Text("Your upcoming Appointments")
                                 .font(.title2)
                                 .padding(.vertical)
                                 .frame(maxWidth: .infinity,alignment: .leading)
@@ -93,19 +81,26 @@ struct PatientDashView: View {
                             TestView()
                             
                             
-                            VStack{
-                                Text("My Medication")
-                                    .font(.title2)
-                                    .padding(.vertical)
-                                    .frame(maxWidth: .infinity,alignment: .leading)
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 20) {
-                                        MedicationCard(timeOfDay: "Morning", medications: [("Med1", "2 tablets"), ("Med2", "1 tablet"), ("Med3", "2 tablets")])
-                                        MedicationCard(timeOfDay: "Afternoon", medications: [("Med4", "1 tablet"), ("Med5", "2 tablets"), ("Med6", "1 tablet")])
-                                        MedicationCard(timeOfDay: "Night", medications: [("Med7", "2 tablets"), ("Med8", "1 tablet"), ("Med9", "2 tablets")])
+                            VStack(alignment: .leading) {
+                                Text("Medication Entries")
+                                    .font(.title)
+                                    .padding()
+                                
+                                ScrollView(.horizontal) {
+                                    ScrollViewReader { proxy in
+                                        HStack {
+                                            ForEach(medicationEntries.indices, id: \.self) { index in
+                                                MedicationCard(entry: medicationEntries[index])
+                                                    .padding()
+                                                    .background(Color.blue.opacity(0.2))
+                                                    .cornerRadius(10)
+                                                    .padding(.horizontal)
+                                            }
+                                        }
                                     }
-                                    .padding(.horizontal)
                                 }
+
+                                
                             }
                             
                             
@@ -141,6 +136,8 @@ struct PatientDashView: View {
                                             .padding(.horizontal, 8)
                                             
                                         }
+                                        
+                                        
                                     }
                                 }
                             }
@@ -158,8 +155,8 @@ struct PatientDashView: View {
                         Spacer()
                         
                         Button(action: {
-                                                                        guard let phoneNum = URL(string: "tel://102") else { return }
-                                                                        UIApplication.shared.open(phoneNum)
+                            guard let phoneNum = URL(string: "tel://102") else { return }
+                            UIApplication.shared.open(phoneNum)
                         }) {
                             Image(systemName: "phone.fill")
                                 .resizable()
@@ -177,22 +174,53 @@ struct PatientDashView: View {
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
+        .onAppear {
+            fetchLatestMedicationEntries() // Fetch patient history when the view appears
+        }
     }
+    
+
+    private func fetchLatestMedicationEntries() {
+            let db = Firestore.firestore()
+            let patientHistoryRef = db.collection("patienthistory")
+                .order(by: "date", descending: true)
+                .limit(to: 1)
+
+            patientHistoryRef.getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error fetching patient history: \(error)")
+                    return
+                }
+
+                guard let document = querySnapshot?.documents.first else {
+                    print("No documents found")
+                    return
+                }
+
+                if let medicationEntries = document.data()["medicationEntries"] as? [[String: Any]] {
+                    self.medicationEntries = medicationEntries
+                    print("Fetched medication entries successfully: \(self.medicationEntries)")
+                } else {
+                    print("No medication entries found in the document")
+                }
+            }
+        }
+
+
 }
 
-struct MedicationCard: View {
-    var timeOfDay: String
-    var medications: [(name: String, quantity: String)]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(timeOfDay.uppercased())
-            
-                .font(.headline)
-                .foregroundColor(.blue)
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                .background(Color.blue.opacity(0.2))
+
+//struct MedicationCard: View {
+//    var timeOfDay: String
+//    var medications: [(name: String, quantity: String)]
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 8) {
+//            Text(timeOfDay.uppercased())
+//                .font(.headline)
+//                .foregroundColor(.white)
+//                .padding(.horizontal)
+//                .padding(.vertical, 5)
 //                .background(LinearGradient(
 //                    stops: [
 //                        Gradient.Stop(color: Color(red: 0.05, green: 0.51, blue: 0.99), location: 0.00),
@@ -201,35 +229,73 @@ struct MedicationCard: View {
 //                    startPoint: UnitPoint(x: 0.5, y: 0),
 //                    endPoint: UnitPoint(x: 0.5, y: 1)
 //                ))
-                .cornerRadius(8)
+//                .cornerRadius(8)
 //                .shadow(radius: 3)
-                .frame(width: 200)
-            
-            ForEach(medications, id: \.name) { medication in
-                HStack {
-                    Text(medication.name)
-                        .font(.subheadline)
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Text(medication.quantity)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .padding(.trailing)
-                }
-                .padding(.horizontal)
-            }
-        }
-        .padding(.top,10)
+//                .frame(width: 200)
+//
+//            ForEach(medications, id: \.name) { medication in
+//                HStack {
+//                    Text(medication.name)
+//                        .font(.subheadline)
+//                        .foregroundColor(.primary)
+//                    Spacer()
+//                    Text(medication.quantity)
+//                        .font(.subheadline)
+//                        .foregroundColor(.secondary)
+//                        .padding(.trailing)
+//                }
+//                .padding(.horizontal)
+//            }
+//        }
+//        .padding(.vertical)
+//        .background(Color.white)
+//        .cornerRadius(10)
+//        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+//        .frame(width: 200, height: 150)
+//    }
+//}
 
-        .padding(.vertical)
-        .background(Color.white)
+struct MedicationCard: View {
+    var entry: [String: Any]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(entry["medicineName"] as? String ?? "")
+                .foregroundColor(.black).font(.title2).bold()
+            
+            Text("Dosage: \(entry["dosage"] as? String ?? "")")
+                .foregroundColor(.secondary)
+            
+            Text("Time: \(entry["time"] as? String ?? "")")
+                .foregroundColor(.secondary)
+            
+            Text("Additional Description: \(entry["additionalDescription"] as? String ?? "")")
+                .foregroundColor(.secondary)
+        }
+        .padding()
+//        .background(Color.blue.opacity(0.2))
         .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
-        .frame(width: 200, height: 170)
+    }
+    
+}
+
+
+
+//            Text("Time:")
+//                .font(.headline)
+//            Text(entry["time"] as? String ?? "")
+//                .foregroundColor(.secondary)
+//            Text("Additional Description:")
+//                .font(.headline)
+//            Text(entry["additionalDescription"] as? String ?? "")
+//                .foregroundColor(.secondary)
+       
+    
+
+
+
+struct PatientDashView_Previews: PreviewProvider {
+    static var previews: some View {
+        PatientDashView()
     }
 }
-
-#Preview {
-    PatientDashView()
-}
-
