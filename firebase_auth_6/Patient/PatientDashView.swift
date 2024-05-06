@@ -35,10 +35,17 @@ struct PatientDashView: View {
                     VStack(alignment: .leading) {
                         VStack{
                             Text("Patient View")
-                            Text("Welcome \(name)!")
-                                .foregroundStyle(.white)
-                                .font(.title)
-                                .padding(.top)
+                            if let fullName = viewModel.currentUser?.fullname {
+                                Text("Welcome \(fullName)!")
+                                    .foregroundColor(.white)
+                                    .font(.title)
+                                    .padding()
+                            } else {
+                                Text("Welcome!")
+                                    .foregroundColor(.white)
+                                    .font(.title)
+                                    .padding()
+                            }
                             
                             Text("Get Health Checkup done today!")
                                 .font(.headline)
