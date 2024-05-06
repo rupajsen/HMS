@@ -201,8 +201,8 @@
 		3FA390A52BE369A7006AF98B /* Patient */ = {
 			isa = PBXGroup;
 			children = (
-				840346942BDA1D9E000D6055 /* AppointmentView.swift */,
 				3F399DAE2BD9755F008AD694 /* PatientView.swift */,
+				840346942BDA1D9E000D6055 /* AppointmentView.swift */,
 				3F215E492BE4DFD100D24423 /* PatientDashView.swift */,
 				840346922BDA1D7E000D6055 /* ViewDoc.swift */,
 				3F4B3F452BE0134E0034768D /* TestView.swift */,
