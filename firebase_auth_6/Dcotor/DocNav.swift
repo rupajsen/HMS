@@ -14,7 +14,6 @@ struct DocNav: View {
                 Picker(selection: $selection, label: Text("Select View")) {
                     Text("Today's Appointments").tag(0)
                     Text("All Appointment History ").tag(1)
-                    Text("Schedule").tag(2)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
@@ -24,8 +23,7 @@ struct DocNav: View {
                         .tag(0)
                     PatientList()
                         .tag(1)
-                    ScheduleView()
-                        .tag(2)
+                    
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .padding(.top, 20)
@@ -37,11 +35,6 @@ struct DocNav: View {
 }
 
 
-struct ScheduleView: View {
-    var body: some View {
-        Text("Schedule")
-    }
-}
 
 #Preview {
     DocNav()
