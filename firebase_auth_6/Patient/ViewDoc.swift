@@ -204,9 +204,9 @@ struct DoctorListItem: View {
             .frame(maxWidth: .infinity)
         }
         .padding()
-        .background(Color.blue.opacity(0.1))
+        .background(Color.blue.opacity(0.2))
         .cornerRadius(10)
-        .shadow(radius: 3)
+//        .shadow(radius: 3)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.blue, lineWidth: 1)
