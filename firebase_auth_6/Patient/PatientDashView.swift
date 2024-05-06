@@ -7,6 +7,8 @@
 
 
 import SwiftUI
+import Firebase
+
 struct PatientDashView: View {
     @EnvironmentObject var viewModel : AuthViewModel
     @State private var name: String = ""
@@ -19,7 +21,6 @@ struct PatientDashView: View {
     @State private var otherVitals: String = ""
     @State private var latestLabTestReports: String = ""
     @State private var showImagePicker: Bool = false
-    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var showProfileView = false // State variable to control the visibility of the PatientProfileView
     
@@ -38,10 +39,18 @@ struct PatientDashView: View {
                     VStack(alignment: .leading) {
                         VStack{
                             Text("Patient View")
-                            Text("Welcome \(name)!")
-                                .foregroundStyle(.white)
-                                .font(.title)
-                                .padding(.top)
+                            
+                            if let fullName = viewModel.currentUser?.fullname {
+                                                Text("Welcome \(fullName)!")
+                                    .foregroundColor(.white)
+                                                    .font(.title)
+                                                    .padding()
+                                            } else {
+                                                Text("Welcome!")
+                                                    .foregroundColor(.white)
+                                                    .font(.title)
+                                                    .padding()
+                                            }
                             
                             Text("Get Health Checkup done today!")
                                 .font(.headline)

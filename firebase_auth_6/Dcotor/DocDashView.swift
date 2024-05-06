@@ -15,11 +15,11 @@
 //                        DashboardCard(title: "Visitors", count: "2,479", color: .purple, isFirstCard: false, isSecondCard: false, isThirdCard: true)
 //                    }
 //                    .padding(.leading, 50)
-//                    
+//
 //                    Text("Today's Appointments")
 //                        .font(.headline)
 //                        .padding(.leading, 44.5)
-//                    
+//
 //                    ScrollView {
 //                        VStack(alignment: .center) {
 //                            // Header
@@ -45,7 +45,7 @@
 //                            .padding(.horizontal, 10)
 //                            .padding(.bottom, 5)
 //                            .background(Color.white)
-//                            
+//
 //                            // List of appointments
 //                            ForEach(appointments.indices, id: \.self) { index in
 //                                let appointment = appointments[index]
@@ -68,7 +68,7 @@
 //            }
 //        }
 //    }
-//    
+//
 //    func fetchAppointmentsForLoggedInDoctor() {
 //        let db = Firestore.firestore()
 //        guard let loggedInUserId = Auth.auth().currentUser?.uid else {
@@ -77,18 +77,18 @@
 //        }
 //
 //        let appointmentsRef = db.collection("appointments")
-//        
+//
 //        appointmentsRef.whereField("doctorId", isEqualTo: loggedInUserId).getDocuments { (querySnapshot, error) in
 //            if let error = error {
 //                print("Error fetching appointments: \(error.localizedDescription)")
 //                return
 //            }
-//            
+//
 //            guard let documents = querySnapshot?.documents else {
 //                print("No appointments found.")
 //                return
 //            }
-//            
+//
 //            var fetchedAppointments: [AppointmentForDoctor] = []
 //            for document in documents {
 //                let data = document.data()
@@ -97,11 +97,11 @@
 //                let doctorId = data["doctorId"] as? String ?? ""
 //                let time = data["time"] as? String ?? ""
 //                let userId = data["userId"] as? String ?? ""
-//                
+//
 //                let appointment = AppointmentForDoctor(id: id, date: date, doctorId: doctorId, time: time, userId: userId)
 //                fetchedAppointments.append(appointment)
 //            }
-//            
+//
 //            self.appointments = fetchedAppointments
 //        }
 //    }
@@ -110,29 +110,29 @@
 //struct AppointmentRow: View {
 //    let index: Int
 //    let appointment: AppointmentForDoctor
-//    
+//
 //    var body: some View {
 //        HStack {
 //            Text(appointment.id)
 //                .frame(width: 80, alignment: .center)
 //                .foregroundColor(.black)
-//            
+//
 //            Text(appointment.userId)
 //                .frame(maxWidth: .infinity, alignment: .leading)
 //                .padding(.leading, 20)
 //                .foregroundColor(.black)
-//            
+//
 //            Text(appointment.time)
 //                .frame(width: 150, alignment: .center)
 //                .padding(.trailing, 180)
 //                .foregroundColor(.black)
-//            
+//
 //            HStack(spacing: 20) {
 //                Image(systemName: "pencil")
 //                    .resizable()
 //                    .frame(width: 20, height: 20)
 //                    .foregroundColor(.green)
-//                
+//
 //                Image(systemName: "xmark")
 //                    .resizable()
 //                    .frame(width: 20, height: 20)
@@ -157,33 +157,33 @@
 //    var isFirstCard: Bool
 //    var isSecondCard: Bool
 //    var isThirdCard: Bool
-//    
+//
 //    var body: some View {
 //        HStack {
 //            VStack(alignment: .leading, spacing: 10) {
 //                Text(title)
 //                    .font(.headline)
-//                
+//
 //                Text(count)
 //                    .font(.largeTitle)
-//                
+//
 //                Spacer()
-//                
+//
 //                ZStack(alignment: .leading) {
 //                    Rectangle()
 //                        .frame(height: 10)
 //                        .foregroundColor(Color.gray.opacity(0.3))
 //                        .cornerRadius(5)
-//                    
+//
 //                    Rectangle()
 //                        .frame(width: CGFloat(Double(count.replacingOccurrences(of: ",", with: "")) ?? 0) / 10, height: 10)
 //                        .foregroundColor(color)
 //                        .cornerRadius(5)
 //                }
 //            }
-//            
+//
 //            Spacer()
-//            
+//
 //            if isFirstCard {
 //                Image("pie")
 //                    .resizable()
@@ -232,7 +232,6 @@
 //    }
 //}
 //
-
 
 import SwiftUI
 import Firebase
@@ -292,8 +291,8 @@ struct DocDashView: View {
                             .background(Color.white)
                             
                             // List of appointments
-                            ForEach(filteredAppointments(), id: \.id) { appointment in
-                                AppointmentRow(appointment: appointment)
+                            ForEach(appointments.indices, id: \.self) { index in
+                                AppointmentRow(appointment: appointments[index], serialNumber: index + 1)
                             }
                             .padding(.horizontal, 10)
                             .cornerRadius(10)
@@ -349,32 +348,20 @@ struct DocDashView: View {
             self.appointments = fetchedAppointments
         }
     }
-    
-    func filteredAppointments() -> [AppointmentForDoctor] {
-        switch selectedFilterIndex {
-        case 0: // Today's Appointments
-            let today = Calendar.current.startOfDay(for: Date())
-            return appointments.filter { Calendar.current.isDate($0.date.dateValue(), inSameDayAs: today) }
-        case 1: // This Week's Appointments
-            let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
-            let endOfWeek = Calendar.current.date(byAdding: .day, value: 7, to: startOfWeek)!
-            return appointments.filter { $0.date.dateValue() >= startOfWeek && $0.date.dateValue() < endOfWeek }
-        default: // All Appointments
-            return appointments
-        }
-    }
 }
 
 struct AppointmentRow: View {
     let appointment: AppointmentForDoctor
+    let serialNumber: Int
+    @State private var patientName: String = ""
     
     var body: some View {
         HStack {
-            Text(appointment.id)
+            Text("\(serialNumber)")
                 .frame(width: 80, alignment: .center)
                 .foregroundColor(.black)
             
-            Text(appointment.userId)
+            Text(patientName)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 20)
                 .foregroundColor(.black)
@@ -396,6 +383,25 @@ struct AppointmentRow: View {
             RoundedRectangle(cornerRadius: 0)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 0.2)
         )
+        .onAppear {
+            fetchPatientName()
+        }
+    }
+    
+    func fetchPatientName() {
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(appointment.userId)
+        
+        userRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                if let fullname = data?["fullname"] as? String {
+                    self.patientName = fullname
+                }
+            } else {
+                print("User document does not exist for userID: \(appointment.userId)")
+            }
+        }
     }
     
     func formatDate(_ date: Timestamp) -> String {
@@ -404,6 +410,7 @@ struct AppointmentRow: View {
         return dateFormatter.string(from: date.dateValue())
     }
 }
+
 
 struct DashboardCard: View {
     var title: String
