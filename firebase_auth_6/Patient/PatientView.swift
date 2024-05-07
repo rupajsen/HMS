@@ -19,7 +19,7 @@ struct PatientView: View {
                             Image(systemName: "calendar")
                             Text("Appointments")
                         }
-                    ReportView(appointmentDate: "May 10, 2024", doctorName: "Dr. Smith")
+                    ReportView()
                         .tabItem {
                             Image(systemName: "newspaper.fill")
                             Text("Reports")

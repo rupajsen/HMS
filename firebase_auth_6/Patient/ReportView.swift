@@ -1,13 +1,15 @@
 import SwiftUI
 import Firebase
 import FirebaseStorage
+import UIKit
+import PDFKit
 
 struct ReportView: View {
-    let appointmentDate: String
-    let doctorName: String
-    @State private var selectedPDFs: [URL] = []
+    @State private var pdfURLs: [URLWrapper] = []
+    @State private var selectedPDF: URLWrapper? = nil
     @State private var isShowingDocumentPicker = false
-    
+    @State private var selectedPDFs: [URL] = []
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("My Test Reports")
@@ -16,38 +18,37 @@ struct ReportView: View {
                 .padding(.vertical)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            VStack(alignment: .leading) {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Add Test Reports")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                .padding(.bottom, 8)
-                
-                // Upload PDF button
-                Button(action: {
-                    self.isShowingDocumentPicker.toggle()
+            
+            Button(action: {
+                self.isShowingDocumentPicker.toggle()
 
+            }) {
+                Text("Upload PDF")
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(Color.blue.opacity(0.2))
+                    .foregroundColor(.blue)
+                    .cornerRadius(10)
+                    .frame(maxWidth: .infinity)
+            }
+            .sheet(isPresented: $isShowingDocumentPicker) {
+                DocumentPicker(onDocumentPicked: { urls in
+                    self.selectedPDFs = urls
+                    print(urls)
+                    // Call a function to upload the selected PDF(s) to Firebase
+                    self.uploadPDFsToFirebase(urls: urls)
+                })
+            }
+            
+            // Display PDFs
+            List(pdfURLs) { pdfURL in
+                Button(action: {
+                    self.selectedPDF = pdfURL
                 }) {
-                    Text("Upload PDF")
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .background(Color.blue.opacity(0.2))
-                        .foregroundColor(.blue)
-                        .cornerRadius(10)
-                }
-                .sheet(isPresented: $isShowingDocumentPicker) {
-                    DocumentPicker(onDocumentPicked: { urls in
-                        self.selectedPDFs = urls
-                        print(urls)
-                        // Call a function to upload the selected PDF(s) to Firebase
-                        self.uploadPDFsToFirebase(urls: urls)
-                    })
+                    Text(pdfURL.url.lastPathComponent)
                 }
             }
             .padding()
-            .padding(.horizontal, -180)
-            .frame(maxWidth: .infinity, minHeight: 100)
             .background(Color.white)
             .cornerRadius(10)
             .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
@@ -55,8 +56,65 @@ struct ReportView: View {
             
             Spacer()
         }
+        .onAppear {
+            // Fetch PDF URLs for the current user
+            fetchPDFsForCurrentUser()
+        }
+        .sheet(item: $selectedPDF) { pdfWrapper in
+            NavigationView {
+                PDFViewer(pdfURL: pdfWrapper.url)
+                    .navigationBarItems(trailing: Button(action: {
+                        self.selectedPDF = nil // Dismiss the sheet
+                    }) {
+                        Text("Done")
+                            .font(.callout)
+                            .foregroundColor(.blue)
+                    })
+            }
+        }
     }
     
+    // Wrapper type for URL to conform to Identifiable
+    struct URLWrapper: Identifiable {
+        let id = UUID()
+        let url: URL
+    }
+    
+    // Function to fetch PDF URLs for the current user from Firebase Storage
+    func fetchPDFsForCurrentUser() {
+        if let currentUserUID = Auth.auth().currentUser?.uid {
+            let storageRef = Storage.storage().reference().child("users/\(currentUserUID)/pdfs")
+            
+            storageRef.listAll { result, error in
+                if let error = error {
+                    print("Error listing PDFs: \(error.localizedDescription)")
+                    // Handle error if needed
+                } else if let items = result?.items {
+                    self.fetchDownloadURLs(for: items)
+                } else {
+                    print("No PDFs found.")
+                    // Handle case where no PDFs are found
+                }
+            }
+        } else {
+            print("User not authenticated.")
+            // Handle authentication error if needed
+        }
+    }
+    
+    // Function to fetch download URLs for each PDF file
+    private func fetchDownloadURLs(for references: [StorageReference]) {
+        for reference in references {
+            reference.downloadURL { url, error in
+                if let error = error {
+                    print("Error fetching download URL: \(error.localizedDescription)")
+                    // Handle error if needed
+                } else if let downloadURL = url {
+                    self.pdfURLs.append(URLWrapper(url: downloadURL))
+                }
+            }
+        }
+    }
     // Function to upload selected PDF(s) to Firebase
     func uploadPDFsToFirebase(urls: [URL]) {
         if let currentUserUID = Auth.auth().currentUser?.uid {
@@ -85,17 +143,29 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 
 
-// Preview
-struct ReportView_Previews: PreviewProvider {
-    static var previews: some View {
-        ReportView(appointmentDate: "May 10, 2024", doctorName: "Dr. Smith")
+
+
+struct PDFViewer: View {
+    let pdfURL: URL
+    
+    var body: some View {
+        PDFKitView(url: pdfURL)
     }
 }
 
+// PDFKitView SwiftUI View for PDF rendering
+struct PDFKitView: UIViewRepresentable {
+    let url: URL
 
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.document = PDFDocument(url: url)
+        return pdfView
+    }
 
+    func updateUIView(_ uiView: PDFView, context: Context) {}
+}
 
-import UIKit
 
 struct DocumentPicker: UIViewControllerRepresentable {
     var onDocumentPicked: ([URL]) -> Void
@@ -127,5 +197,13 @@ struct DocumentPicker: UIViewControllerRepresentable {
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
             // Handle cancellation if needed
         }
+    }
+}
+
+
+// Preview
+struct ReportView_Previews: PreviewProvider {
+    static var previews: some View {
+        ReportView()
     }
 }
