@@ -30,6 +30,7 @@
 		3F399DAF2BD9755F008AD694 /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399DAE2BD9755F008AD694 /* PatientView.swift */; };
 		3F399DB12BD9756D008AD694 /* DoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399DB02BD9756D008AD694 /* DoctorView.swift */; };
 		3F399DB32BD97577008AD694 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399DB22BD97577008AD694 /* AdminView.swift */; };
+		3F4A3C772BE9E6660027D00C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F4A3C762BE9E6660027D00C /* GoogleService-Info.plist */; };
 		3F4B3F462BE0134E0034768D /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F452BE0134E0034768D /* TestView.swift */; };
 		3F4B3F4A2BE024540034768D /* AddStaff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F472BE024540034768D /* AddStaff.swift */; };
 		3F4B3F4B2BE024540034768D /* StaffList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F482BE024540034768D /* StaffList.swift */; };
@@ -41,7 +42,6 @@
 		840346912BDA1D32000D6055 /* DoctorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346902BDA1D32000D6055 /* DoctorDetailView.swift */; };
 		840346932BDA1D7E000D6055 /* ViewDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346922BDA1D7E000D6055 /* ViewDoc.swift */; };
 		840346952BDA1D9E000D6055 /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346942BDA1D9E000D6055 /* AppointmentView.swift */; };
-		842685EF2BE8CE2E00DFE4F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */; };
 		84467EC02BE4BC320090A238 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84467EBF2BE4BC320090A238 /* ReportView.swift */; };
 		8453FF622BE24AE9008CDEE7 /* DocNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF612BE24AE9008CDEE7 /* DocNav.swift */; };
 		8453FF662BE25B2D008CDEE7 /* PatientHistoryUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */; };
@@ -67,6 +67,7 @@
 		3F399DAE2BD9755F008AD694 /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		3F399DB02BD9756D008AD694 /* DoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorView.swift; sourceTree = "<group>"; };
 		3F399DB22BD97577008AD694 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
+		3F4A3C762BE9E6660027D00C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F4B3F452BE0134E0034768D /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		3F4B3F472BE024540034768D /* AddStaff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStaff.swift; sourceTree = "<group>"; };
 		3F4B3F482BE024540034768D /* StaffList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffList.swift; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		840346902BDA1D32000D6055 /* DoctorDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetailView.swift; sourceTree = "<group>"; };
 		840346922BDA1D7E000D6055 /* ViewDoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDoc.swift; sourceTree = "<group>"; };
 		840346942BDA1D9E000D6055 /* AppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
-		842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84467EBF2BE4BC320090A238 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		8453FF612BE24AE9008CDEE7 /* DocNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocNav.swift; sourceTree = "<group>"; };
 		8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHistoryUpdate.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 			children = (
 				3F399D932BD97392008AD694 /* Firebase */,
 				3F399D872BD971A9008AD694 /* Assets.xcassets */,
-				842685EE2BE8CE2E00DFE4F5 /* GoogleService-Info.plist */,
+				3F4A3C762BE9E6660027D00C /* GoogleService-Info.plist */,
 				3F399D892BD971A9008AD694 /* Preview Content */,
 			);
 			path = firebase_auth;
@@ -282,7 +282,7 @@
 			files = (
 				3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */,
 				3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */,
-				842685EF2BE8CE2E00DFE4F5 /* GoogleService-Info.plist in Resources */,
+				3F4A3C772BE9E6660027D00C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,7 +456,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"firebase_auth/Preview Content\"";
-				DEVELOPMENT_TEAM = 6G6YV76FAP;
+				DEVELOPMENT_TEAM = M86WV5Z73X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = InfyHealth;
@@ -487,7 +487,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"firebase_auth/Preview Content\"";
-				DEVELOPMENT_TEAM = 6G6YV76FAP;
+				DEVELOPMENT_TEAM = M86WV5Z73X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = InfyHealth;

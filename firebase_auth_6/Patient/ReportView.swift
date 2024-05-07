@@ -59,19 +59,22 @@ struct ReportView: View {
     
     // Function to upload selected PDF(s) to Firebase
     func uploadPDFsToFirebase(urls: [URL]) {
-        // Example Firebase upload code
-        for url in urls {
-            print(url)
-            let storageRef = Storage.storage().reference().child("pdfs").child("\(UUID().uuidString).pdf")
-            storageRef.putFile(from: url, metadata: nil) { _, error in
-                if let error = error {
-                    print("Error uploading PDF: \(error.localizedDescription)")
-                    // Handle error if needed
-                } else {
-                    print("PDF uploaded successfully!")
-                    // Handle success if needed
+        if let currentUserUID = Auth.auth().currentUser?.uid {
+            for url in urls {
+                let storageRef = Storage.storage().reference().child("users/\(currentUserUID)/pdfs/\(UUID().uuidString).pdf")
+                storageRef.putFile(from: url, metadata: nil) { _, error in
+                    if let error = error {
+                        print("Error uploading PDF: \(error.localizedDescription)")
+                        // Handle error if needed
+                    } else {
+                        print("PDF uploaded successfully!")
+                        // Handle success if needed
+                    }
                 }
             }
+        } else {
+            print("User not authenticated.")
+            // Handle authentication error if needed
         }
     }
 }
