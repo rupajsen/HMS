@@ -84,6 +84,7 @@ struct LoginView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -67,6 +67,7 @@ struct AccountView: View {
                             viewModel.fetchUserSynchronously()
                             currentUser = viewModel.currentUser            }
         }
+        //.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -21,100 +21,103 @@ struct RegistrationView: View {
     let roles = ["Patient", "Doctor", "Admin"] // Define roles
     
     var body: some View {
-        VStack {
-//            Image("logo")
-//                .resizable()
-//                .scaledToFill()
-//                .frame(width: 100, height: 120)
-//                .padding(.vertical, 32)
-            
-            Text("InfyHealth")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity)
-                .padding(.top,50)
-            
-            VStack(spacing: 24) {
-                InputView(text: $email, title: "Email address", placeholder: "name@example.com", isSecureField: false)
-                    .autocapitalization(.none)
+        NavigationView{
+            VStack {
+                //            Image("logo")
+                //                .resizable()
+                //                .scaledToFill()
+                //                .frame(width: 100, height: 120)
+                //                .padding(.vertical, 32)
                 
-                InputView(text: $fullname, title: "Full Name", placeholder: "Enter your name", isSecureField: false)
+                Text("InfyHealth")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top,50)
                 
-                InputView(text: $password, title: "Password", placeholder: "Enter your password", isSecureField: true)
-                
-                ZStack(alignment: .trailing) {
-                    InputView(text: $confirmPassword, title: "Password", placeholder: "Confirm your password", isSecureField: true)
+                VStack(spacing: 24) {
+                    InputView(text: $email, title: "Email address", placeholder: "name@example.com", isSecureField: false)
+                        .autocapitalization(.none)
                     
-                    if !password.isEmpty && !confirmPassword.isEmpty {
-                        if password == confirmPassword {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.green)
-                        } else {
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.large)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.red)
+                    InputView(text: $fullname, title: "Full Name", placeholder: "Enter your name", isSecureField: false)
+                    
+                    InputView(text: $password, title: "Password", placeholder: "Enter your password", isSecureField: true)
+                    
+                    ZStack(alignment: .trailing) {
+                        InputView(text: $confirmPassword, title: "Password", placeholder: "Confirm your password", isSecureField: true)
+                        
+                        if !password.isEmpty && !confirmPassword.isEmpty {
+                            if password == confirmPassword {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.green)
+                            } else {
+                                Image(systemName: "xmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.red)
+                            }
                         }
                     }
+                    
+                    Text("Sign up as a patient")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.blue)
+                    
+                    //                HStack(spacing:130){
+                    //                    Text("Select Role")
+                    //                    // Picker for roles
+                    //                    Picker("Select Role", selection: $selectedRole) {
+                    //                        ForEach(roles, id: \.self) { role in
+                    //                            Text(role)
+                    //                        }
+                    //                    }
+                    //                    .pickerStyle(.menu)
+                    //                    .padding(.horizontal)
+                    //                }
+                    
                 }
+                .padding(.horizontal)
+                .padding(.top, 12)
                 
-                Text("Sign up as a patient")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.blue)
-                
-//                HStack(spacing:130){
-//                    Text("Select Role")
-//                    // Picker for roles
-//                    Picker("Select Role", selection: $selectedRole) {
-//                        ForEach(roles, id: \.self) { role in
-//                            Text(role)
-//                        }
-//                    }
-//                    .pickerStyle(.menu)
-//                    .padding(.horizontal)
-//                }
-                
-            }
-            .padding(.horizontal)
-            .padding(.top, 12)
-            
-            Button(action: {
-                Task {
-                    guard let userType = UserType(rawValue: selectedRole) else {
-                        print("Invalid role: \(selectedRole)")
-                        return
+                Button(action: {
+                    Task {
+                        guard let userType = UserType(rawValue: selectedRole) else {
+                            print("Invalid role: \(selectedRole)")
+                            return
+                        }
+                        // Pass the UserType enum to createUser function
+                        try await viewModel.createUser(withEmail: email, password: password, fullname: fullname, userType: userType)
                     }
-                    // Pass the UserType enum to createUser function
-                    try await viewModel.createUser(withEmail: email, password: password, fullname: fullname, userType: userType)
+                }) {
+                    HStack {
+                        Text("Sign up")
+                            .fontWeight(.semibold)
+                        Image(systemName: "arrow.right")
+                    }
+                    .foregroundColor(.white)
+                    .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }
-            }) {
-                HStack {
-                    Text("Sign up")
-                        .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
+                .background(Color.blue)
+                .cornerRadius(10)
+                .padding(.top, 24)
+                
+                Spacer()
+                
+                Button(action: {
+                    dismiss()
+                }) {
+                    HStack(spacing: 3) {
+                        Text("Already have an account?")
+                        Text("Sign in")
+                            .fontWeight(.bold)
+                    }
+                    .font(.system(size: 14))
                 }
-                .foregroundColor(.white)
-                .frame(width: UIScreen.main.bounds.width - 32, height: 48)
-            }
-            .background(Color.blue)
-            .cornerRadius(10)
-            .padding(.top, 24)
-            
-            Spacer()
-            
-            Button(action: {
-                dismiss()
-            }) {
-                HStack(spacing: 3) {
-                    Text("Already have an account?")
-                    Text("Sign in")
-                        .fontWeight(.bold)
-                }
-                .font(.system(size: 14))
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

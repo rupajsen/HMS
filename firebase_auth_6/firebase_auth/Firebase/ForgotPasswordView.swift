@@ -76,6 +76,7 @@ struct ForgotPasswordView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
