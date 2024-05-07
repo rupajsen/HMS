@@ -114,9 +114,16 @@ struct ScheduledAppointmentView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+            
+            Text("Appointments")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.vertical)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
             Picker("", selection: $selectedTabIndex) {
-                Text("Upcoming Appointments").tag(0)
-                Text("Appointment History").tag(1)
+                Text("Upcoming").tag(0)
+                Text("History").tag(1)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
@@ -141,13 +148,9 @@ struct ScheduledAppointmentView: View {
 
     private func upcomingAppointmentsView() -> some View {
         VStack(alignment: .leading) {
-            Text("Appointments")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.vertical)
-                .frame(maxWidth: .infinity, alignment: .leading)
 
-            SearchBar(text: $searchText).padding(.bottom,20)
+            SearchBar(text: $searchText).padding()
+            
 
             ScrollView {
                 VStack {
