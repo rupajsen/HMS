@@ -77,6 +77,7 @@ struct PatientCard: View {
                     if patientInfoFetched {
                         Text(patientName)
                             .font(.subheadline)
+                            .fontWeight(.bold)
                             .foregroundColor(.primary)
                     } else {
                         Text("Fetching...")
