@@ -1,127 +1,8 @@
-//
-//  AddStaff.swift
-//  HMS_Main
-//
-//  Created by Rupaj Sen on 24/04/24.
-//
-//
-//import SwiftUI
-//
-//struct StaffList: View {
-//    @State private var selectedTab = 1
-//    @State private var isAddStaffSheetPresented = false
-//
-//    var body: some View {
-//            VStack {
-//                Picker(selection: $selectedTab, label: Text("What is your favorite color?")) {
-//                    Text("Overview").tag(0)
-//                    Text("Staff List").tag(1)
-//                    Text("Patient List").tag(2)
-//                    Text("Patient Appointments").tag(3)
-//                }.pickerStyle(SegmentedPickerStyle())
-//
-//                SearchBar(text: .constant(""))
-//
-//                if selectedTab == 1 {
-//                    ScrollView {
-//                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-//                            ForEach(0..<10) { _ in
-//                                StaffCard()
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    // Display other content for the Overview, Patient List, and Patient Appointments tabs
-//                }
-//
-//
-//                if selectedTab == 2 {
-//                    ScrollView {
-//                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-//                            ForEach(0..<10) { _ in
-//                                PatientCard()
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    // Display other content for the Overview, Patient List, and Patient Appointments tabs
-//                }
-//
-//
-//
-//                Spacer()
-//
-//                Button(action: {
-//                               // Show the AddStaff sheet when the button is tapped
-//                               isAddStaffSheetPresented.toggle()
-//                           }) {
-//                               Text("Add New Staff")
-//                                   .foregroundColor(.white)
-//                                   .padding()
-//                                   .background(Color.blue)
-//                                   .cornerRadius(10)
-//                           }
-//            }
-//            .padding()
-//            .navigationTitle("Staff Management")
-//            .navigationBarItems(trailing: Image(systemName: "person.crop.circle"))
-//            .sheet(isPresented: $isAddStaffSheetPresented) {
-//                        // Present the AddStaff sheet when isAddStaffSheetPresented is true
-//                        AddStaff()
-//                    }
-//    }
-//}
-//
-//struct StaffCard: View {
-//    var body: some View {
-//        VStack(alignment: .leading) {
-//            HStack {
-//                Circle()
-//                    .fill(Color.gray)
-//                    .frame(width: 50, height: 50)
-//
-//                VStack(alignment: .leading) {
-//                    Text("Kristan Watson")
-//                        .font(.headline)
-//                    Text("Employee ID: 27140440")
-//                        .font(.subheadline)
-//                        .foregroundColor(.gray)
-//                }
-//            }
-//
-//            Divider()
-//
-//            VStack(alignment: .leading, spacing: 10) {
-//                Text("Designation: Cardiologists, Head")
-//                Text("Department: Cardiology")
-//                Text("Contact no.: 9893823937")
-//            }
-//
-//            Spacer()
-//
-//            Button(action: {}) {
-//                Text("View Doctor Details")
-//                    .foregroundColor(.white)
-//                    .padding()
-//                    .background(Color.purple)
-//                    .cornerRadius(10)
-//            }
-//        }
-//        .padding()
-//        .background(Color.white)
-//        .cornerRadius(10)
-//        .shadow(radius: 10)
-//    }
-//}
-//
-//
-//
-//#Preview {
-//    StaffList()
-//}
+
 
 import SwiftUI
 import Firebase
+import SwiftUICharts
 
 struct StaffList: View {
     @State private var selectedTab = 0
@@ -390,6 +271,7 @@ struct OverviewTabView: View {
                         // Doctors Available Card
                         TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {}, totalCount: $totalDoctorsCount)
                     }
+                    .padding()
 
                     // Summary Statistics
 
@@ -498,26 +380,17 @@ struct TotalBookingsCard: View {
                 .font(.system(size: 20, weight: .bold, design: .default))
                 .fontWeight(.bold)
                 .foregroundColor(.black)
+                .padding()
             
             Text(value)
                 .font(.system(size: 20, weight: .bold, design: .default))
                 .foregroundColor(.black)
-            
-            Button(action: buttonAction) {
-                Text("View Details")
-                    .foregroundColor(.white)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 30)
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
-            .shadow(color: Color.gray.opacity(0.3), radius: 10, x: 0, y: 5)
         }
         .padding()
         .frame(width:230 ,height: 180)
         .background(Color.white)
         .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
+        .shadow(radius: 5)
     }
 }
 
@@ -615,7 +488,7 @@ struct SummaryRow: View {
 
 
 import SwiftUI
-import SwiftUICharts // Import the SwiftUICharts library
+ // Import the SwiftUICharts library
 
 struct PatientListView: View {
     @State private var appointmentsData: [Date: Double] = [:]
@@ -928,13 +801,13 @@ struct AppointmentCard1: View {
     let appointment: Appointment1
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
                 Circle()
                     .fill(Color.gray)
                     .frame(width: 50, height: 50)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("Doctor: \(appointment.doctorId)")
                         .font(.headline)
                     Text("Patient: \(appointment.userId)")
@@ -945,7 +818,7 @@ struct AppointmentCard1: View {
             
             Divider()
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Date: \(formattedDate)")
                 Text("Time: \(appointment.time)")
                 Text("Additional Info: \(appointment.additionalInfo)")
@@ -956,20 +829,22 @@ struct AppointmentCard1: View {
             Button(action: {}) {
                 Text("View Details")
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
                     .background(Color.blue)
-                    .cornerRadius(10)
+                    .cornerRadius(8)
+                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
             }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(10)
-        .shadow(radius: 10)
+        .shadow(radius: 3)
     }
 
     private var formattedDate: String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy "
+        dateFormatter.dateFormat = "MMM dd, yyyy"
         return dateFormatter.string(from: appointment.date)
     }
 }
@@ -996,17 +871,19 @@ struct Appointment1 {
     }
 }
 
+
+
 struct DoctorCard1: View {
     let doctor: Doctor1
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
                 Circle()
                     .fill(Color.gray)
                     .frame(width: 50, height: 50)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(doctor.name)
                         .font(.headline)
                     Text("Employee ID: \(doctor.position)")
@@ -1017,10 +894,10 @@ struct DoctorCard1: View {
             
             Divider()
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Designation: \(doctor.designation)")
                 Text("Department: \(doctor.department)")
-                Text("Contact no.: \(doctor.contactNo)")
+                Text("Contact No.: \(doctor.contactNo)")
                 Text("Educational Details: \(doctor.educationalDetails)")
                 Text("Email: \(doctor.email)")
             }
@@ -1030,15 +907,17 @@ struct DoctorCard1: View {
             Button(action: {}) {
                 Text("View Details")
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
                     .background(Color.blue)
-                    .cornerRadius(10)
+                    .cornerRadius(8)
+                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
             }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(10)
-        .shadow(radius: 10)
+        .shadow(radius: 3)
     }
 }
 
@@ -1046,13 +925,13 @@ struct PatientCard1: View {
     let patient: Patient1
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
                 Circle()
                     .fill(Color.gray)
                     .frame(width: 50, height: 50)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(patient.name)
                         .font(.headline)
                     Text("Patient ID: \(patient.patientID)")
@@ -1062,8 +941,8 @@ struct PatientCard1: View {
             
             Divider()
             
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Weight: \(patient.weight)")
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Weight: \(patient.weight) kg")
                 Text("Blood Pressure: \(patient.bloodPressure)")
                 Text("Blood Glucose: \(patient.bloodGlucose)")
             }
@@ -1073,17 +952,20 @@ struct PatientCard1: View {
             Button(action: {}) {
                 Text("View Details")
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
                     .background(Color.blue)
-                    .cornerRadius(10)
+                    .cornerRadius(8)
+                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
             }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(10)
-        .shadow(radius: 10)
+        .shadow(radius: 3)
     }
 }
+
 
 
 
