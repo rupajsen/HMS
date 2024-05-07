@@ -14,14 +14,15 @@ struct AppointmentView: View {
         @EnvironmentObject var viewModel : AuthViewModel
         @Environment(\.presentationMode) var presentationMode
         @State private var showAlert: Bool = false
+    @State private var appointmentSaved: Bool = false
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     /*if let user = viewModel.currentUser{
-                        Text(user.id)
-                    }*/
+                     Text(user.id)
+                     }*/
                     Text("Select Date")
                         .font(.title2)
                         .bold()
@@ -93,100 +94,20 @@ struct AppointmentView: View {
                             .cornerRadius(10)
                     }
                     .padding()
-                }
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Saved!"),
+                              message: Text("Your appointment has been successfully booked."),
+                              dismissButton: .default(Text("OK")) {
+                            appointmentSaved = true
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                    }}
                 .padding()
-                .navigationBarTitle("", displayMode: .inline) // Set navigation bar title to empty string
-                .padding(.bottom, -30)
+                .navigationBarTitle("", displayMode: .inline)                .padding(.bottom, -30)
             }
         }
     }
     
-//    func saveAppointment() {
-//        // Check if user is authenticated
-//        guard let user = Auth.auth().currentUser else {
-//            print("User is not authenticated.")
-//            return
-//        }
-//
-//        // Print authenticated user UID
-//        print("Authenticated user UID:", user.uid)
-//
-//        // Get Firestore reference
-//        let db = Firestore.firestore()
-//        
-//        // Reference to the user's document
-//        let userRef = db.collection("users").document(user.uid)
-//        
-//        // Generate UUID for appointment
-//        let appointmentId = UUID().uuidString
-//
-//        // Appointment data to be saved
-//        let appointmentData: [String: Any] = [
-//            "date": Timestamp(date: selectedDate), // Convert selectedDate to Firestore Timestamp
-//            "time": selectedTimeSlot != nil ? "\(selectedTimeSlot!):00 \(selectedTimeSlot! >= 12 ? "PM" : "AM")" : "", // Format time
-//            "additionalInfo": additionalInfo, // Additional information
-//            "userId": user.uid, // User ID
-//            "doctorId": selectedDoctorId // Doctor ID
-//        ]
-//
-//        // Add appointment data to user's appointments sub-collection
-//        userRef.collection("appointments").document(appointmentId).setData(appointmentData) { error in
-//            if let error = error {
-//                print("Error saving appointment:", error.localizedDescription)
-//            } else {
-//                print("Appointment saved successfully!")
-//            }
-//        }
-//    }
-//    
-    
-    
-//    
-//    func saveAppointment() {
-//        // Check if user is authenticated
-//        guard let user = Auth.auth().currentUser else {
-//            print("User is not authenticated.")
-//            return
-//        }
-//
-//        // Print authenticated user UID
-//        print("Authenticated user UID:", user.uid)
-//
-//        // Print selected doctor's ID
-//        print("Selected Doctor ID:", selectedDoctorId)
-//
-//        // Get Firestore reference
-//        let db = Firestore.firestore()
-//        
-//        // Generate UUID for appointment
-//        let appointmentId = UUID().uuidString
-//
-//        // Appointment data to be saved
-//        let appointmentData: [String: Any] = [
-//            "date": Timestamp(date: selectedDate), // Convert selectedDate to Firestore Timestamp
-//            "time": selectedTimeSlot != nil ? "\(selectedTimeSlot!):00 \(selectedTimeSlot! >= 12 ? "PM" : "AM")" : "", // Format time
-//            "additionalInfo": additionalInfo, // Additional information
-//            "userId": user.uid, // User ID
-//            "doctorId": selectedDoctorId // Doctor ID
-//        ]
-//
-//        // Reference to appointments collection
-//        let appointmentsRef = db.collection("appointments")
-//        
-//        // Add appointment data to appointments collection
-//        appointmentsRef.document(appointmentId).setData(appointmentData) { error in
-//            if let error = error {
-//                print("Error saving appointment:", error.localizedDescription)
-//            } else {
-//                // Print appointment details
-//                print("Appointment saved successfully!")
-//                print("Appointment ID:", appointmentId)
-//                print("Doctor ID:", selectedDoctorId)
-//                print("Patient ID:", user.uid)
-//            }
-//        }
-//        presentationMode.wrappedValue.dismiss()
-//    }
 
     func saveAppointment() {
         // Check if user is authenticated
@@ -226,6 +147,8 @@ struct AppointmentView: View {
                 print("Error saving appointment:", error.localizedDescription)
             } else {
                 print("Appointment saved successfully!")
+                showAlert = true
+//                presentationMode.wrappedValue.dismiss()
             }
         }
     }
