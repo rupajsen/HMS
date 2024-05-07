@@ -25,7 +25,7 @@ struct PatientList: View {
             .onAppear {
                 fetchPatientHistory()
             }
-            .navigationTitle("Patient List")
+            .navigationTitle("Appointment History")
         }
         .navigationViewStyle(StackNavigationViewStyle()) // Use StackNavigationViewStyle for iPad
     }

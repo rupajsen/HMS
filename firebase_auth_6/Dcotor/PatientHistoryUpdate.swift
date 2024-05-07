@@ -16,65 +16,64 @@ struct PatientHistoryUpdate: View {
     let appointment: AppointmentForDoctor
     
     var body: some View {
-        VStack {
-            Text("Patient History Update")
-                .font(.largeTitle)
-                .padding()
-            
-            Divider()
-            
-            Form {
-                Section(header: Text("Appointment Details")) {
-                    Text("Patient Name: \(appointment.userId)")
-                    Text("Appointment Date: \(formatDate(appointment.date))")
-                    Text("Appointment Time: \(appointment.time)")
-                }
-                
-                Section(header: Text("Consultation Details")) {
-                    TextField("Reason of Consult", text: $reasonOfConsult)
-                    TextField("Diagnosis", text: $diagnosis)
-                    DatePicker("Follow-up Date", selection: $followUpDate, displayedComponents: .date)
-                }
-                
-                Section(header: Text("Medication")) {
-                    ForEach(medicationEntries.indices, id: \.self) { index in
-                        MedicationEntryView(medicationEntry: $medicationEntries[index])
+        NavigationView{
+            VStack {
+                Form {
+                    Section(header: Text("Appointment Details")) {
+                        Text("Patient Name: \(appointment.userId)")
+                        Text("Appointment Date: \(formatDate(appointment.date))")
+                        Text("Appointment Time: \(appointment.time)")
                     }
-                }
-
-                VStack {
-                    Button(action: {
-                        medicationEntries.append(MedicationEntry(medicineName: "", dosage: "", time: "", additionalDescription: ""))
-                    }) {
-                        HStack {
-                            Image(systemName: "plus.circle")
-                                .foregroundColor(.blue)
-                            Text("Add Medication")
+                    
+                    Section(header: Text("Consultation Details")) {
+                        TextField("Reason of Consult", text: $reasonOfConsult)
+                        TextField("Diagnosis", text: $diagnosis)
+                        DatePicker("Follow-up Date", selection: $followUpDate, displayedComponents: .date)
+                    }
+                    
+                    Section(header: Text("Medication")) {
+                        ForEach(medicationEntries.indices, id: \.self) { index in
+                            MedicationEntryView(medicationEntry: $medicationEntries[index])
                         }
                     }
-                    .padding()
-
-                }
-                
-                Section(header: Text("Additional Description")) {
-                    TextField("Additional Description", text: $medicationEntries[0].additionalDescription)
-                }
-                
-                Button(action: {
-                    savePatientHistory()
-                }) {
-                    Text("Save")
-                        .foregroundColor(.white)
+                    
+                    VStack {
+                        Button(action: {
+                            medicationEntries.append(MedicationEntry(medicineName: "", dosage: "", time: "", additionalDescription: ""))
+                        }) {
+                            HStack {
+                                Image(systemName: "plus.circle")
+                                    .foregroundColor(.blue)
+                                Text("Add Medication")
+                            }
+                        }
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                        
+                    }
+                    
+                    Section(header: Text("Additional Description")) {
+                        TextField("Additional Description", text: $medicationEntries[0].additionalDescription)
+                    }
+                    
+                    Button(action: {
+                        savePatientHistory()
+                    }) {
+                        Text("Save")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
                 }
+                .padding()
+                
+                Spacer()
             }
-            .padding()
-            
-            Spacer()
+            .navigationTitle("Add Treatment Plan")
+            .navigationBarTitleDisplayMode(.automatic)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     func formatDate(_ date: Timestamp) -> String {

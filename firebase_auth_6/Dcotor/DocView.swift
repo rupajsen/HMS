@@ -10,10 +10,16 @@ import SwiftUI
 struct DocView: View {
     var body: some View {
         TabView {
-            DocNav()
+            DocDashView()
                 .tabItem {
                     Image(systemName: "stethoscope")
                     Text("Dashboard")
+                }
+            
+            PatientList()
+                .tabItem {
+                    Image(systemName: "clock.arrow.circlepath")
+                    Text("History")
                 }
             
             AccountView()
