@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 import Firebase
 import SwiftUICharts
@@ -639,22 +637,22 @@ struct PatientListView: View {
 //                Spacer()
 //                // Add any action buttons here if needed
 //            }
-//            
+//
 //            Divider()
-//            
+//
 //            // Circular Pie Chart Placeholder
 //            ZStack {
 //                Circle()
 //                    .stroke(Color.blue.opacity(0.3), lineWidth: 12)
 //                    .frame(width: 150, height: 150)
 //                    .rotationEffect(.degrees(-90))
-//                
+//
 //                Circle()
 //                    .trim(from: 0, to: 0.7)
 //                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round))
 //                    .frame(width: 150, height: 150)
 //                    .rotationEffect(.degrees(-90))
-//                
+//
 //                Text("80%") // Placeholder text for percentage
 //                    .font(.title)
 //                    .foregroundColor(.blue)
@@ -662,7 +660,7 @@ struct PatientListView: View {
 //            .padding()
 //            .background(Color.white)
 //            .cornerRadius(75)
-//            
+//
 //            // Doctor list
 //            VStack(alignment: .leading, spacing: 8) {
 //                DoctorListItemm()
@@ -796,9 +794,10 @@ struct GreetingCard: View {
     }
 }
 
-
 struct AppointmentCard1: View {
     let appointment: Appointment1
+    @State private var doctorName: String = ""
+    @State private var patientName: String = ""
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -808,9 +807,9 @@ struct AppointmentCard1: View {
                     .frame(width: 50, height: 50)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Doctor: \(appointment.doctorId)")
+                    Text("Doctor: \(doctorName)")
                         .font(.headline)
-                    Text("Patient: \(appointment.userId)")
+                    Text("Patient: \(patientName)")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
@@ -840,6 +839,10 @@ struct AppointmentCard1: View {
         .background(Color.white)
         .cornerRadius(10)
         .shadow(radius: 3)
+        .onAppear {
+            fetchDoctorName()
+            fetchPatientName()
+        }
     }
 
     private var formattedDate: String {
@@ -847,7 +850,36 @@ struct AppointmentCard1: View {
         dateFormatter.dateFormat = "MMM dd, yyyy"
         return dateFormatter.string(from: appointment.date)
     }
+    
+    private func fetchDoctorName() {
+        let db = Firestore.firestore()
+        let doctorRef = db.collection("users").document(appointment.doctorId)
+        
+        doctorRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let doctorData = document.data()
+                self.doctorName = doctorData?["fullName"] as? String ?? "Unknown Doctor"
+            } else {
+                print("Doctor document does not exist")
+            }
+        }
+    }
+    
+    private func fetchPatientName() {
+        let db = Firestore.firestore()
+        let patientRef = db.collection("users").document(appointment.userId)
+        
+        patientRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let patientData = document.data()
+                self.patientName = patientData?["fullname"] as? String ?? "Unknown Patient"
+            } else {
+                print("Patient document does not exist")
+            }
+        }
+    }
 }
+
 
 struct Appointment1 {
     let additionalInfo: String
