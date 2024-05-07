@@ -405,8 +405,8 @@ struct OverviewTabView: View {
                     SummaryStatisticsView()
                         .offset(y: -60)
 
-                    DoctorListView()
-                        .offset(y: -70)
+//                    DoctorListView()
+//                        .offset(y: -70)
                 }
                 .offset(y: 60)
             }
@@ -521,7 +521,14 @@ struct TotalBookingsCard: View {
     }
 }
 
+import SwiftUI
+import FirebaseFirestore
+
 struct SummaryStatisticsView: View {
+    @State private var appointmentsCount: Int = 0
+    @State private var completedAppointmentsCount: Int = 0
+    @State private var pendingAppointmentsCount: Int = 0
+    
     var body: some View {
         VStack {
             // Summary Card
@@ -529,19 +536,65 @@ struct SummaryStatisticsView: View {
                 Text("Summary")
                     .font(.headline)
                 Divider()
-                SummaryRow(status: "Pending", count: "35", color: .yellow)
-                SummaryRow(status: "Confirmed", count: "70", color: .green)
-                SummaryRow(status: "Canceled", count: "10", color: .red)
-                SummaryRow(status: "Rescheduled", count: "5", color: .orange)
+                SummaryRow(status: "Total Appointments", count: "\(appointmentsCount)", color: .yellow)
+                SummaryRow(status: "Completed Appointments", count: "\(completedAppointmentsCount)", color: .green)
+                SummaryRow(status: "Pending Appointments", count: "\(pendingAppointmentsCount)", color: .red)
+                // Add other SummaryRows for different status types here
             }
             .frame(width: 260)
             .padding()
             .background(Color(.systemGray6))
             .cornerRadius(12)
-            
         }
-        .offset(y:-60)
+        .offset(y: -60)
         .padding()
+        .onAppear {
+            fetchAppointmentsDataFromFirestore()
+        }
+    }
+    
+    
+    // Function to fetch appointments data from Firestore
+    func fetchAppointmentsDataFromFirestore() {
+        let db = Firestore.firestore()
+        
+        // Fetch total appointments count
+        db.collection("appointments").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching appointments data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No appointment documents")
+                return
+            }
+            
+            // Update appointmentsCount with the total count of appointments
+            self.appointmentsCount = documents.count
+            
+            // Calculate pending appointments count
+            self.pendingAppointmentsCount = self.appointmentsCount - self.completedAppointmentsCount
+        }
+        
+        // Fetch completed appointments count from patienthistory collection
+        db.collection("patienthistory").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching completed appointments data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No completed appointment documents")
+                return
+            }
+            
+            // Update completedAppointmentsCount with the count of completed appointments
+            self.completedAppointmentsCount = documents.count
+            
+            // Calculate pending appointments count
+            self.pendingAppointmentsCount = self.appointmentsCount - self.completedAppointmentsCount
+        }
     }
 }
 
@@ -559,6 +612,8 @@ struct SummaryRow: View {
         }
     }
 }
+
+
 import SwiftUI
 import SwiftUICharts // Import the SwiftUICharts library
 
@@ -700,57 +755,57 @@ struct PatientListView: View {
 
 
 
-
-struct DoctorListView: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Doctors")
-                    .font(.title2)
-                    .foregroundColor(.primary)
-                Spacer()
-                // Add any action buttons here if needed
-            }
-            
-            Divider()
-            
-            // Circular Pie Chart Placeholder
-            ZStack {
-                Circle()
-                    .stroke(Color.blue.opacity(0.3), lineWidth: 12)
-                    .frame(width: 150, height: 150)
-                    .rotationEffect(.degrees(-90))
-                
-                Circle()
-                    .trim(from: 0, to: 0.7)
-                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                    .frame(width: 150, height: 150)
-                    .rotationEffect(.degrees(-90))
-                
-                Text("80%") // Placeholder text for percentage
-                    .font(.title)
-                    .foregroundColor(.blue)
-            }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(75)
-            
-            // Doctor list
-            VStack(alignment: .leading, spacing: 8) {
-                DoctorListItemm()
-                Divider()
-                DoctorListItemm()
-                Divider()
-                DoctorListItemm()
-            }
-        }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(8)
-        .padding()
-        .frame(width: 320, height: 320)
-    }
-}
+//
+//struct DoctorListView: View {
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            HStack {
+//                Text("Doctors")
+//                    .font(.title2)
+//                    .foregroundColor(.primary)
+//                Spacer()
+//                // Add any action buttons here if needed
+//            }
+//            
+//            Divider()
+//            
+//            // Circular Pie Chart Placeholder
+//            ZStack {
+//                Circle()
+//                    .stroke(Color.blue.opacity(0.3), lineWidth: 12)
+//                    .frame(width: 150, height: 150)
+//                    .rotationEffect(.degrees(-90))
+//                
+//                Circle()
+//                    .trim(from: 0, to: 0.7)
+//                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+//                    .frame(width: 150, height: 150)
+//                    .rotationEffect(.degrees(-90))
+//                
+//                Text("80%") // Placeholder text for percentage
+//                    .font(.title)
+//                    .foregroundColor(.blue)
+//            }
+//            .padding()
+//            .background(Color.white)
+//            .cornerRadius(75)
+//            
+//            // Doctor list
+//            VStack(alignment: .leading, spacing: 8) {
+//                DoctorListItemm()
+//                Divider()
+//                DoctorListItemm()
+//                Divider()
+//                DoctorListItemm()
+//            }
+//        }
+//        .padding()
+//        .background(Color(.systemGray6))
+//        .cornerRadius(8)
+//        .padding()
+//        .frame(width: 320, height: 320)
+//    }
+//}
 
 
 struct DoctorListItemm: View {
