@@ -12,6 +12,8 @@ struct PatientHistoryUpdate: View {
     @State private var followUpDate = Date()
     @State private var medicationEntries: [MedicationEntry] = [MedicationEntry(medicineName: "", dosage: "", time: "", additionalDescription: "")]
     @State private var reasonOfConsult: String = ""
+    @Environment(\.presentationMode) var presentationMode
+
 
     let appointment: AppointmentForDoctor
     
@@ -123,11 +125,10 @@ struct PatientHistoryUpdate: View {
                 print("Error saving patient history: \(error)")
             } else {
                 print("Patient history saved successfully")
+                presentationMode.wrappedValue.dismiss()
             }
         }
     }
-
-
 }
 
 

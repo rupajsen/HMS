@@ -186,6 +186,7 @@ struct AppointmentRow: View {
     let appointment: AppointmentForDoctor
     let serialNumber: Int
     @State private var patientName: String = ""
+    @State private var isShowingPatientHistoryUpdate = false
     
     var body: some View {
         HStack {
@@ -202,11 +203,16 @@ struct AppointmentRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.black)
             
-            NavigationLink(destination: PatientHistoryUpdate(appointment: appointment)) {
+            Button(action: {
+                isShowingPatientHistoryUpdate.toggle()
+            }) {
                 Image(systemName: "pencil")
                     .resizable()
                     .frame(width: 20, height: 20)
                     .foregroundColor(.green)
+            }
+            .sheet(isPresented: $isShowingPatientHistoryUpdate) {
+                PatientHistoryUpdate(appointment: appointment)
             }
         }
         .frame(width: 1150, height: 50)
