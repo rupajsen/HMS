@@ -14,12 +14,19 @@ struct LoginView: View {
         NavigationView {
             VStack {
                 // Image
-                Image("logo")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 120)
-                    .padding(.vertical, 32)
+//                Image("logo")
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 100, height: 120)
+//                    .padding(.vertical, 32)
+//                
+                Text("InfyHealth")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top,50)
                 
+                Spacer()
                 // Form fields
                 VStack(spacing: 24) {
                     InputView(text: $email, title: "Email address", placeholder: "name@example.com", isSecureField: false)

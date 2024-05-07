@@ -22,11 +22,17 @@ struct RegistrationView: View {
     
     var body: some View {
         VStack {
-            Image("logo")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 120)
-                .padding(.vertical, 32)
+//            Image("logo")
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: 100, height: 120)
+//                .padding(.vertical, 32)
+            
+            Text("InfyHealth")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity)
+                .padding(.top,50)
             
             VStack(spacing: 24) {
                 InputView(text: $email, title: "Email address", placeholder: "name@example.com", isSecureField: false)
@@ -54,17 +60,21 @@ struct RegistrationView: View {
                     }
                 }
                 
-                HStack(spacing:130){
-                    Text("Select Role")
-                    // Picker for roles
-                    Picker("Select Role", selection: $selectedRole) {
-                        ForEach(roles, id: \.self) { role in
-                            Text(role)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .padding(.horizontal)
-                }
+                Text("Sign up as a patient")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.blue)
+                
+//                HStack(spacing:130){
+//                    Text("Select Role")
+//                    // Picker for roles
+//                    Picker("Select Role", selection: $selectedRole) {
+//                        ForEach(roles, id: \.self) { role in
+//                            Text(role)
+//                        }
+//                    }
+//                    .pickerStyle(.menu)
+//                    .padding(.horizontal)
+//                }
                 
             }
             .padding(.horizontal)
