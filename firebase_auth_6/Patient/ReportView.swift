@@ -41,23 +41,32 @@ struct ReportView: View {
             }
             
             // Display PDFs
-            List(pdfURLs) { pdfURL in
-                Button(action: {
-                    self.selectedPDF = pdfURL
-                }) {
-                    Text(pdfURL.url.lastPathComponent)
+            if pdfURLs.isEmpty {
+                Text("No reports found.")
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+            } else {
+                List(pdfURLs) { pdfURL in
+                    Button(action: {
+                        self.selectedPDF = pdfURL
+                    }) {
+                        Text(pdfURL.url.lastPathComponent)
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                    .padding()
                 }
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-            .padding()
-            
             Spacer()
         }
         .onAppear {
-            // Fetch PDF URLs for the current user
             fetchPDFsForCurrentUser()
         }
         .sheet(item: $selectedPDF) { pdfWrapper in
