@@ -173,7 +173,18 @@ struct StaffList: View {
             
             if selectedTab == 1 {
                 VStack {
-                    SearchBar(text: $searchTextDoctor, placeholder: "Search Doctors")
+                    HStack{
+                        SearchBar(text: $searchTextDoctor, placeholder: "Search Doctors")
+                        Button(action: {
+                            isAddStaffSheetPresented.toggle()
+                        }) {
+                            Text("Add New Staff")
+                                .foregroundColor(.blue)
+                                .padding()
+                                .background(Color.blue.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                    }
                     ScrollView {
                         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
                             ForEach(filteredDoctors.indices, id: \.self) { index in
@@ -214,15 +225,15 @@ struct StaffList: View {
             
             Spacer()
             
-            Button(action: {
-                isAddStaffSheetPresented.toggle()
-            }) {
-                Text("Add New Staff")
-                    .foregroundColor(.blue)
-                    .padding()
-                    .background(Color.blue.opacity(0.2))
-                    .cornerRadius(10)
-            }
+//            Button(action: {
+//                isAddStaffSheetPresented.toggle()
+//            }) {
+//                Text("Add New Staff")
+//                    .foregroundColor(.blue)
+//                    .padding()
+//                    .background(Color.blue.opacity(0.2))
+//                    .cornerRadius(10)
+//            }
         }
         .padding()
         .navigationTitle("Staff Management")
