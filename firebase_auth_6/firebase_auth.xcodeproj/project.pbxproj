@@ -31,6 +31,7 @@
 		3F399DB12BD9756D008AD694 /* DoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399DB02BD9756D008AD694 /* DoctorView.swift */; };
 		3F399DB32BD97577008AD694 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399DB22BD97577008AD694 /* AdminView.swift */; };
 		3F4A3C772BE9E6660027D00C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F4A3C762BE9E6660027D00C /* GoogleService-Info.plist */; };
+		3F4A3C7C2BE9F87B0027D00C /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 3F4A3C7B2BE9F87B0027D00C /* SwiftUICharts */; };
 		3F4B3F462BE0134E0034768D /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F452BE0134E0034768D /* TestView.swift */; };
 		3F4B3F4A2BE024540034768D /* AddStaff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F472BE024540034768D /* AddStaff.swift */; };
 		3F4B3F4B2BE024540034768D /* StaffList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F482BE024540034768D /* StaffList.swift */; };
@@ -92,6 +93,7 @@
 				3F399DA22BD974AA008AD694 /* FirebaseDatabaseSwift in Frameworks */,
 				3F399DA42BD974AA008AD694 /* FirebaseFirestore in Frameworks */,
 				3F399DA02BD974AA008AD694 /* FirebaseDatabase in Frameworks */,
+				3F4A3C7C2BE9F87B0027D00C /* SwiftUICharts in Frameworks */,
 				3F399DA62BD974AA008AD694 /* FirebaseStorage in Frameworks */,
 				3F399D9E2BD974AA008AD694 /* FirebaseAuth in Frameworks */,
 			);
@@ -234,6 +236,7 @@
 				3F399DA12BD974AA008AD694 /* FirebaseDatabaseSwift */,
 				3F399DA32BD974AA008AD694 /* FirebaseFirestore */,
 				3F399DA52BD974AA008AD694 /* FirebaseStorage */,
+				3F4A3C7B2BE9F87B0027D00C /* SwiftUICharts */,
 			);
 			productName = firebase_auth;
 			productReference = 3F399D802BD971A7008AD694 /* firebase_auth.app */;
@@ -265,6 +268,7 @@
 			mainGroup = 3F399D772BD971A7008AD694;
 			packageReferences = (
 				3F399D9C2BD974AA008AD694 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3F4A3C7A2BE9F87B0027D00C /* XCRemoteSwiftPackageReference "ChartView" */,
 			);
 			productRefGroup = 3F399D812BD971A7008AD694 /* Products */;
 			projectDirPath = "";
@@ -542,6 +546,14 @@
 				minimumVersion = 10.24.0;
 			};
 		};
+		3F4A3C7A2BE9F87B0027D00C /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -569,6 +581,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3F399D9C2BD974AA008AD694 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		3F4A3C7B2BE9F87B0027D00C /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F4A3C7A2BE9F87B0027D00C /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

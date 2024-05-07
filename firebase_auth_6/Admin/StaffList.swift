@@ -19,9 +19,9 @@
 //                    Text("Patient List").tag(2)
 //                    Text("Patient Appointments").tag(3)
 //                }.pickerStyle(SegmentedPickerStyle())
-//                
+//
 //                SearchBar(text: .constant(""))
-//                
+//
 //                if selectedTab == 1 {
 //                    ScrollView {
 //                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
@@ -33,8 +33,8 @@
 //                } else {
 //                    // Display other content for the Overview, Patient List, and Patient Appointments tabs
 //                }
-//                
-//                
+//
+//
 //                if selectedTab == 2 {
 //                    ScrollView {
 //                        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
@@ -46,11 +46,11 @@
 //                } else {
 //                    // Display other content for the Overview, Patient List, and Patient Appointments tabs
 //                }
-//                
-//                
-//                
+//
+//
+//
 //                Spacer()
-//                
+//
 //                Button(action: {
 //                               // Show the AddStaff sheet when the button is tapped
 //                               isAddStaffSheetPresented.toggle()
@@ -79,7 +79,7 @@
 //                Circle()
 //                    .fill(Color.gray)
 //                    .frame(width: 50, height: 50)
-//                
+//
 //                VStack(alignment: .leading) {
 //                    Text("Kristan Watson")
 //                        .font(.headline)
@@ -88,17 +88,17 @@
 //                        .foregroundColor(.gray)
 //                }
 //            }
-//            
+//
 //            Divider()
-//            
+//
 //            VStack(alignment: .leading, spacing: 10) {
 //                Text("Designation: Cardiologists, Head")
 //                Text("Department: Cardiology")
 //                Text("Contact no.: 9893823937")
 //            }
-//            
+//
 //            Spacer()
-//            
+//
 //            Button(action: {}) {
 //                Text("View Doctor Details")
 //                    .foregroundColor(.white)
@@ -132,6 +132,9 @@ struct StaffList: View {
     @State private var searchText: String = ""
     @State private var searchTextDoctor = ""
     @State private var searchTextPatient = ""
+    
+    @State private var totalAppointmentsCount = 0
+
     
     let totalPatientsVisited = 100
         let activeAppointmentsCount = 20
@@ -274,6 +277,27 @@ struct StaffList: View {
         }
     }
 
+//    func fetchAppointmentsFromFirestore() {
+//        let db = Firestore.firestore()
+//        db.collection("appointments").getDocuments { (querySnapshot, error) in
+//            if let error = error {
+//                print("Error fetching appointments: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            guard let documents = querySnapshot?.documents else {
+//                print("No documents")
+//                return
+//            }
+//
+//            self.appointments = documents.compactMap { queryDocumentSnapshot in
+//                let data = queryDocumentSnapshot.data()
+//                return Appointment1(data: data)
+//            }
+//
+//        }
+//    }
+    
     func fetchAppointmentsFromFirestore() {
         let db = Firestore.firestore()
         db.collection("appointments").getDocuments { (querySnapshot, error) in
@@ -287,12 +311,24 @@ struct StaffList: View {
                 return
             }
             
+            
+            
             self.appointments = documents.compactMap { queryDocumentSnapshot in
                 let data = queryDocumentSnapshot.data()
                 return Appointment1(data: data)
             }
+            
+            // Print the total appointments count for debugging
+            let totalAppointmentsCount = documents.count
+            print("Total Appointments Count: \(totalAppointmentsCount)")
+            
+            // Update the total appointments count using a separate state variable
+            DispatchQueue.main.async {
+                self.totalAppointmentsCount = totalAppointmentsCount
+            }
         }
     }
+
     struct SearchBar: View {
         @Binding var text: String
         var placeholder: String
@@ -316,59 +352,116 @@ struct StaffList: View {
         }
     }
 }
+
 import SwiftUI
+import Firebase
 
 struct OverviewTabView: View {
+    @State private var totalAppointmentsCount = 0 // Define totalAppointmentsCount as a state variable
+    @State private var totalPatientsCount = 0 // Define totalPatientsCount as a state variable
+    @State private var totalDoctorsCount = 0 // Define totalDoctorsCount as a state variable
+
     var body: some View {
         ScrollView {
-            
-            HStack(){
-                
-            VStack(alignment: .leading) {
-                GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
-                                        .frame(width: 755, height: 150)
-                                        .padding()
-                   
-                
-            
-                
-                HStack() {// Total Bookings Card
-                    TotalBookingsCard(title: "Total Bookings", value: "220") {
-                                                // Action to add appointment
-                                            }
-                                            .padding(.horizontal)
-                    TotalBookingsCard(title: "Total patients", value: "170") {
-                                                // Action to add appointment
-                                            }
-                                            .padding(.horizontal)
-                    TotalBookingsCard(title: "Doctors Available", value: "40") {
-                                                // Action to add appointment
-                                            }
-                                            .padding(.horizontal)
+            HStack {
+                VStack(alignment: .leading) {
+                    GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
+                        .frame(width: 755, height: 150)
+                        .padding()
+
+                    HStack {
+                        // Total Bookings Card
+                        TotalBookingsCard(title: "Total Bookings", value: "\(totalAppointmentsCount)", buttonAction: {}, totalCount: $totalAppointmentsCount)
+
+                        // Total patients Card
+                        TotalBookingsCard(title: "Total patients", value: "\(totalPatientsCount)", buttonAction: {}, totalCount: $totalPatientsCount)
+
+                        // Doctors Available Card
+                        TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {}, totalCount: $totalDoctorsCount)
+                    }
+
+                    // Summary Statistics
+
+                    HStack {
+                        // Patient List
+                        PatientListView()
+
+                        // Doctors List
+                    }
                 }
-                
-                
-                // Summary Statistics
-                
-                HStack() {
-                    // Patient List
-                    PatientListView()
-                    
-                    // Doctors List
-                    
+
+                VStack {
+                    SummaryStatisticsView()
+                        .offset(y: -60)
+
+                    DoctorListView()
+                        .offset(y: -70)
                 }
-                
+                .offset(y: 60)
+            }
+        }
+        .onAppear {
+            // Fetch appointments, patient, and doctor counts from Firestore
+            fetchAppointmentsCountFromFirestore()
+            fetchPatientsCountFromFirestore()
+            fetchDoctorsCountFromFirestore()
+        }
+    }
+
+    // Function to fetch appointments count from Firestore
+    func fetchAppointmentsCountFromFirestore() {
+        let db = Firestore.firestore()
+        db.collection("appointments").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching appointments count: \(error.localizedDescription)")
+                return
             }
             
-                VStack(){
-                    SummaryStatisticsView()
-                        .offset(y:-60)
-                    
-                    DoctorListView()
-                        .offset(y:-70)
-                }
-                .offset(y:60)
+            guard let documents = querySnapshot?.documents else {
+                print("No appointment documents")
+                return
+            }
+            
+            // Update totalAppointmentsCount with the count of documents
+            self.totalAppointmentsCount = documents.count
         }
+    }
+    
+    // Function to fetch patients count from Firestore
+    func fetchPatientsCountFromFirestore() {
+        let db = Firestore.firestore()
+        db.collection("users").whereField("userType", isEqualTo: "Patient").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching patients count: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No patient documents")
+                return
+            }
+            
+            // Update totalPatientsCount with the count of documents
+            self.totalPatientsCount = documents.count
+        }
+    }
+    
+    // Function to fetch doctors count from Firestore
+    func fetchDoctorsCountFromFirestore() {
+        let db = Firestore.firestore()
+        db.collection("users").whereField("userType", isEqualTo: "Doctor").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching doctors count: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No doctor documents")
+                return
+            }
+            
+            // Update totalDoctorsCount with the count of documents
+            self.totalDoctorsCount = documents.count
         }
     }
 }
@@ -377,6 +470,16 @@ struct TotalBookingsCard: View {
     var title: String
     var value: String
     var buttonAction: () -> Void
+    
+    // Capture totalAppointmentsCount, totalPatientsCount, or totalDoctorsCount as a binding
+    @Binding var totalCount: Int
+    
+    init(title: String, value: String, buttonAction: @escaping () -> Void, totalCount: Binding<Int>) {
+        self.title = title
+        self.value = value
+        self.buttonAction = buttonAction
+        _totalCount = totalCount
+    }
     
     var body: some View {
         VStack {
@@ -390,7 +493,7 @@ struct TotalBookingsCard: View {
                 .foregroundColor(.black)
             
             Button(action: buttonAction) {
-                Text("View Appointments")
+                Text("View Details")
                     .foregroundColor(.white)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 30)
@@ -400,14 +503,12 @@ struct TotalBookingsCard: View {
             .shadow(color: Color.gray.opacity(0.3), radius: 10, x: 0, y: 5)
         }
         .padding()
-        
         .frame(width:230 ,height: 180)
         .background(Color.white)
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
     }
 }
-
 
 struct SummaryStatisticsView: View {
     var body: some View {
@@ -447,32 +548,147 @@ struct SummaryRow: View {
         }
     }
 }
+import SwiftUI
+import SwiftUICharts // Import the SwiftUICharts library
 
 struct PatientListView: View {
+    @State private var appointmentsData: [Date: Double] = [:]
+    @State private var selectedGraphOption = 0
+    let graphOptions = ["Day", "Week", "Year"]
+    
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Patients")
-                .font(.headline)
-            Divider()
-            // Static list of patients
-            ForEach(0..<5) { _ in
-                HStack {
-                    Text("John Doe")
-                    Spacer()
-                    Text("01/01/1990")
-                    Spacer()
-                    Text("M")
+            // Dropdown menu for selecting the graph option
+            Menu {
+                ForEach(0..<graphOptions.count) { index in
+                    Button(action: {
+                        selectedGraphOption = index
+                        fetchAppointmentsDataFromFirestore() // Update data when option changes
+                    }) {
+                        Text(graphOptions[index])
+                    }
                 }
-                Divider()
+            } label: {
+                Text("Graph Option: \(graphOptions[selectedGraphOption])")
+                    .padding()
+            }
+            
+            Text("Appointments")
+                .font(.headline)
+                .padding(.top)
+            
+            Divider()
+            
+            // Display the graph based on selectedGraphOption
+            switch selectedGraphOption {
+            case 0: // Day
+                if !appointmentsData.isEmpty {
+                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
+                    LineChartView(data: data, title: "Appointments", legend: "Appointments")
+                        .padding()
+                        .frame(height: 300)
+                        .frame(maxWidth: .infinity) // Take up full width
+                } else {
+                    Text("No data available")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+            case 1: // Week
+                if !appointmentsData.isEmpty {
+                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
+                    // Create a line chart for week view
+                    LineChartView(data: data, title: "Appointments - Weekly", legend: "Appointments")
+                        .padding()
+                        .frame(height: 300)
+                        .frame(maxWidth: .infinity) // Take up full width
+                } else {
+                    Text("No data available")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+
+            case 2: // Year
+                if !appointmentsData.isEmpty {
+                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
+                    // Create a line chart for year view
+                    LineChartView(data: data, title: "Appointments - Yearly", legend: "Appointments")
+                        .padding()
+                        .frame(height: 300)
+                        .frame(maxWidth: .infinity) // Take up full width
+                } else {
+                    Text("No data available")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+
+            default:
+                EmptyView()
             }
         }
-        
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
         .padding()
+        .onAppear {
+            fetchAppointmentsDataFromFirestore()
+        }
+    }
+    
+    // Function to fetch appointments data from Firestore
+    func fetchAppointmentsDataFromFirestore() {
+        let db = Firestore.firestore()
+        db.collection("appointments").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching appointments data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No appointment documents")
+                return
+            }
+            
+            // Parse the appointment data and count appointments for each date
+            var appointmentsData: [Date: Double] = [:]
+            for document in documents {
+                if let timestamp = document["date"] as? Timestamp {
+                    // Convert Timestamp to Date
+                    let date = timestamp.dateValue()
+                    // Get the date component without time
+                    let calendar = Calendar.current
+                    let components: Set<Calendar.Component> = [.year, .month, .day]
+                    let normalizedDate = calendar.date(from: calendar.dateComponents(components, from: date))
+                    
+                    switch selectedGraphOption {
+                    case 0: // Day
+                        // For day option, count appointments for each date
+                        appointmentsData[normalizedDate!, default: 0] += 1
+                    case 1: // Week
+                        // For week option, group appointments by week
+                        let weekOfYear = calendar.component(.weekOfYear, from: normalizedDate!)
+                        let year = calendar.component(.year, from: normalizedDate!)
+                        let weekDate = calendar.date(from: DateComponents(year: year, weekOfYear: weekOfYear))
+                        appointmentsData[weekDate!, default: 0] += 1
+                    case 2: // Year
+                        // For year option, group appointments by year
+                        let year = calendar.component(.year, from: normalizedDate!)
+                        let yearDate = calendar.date(from: DateComponents(year: year))
+                        appointmentsData[yearDate!, default: 0] += 1
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            // Update the appointmentsData state variable
+            self.appointmentsData = appointmentsData
+        }
     }
 }
+
+
+
+
 
 struct DoctorListView: View {
     var body: some View {

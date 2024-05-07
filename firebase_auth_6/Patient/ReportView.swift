@@ -47,8 +47,9 @@ struct ReportView: View {
                     .background(Color.white)
                     .cornerRadius(10)
                     .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-                    .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding()
+                    
                 
             } else {
                 List(pdfURLs) { pdfURL in
