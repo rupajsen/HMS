@@ -1,7 +1,4 @@
-//  ScheduledAppointmentView.swift
-//  firebase_auth
-//  Created by Rupaj Sen on 26/04/24.
-//
+
 
 import SwiftUI
 import Firebase
@@ -39,7 +36,7 @@ struct AppointmentCard: View {
                                 .stroke(Color.blue.opacity(0.2), lineWidth: 2)
                         )
                         .padding(.leading, 50)
-                    
+
                     VStack(alignment: .leading, spacing: 5) {
                         Text(appointment.name)
                             .font(.title3).bold()
@@ -52,7 +49,7 @@ struct AppointmentCard: View {
                             .foregroundColor(.blue)
                             .cornerRadius(10)
                             .font(.subheadline)
-                        
+
                         Text("\(appointment.date)")
                             .frame(width:90)
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
@@ -74,7 +71,7 @@ struct AppointmentCard: View {
                                         .stroke(Color.red, lineWidth: 1)
                                 )
                         }}
-                    
+
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -114,95 +111,74 @@ struct ScheduledAppointmentView: View {
     @State private var searchText: String = ""
     @State private var appointmentToDelete: Appointment?
     @State private var showAlert = false
-    
-        var body: some View {
-            VStack(alignment: .leading) {
-                Text("Appointments")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.vertical)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                SearchBar(text: $searchText).padding(.bottom,20)
-                
-                ScrollView {
-                    VStack {
-                        ForEach(filteredAppointments) { appointment in
-                            // AppointmentCard with cancel appointment action
-                            AppointmentCard(appointment: appointment) {
-                                // Set the appointment to delete
-                                self.appointmentToDelete = appointment
-                                // Show alert
-                                self.showAlert = true
-                            }
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Picker("", selection: $selectedTabIndex) {
+                Text("Upcoming Appointments").tag(0)
+                Text("Appointment History").tag(1)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            .padding(.top, 10)
+
+            if selectedTabIndex == 0 {
+                upcomingAppointmentsView()
+            } else {
+                appointmentHistoryView()
+            }
+        }
+        .padding()
+        .onAppear {
+            getUserUID()
+            fetchAppointments(forUserID: userUID ?? "") { dataFetched, error in
+                if let fetchedAppointments = dataFetched {
+                    self.appointmentsBooked = fetchedAppointments
+                }
+            }
+        }
+    }
+
+    private func upcomingAppointmentsView() -> some View {
+        VStack(alignment: .leading) {
+            Text("Appointments")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.vertical)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            SearchBar(text: $searchText).padding(.bottom,20)
+
+            ScrollView {
+                VStack {
+                    ForEach(filteredAppointments) { appointment in
+                        // AppointmentCard with cancel appointment action
+                        AppointmentCard(appointment: appointment) {
+                            // Set the appointment to delete
+                            self.appointmentToDelete = appointment
+                            // Show alert
+                            self.showAlert = true
                         }
                     }
                 }
             }
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Cancel Appointment"),
-                    message: Text("Are you sure you want to cancel this appointment?"),
-                    primaryButton: .destructive(Text("Yes")) {
-                        // Call function to delete appointment when user confirms
-                        deleteAppointment()
-                    },
-                    secondaryButton: .cancel(Text("No"))
-                )
-            }
-            .onAppear {
-                getUserUID()
-                fetchAppointments(forUserID: userUID ?? "") { dataFetched, error in
-                    if let fetchedAppointments = dataFetched {
-                        self.appointmentsBooked = fetchedAppointments
-                    }
-                }
-            }
-            .padding()
         }
-        
-        // Function to delete appointment from Firebase and update UI
-        func deleteAppointment() {
-          guard let appointment = appointmentToDelete else { return }
-          let db = Firestore.firestore()
-            let appointmentID = appointment.appointmentId
-            
-            print(appointmentID)
-          // Get a reference to the appointment document
-            let appointmentRef = db.collection("appointments").document(appointmentID)
-          // Delete the appointment document
-          appointmentRef.delete { error in
-            if let error = error {
-              print("Error deleting appointment:", error.localizedDescription)
-            } else {
-              print("Appointment deleted successfully!")
-
-              // Remove appointment from local state only after successful deletion
-              self.appointmentsBooked.removeAll { $0.id == appointment.id }
-            }
-          }
-        }
-
-    private func upcomingAppointmentsView() -> some View {
-        VStack(alignment: .leading) {
-            SearchBar(text: $searchText).padding(.bottom,20)
-                .padding()
-                .frame(maxWidth: .infinity)
-            
-            ScrollView {
-                VStack {
-                    ForEach(filteredAppointments) { appointment in
-                        AppointmentCard(appointment: appointment)
-                    }
-                }
-            }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Cancel Appointment"),
+                message: Text("Are you sure you want to cancel this appointment?"),
+                primaryButton: .destructive(Text("Yes")) {
+                    // Call function to delete appointment when user confirms
+                    deleteAppointment()
+                },
+                secondaryButton: .cancel(Text("No"))
+            )
         }
     }
 
     private func appointmentHistoryView() -> some View {
         NavigationView { // Ensure that the view is embedded in a NavigationView
             VStack(alignment: .leading) {
-
                 List(appointmentHistory) { appointment in
                     NavigationLink(destination: PatientHistoryDetailView(appointmentHistory: appointment)) {
                         VStack(alignment: .leading) {
@@ -216,9 +192,14 @@ struct ScheduledAppointmentView: View {
                 .padding()
             }
         }
+        .onAppear {
+            fetchAppointmentHistory(forUserID: userUID ?? "") { dataFetched, error in
+                if let fetchedHistory = dataFetched {
+                    self.appointmentHistory = fetchedHistory
+                }
+            }
+        }
     }
-
-
 
     private var filteredAppointments: [Appointment] {
         if searchText.isEmpty {
@@ -238,65 +219,65 @@ struct ScheduledAppointmentView: View {
     }
 
     func fetchAppointments(forUserID userID: String, completion: @escaping ([Appointment]?, Error?) -> Void) {
-            let db = Firestore.firestore()
-            
-            // Reference to the appointments collection
-            let appointmentsRef = db.collection("appointments")
-            
-            // Query appointments where doctorID matches the user's ID
-            appointmentsRef.whereField("userId", isEqualTo: userID).getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    completion(nil, error)
-                    return
-                }
-                
-                var appointments: [Appointment] = []
-                
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-                    let time = data["time"] as? String ?? ""
-                    let id = document.documentID
-                    
-                    let timestamp = data["date"] as? Timestamp ?? Timestamp(date: Date())
-                    let date = timestamp.dateValue()
+        let db = Firestore.firestore()
 
-                    // Create a DateFormatter
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "dd/MM/yyyy"
+        // Reference to the appointments collection
+        let appointmentsRef = db.collection("appointments")
 
-                    // Format the date
-                    let formattedDate = formatter.string(from: date)
-                    print("Formatted date: \(formattedDate)")
+        // Query appointments where doctorID matches the user's ID
+        appointmentsRef.whereField("userId", isEqualTo: userID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
 
-                    
-                    let doctorID = data["doctorId"] as? String ?? ""
-                    
-                    
-                    print(data)
-                    
-    //                 Fetch doctor details using doctorID
-                    fetchDoctorDetails(forDoctorID: doctorID) { (doctor, error) in
-                        if let error = error {
-                            completion(nil, error)
-                            return
-                        }
-                        guard let doctor = doctor else {
-                            completion(nil, nil)
-                            return
-                        }
-                        
-                        let name = doctor.name
-                        let department = doctor.specialization
-                        let appointment = Appointment(appointmentId: id ,name: name, department: department, time: time, date: formattedDate)
-                        appointments.append(appointment)
-                        
-                        // Check if all appointments are fetched
-                            completion(appointments, nil)
-                        
+            var appointments: [Appointment] = []
+
+            for document in querySnapshot!.documents {
+                let data = document.data()
+                let time = data["time"] as? String ?? ""
+                let id = document.documentID
+
+                let timestamp = data["date"] as? Timestamp ?? Timestamp(date: Date())
+                let date = timestamp.dateValue()
+
+                // Create a DateFormatter
+                let formatter = DateFormatter()
+                formatter.dateFormat = "dd/MM/yyyy"
+
+                // Format the date
+                let formattedDate = formatter.string(from: date)
+                print("Formatted date: \(formattedDate)")
+
+
+                let doctorID = data["doctorId"] as? String ?? ""
+
+
+                print(data)
+
+                // Fetch doctor details using doctorID
+                fetchDoctorDetails(forDoctorID: doctorID) { (doctor, error) in
+                    if let error = error {
+                        completion(nil, error)
+                        return
                     }
+                    guard let doctor = doctor else {
+                        completion(nil, nil)
+                        return
+                    }
+
+                    let name = doctor.name
+                    let department = doctor.specialization
+                    let appointment = Appointment(appointmentId: id ,name: name, department: department, time: time, date: formattedDate)
+                    appointments.append(appointment)
+
+                    // Check if all appointments are fetched
+                    completion(appointments, nil)
+
                 }
             }
         }
+    }
 
     private func fetchAppointmentHistory(forUserID userID: String, completion: @escaping ([AppointmentHistory]?, Error?) -> Void) {
         let db = Firestore.firestore()
@@ -387,6 +368,27 @@ struct ScheduledAppointmentView: View {
             completion(name, nil)
         }
     }
+
+    private func deleteAppointment() {
+        guard let appointment = appointmentToDelete else { return }
+        let db = Firestore.firestore()
+        let appointmentID = appointment.appointmentId
+
+        print(appointmentID)
+        // Get a reference to the appointment document
+        let appointmentRef = db.collection("appointments").document(appointmentID)
+        // Delete the appointment document
+        appointmentRef.delete { error in
+            if let error = error {
+                print("Error deleting appointment:", error.localizedDescription)
+            } else {
+                print("Appointment deleted successfully!")
+
+                // Remove appointment from local state only after successful deletion
+                self.appointmentsBooked.removeAll { $0.id == appointment.id }
+            }
+        }
+    }
 }
 
 struct AppointmentHistory: Identifiable {
@@ -395,15 +397,6 @@ struct AppointmentHistory: Identifiable {
     var date: String
     var diagnosis: String
 }
-
-struct ScheduledAppointmentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ScheduledAppointmentView()
-    }
-}
-
-
-import SwiftUI
 
 struct PatientHistoryDetailView: View {
     let appointmentHistory: AppointmentHistory
