@@ -187,79 +187,42 @@ struct PatientDashView: View {
     
 
     private func fetchLatestMedicationEntries() {
-            let db = Firestore.firestore()
-            let patientHistoryRef = db.collection("patienthistory")
-                .order(by: "date", descending: true)
-                .limit(to: 1)
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No user is currently logged in")
+            return
+        }
 
-            patientHistoryRef.getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error fetching patient history: \(error)")
-                    return
-                }
+        let db = Firestore.firestore()
+        let userId = currentUser.uid
 
-                guard let document = querySnapshot?.documents.first else {
-                    print("No documents found")
-                    return
-                }
+        let medicationHistoryRef = db.collection("patienthistory")
+            .whereField("userId", isEqualTo: userId) // Query by user ID
+            .limit(to: 1)
 
-                if let medicationEntries = document.data()["medicationEntries"] as? [[String: Any]] {
-                    self.medicationEntries = medicationEntries
-                    print("Fetched medication entries successfully: \(self.medicationEntries)")
-                } else {
-                    print("No medication entries found in the document")
-                }
+        medicationHistoryRef.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching medication history: \(error)")
+                return
+            }
+
+            guard let document = querySnapshot?.documents.first else {
+                print("No documents found")
+                return
+            }
+
+            if let medicationEntries = document.data()["medicationEntries"] as? [[String: Any]] {
+                self.medicationEntries = medicationEntries
+                print("Fetched medication entries successfully: \(self.medicationEntries)")
+            } else {
+                print("No medication entries found in the document")
             }
         }
+    }
+
 
 
 }
 
-
-//struct MedicationCard: View {
-//    var timeOfDay: String
-//    var medications: [(name: String, quantity: String)]
-//
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 8) {
-//            Text(timeOfDay.uppercased())
-//                .font(.headline)
-//                .foregroundColor(.white)
-//                .padding(.horizontal)
-//                .padding(.vertical, 5)
-//                .background(LinearGradient(
-//                    stops: [
-//                        Gradient.Stop(color: Color(red: 0.05, green: 0.51, blue: 0.99), location: 0.00),
-//                        Gradient.Stop(color: Color(red: 0.03, green: 0.3, blue: 0.59), location: 1.00),
-//                    ],
-//                    startPoint: UnitPoint(x: 0.5, y: 0),
-//                    endPoint: UnitPoint(x: 0.5, y: 1)
-//                ))
-//                .cornerRadius(8)
-//                .shadow(radius: 3)
-//                .frame(width: 200)
-//
-//            ForEach(medications, id: \.name) { medication in
-//                HStack {
-//                    Text(medication.name)
-//                        .font(.subheadline)
-//                        .foregroundColor(.primary)
-//                    Spacer()
-//                    Text(medication.quantity)
-//                        .font(.subheadline)
-//                        .foregroundColor(.secondary)
-//                        .padding(.trailing)
-//                }
-//                .padding(.horizontal)
-//            }
-//        }
-//        .padding(.vertical)
-//        .background(Color.white)
-//        .cornerRadius(10)
-//        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-//        .frame(width: 200, height: 150)
-//    }
-//}
 
 struct MedicationCard: View {
     var entry: [String: Any]
@@ -285,18 +248,6 @@ struct MedicationCard: View {
     
 }
 
-
-
-//            Text("Time:")
-//                .font(.headline)
-//            Text(entry["time"] as? String ?? "")
-//                .foregroundColor(.secondary)
-//            Text("Additional Description:")
-//                .font(.headline)
-//            Text(entry["additionalDescription"] as? String ?? "")
-//                .foregroundColor(.secondary)
-       
-    
 
 
 
