@@ -256,19 +256,25 @@ struct OverviewTabView: View {
             HStack {
                 VStack(alignment: .leading) {
                     GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
-                        .frame(width: 755, height: 150)
+                        //.frame(width: 755, height: 150)
+                        .frame(maxWidth: .infinity)
                         .padding()
 
                     HStack {
                         // Total Bookings Card
-                        TotalBookingsCard(title: "Total Bookings", value: "\(totalAppointmentsCount)", buttonAction: {}, totalCount: $totalAppointmentsCount)
+                        TotalBookingsCard(title: "Total Bookings", value: "\(totalAppointmentsCount)", buttonAction: {})
 
                         // Total patients Card
-                        TotalBookingsCard(title: "Total patients", value: "\(totalPatientsCount)", buttonAction: {}, totalCount: $totalPatientsCount)
+                        TotalBookingsCard(title: "Total patients", value: "\(totalPatientsCount)", buttonAction: {})
 
                         // Doctors Available Card
-                        TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {}, totalCount: $totalDoctorsCount)
+                        TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {})
+                        
+                        SummaryStatisticsView()
+                            .offset(y:55)
+                        
                     }
+                    .frame(maxWidth: .infinity)
                     .padding()
 
                     // Summary Statistics
@@ -279,16 +285,17 @@ struct OverviewTabView: View {
 
                         // Doctors List
                     }
+                    .frame(maxWidth: .infinity)
                 }
 
-                VStack {
-                    SummaryStatisticsView()
-                        .offset(y: -60)
-
-//                    DoctorListView()
-//                        .offset(y: -70)
-                }
-                .offset(y: 60)
+//                VStack {
+//                    SummaryStatisticsView()
+//                        .offset(y: -60)
+//
+////                    DoctorListView()
+////                        .offset(y: -70)
+//                }
+//                .offset(y: 60)
             }
         }
         .onAppear {
@@ -362,35 +369,36 @@ struct TotalBookingsCard: View {
     var value: String
     var buttonAction: () -> Void
     
-    // Capture totalAppointmentsCount, totalPatientsCount, or totalDoctorsCount as a binding
-    @Binding var totalCount: Int
-    
-    init(title: String, value: String, buttonAction: @escaping () -> Void, totalCount: Binding<Int>) {
+    init(title: String, value: String, buttonAction: @escaping () -> Void) {
         self.title = title
         self.value = value
         self.buttonAction = buttonAction
-        _totalCount = totalCount
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(title)
-                .font(.system(size: 20, weight: .bold, design: .default))
+                .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
-                .padding()
+                .padding(.top, 10)
+            
+            Divider()
             
             Text(value)
-                .font(.system(size: 20, weight: .bold, design: .default))
+                .font(.headline)
+                .fontWeight(.bold)
                 .foregroundColor(.black)
+                .padding(.bottom, 10)
         }
+        .frame(width: 200)
         .padding()
-        .frame(width:230 ,height: 180)
-        .background(Color.white)
-        .cornerRadius(20)
-        .shadow(radius: 5)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+        //.shadow(radius: 5)
     }
 }
+
 
 import SwiftUI
 import FirebaseFirestore
@@ -776,17 +784,22 @@ struct GreetingCard: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(title)
-                .font(.largeTitle)
-                .padding(.leading) // Add padding to align with the left edge
-                .foregroundColor(.primary)
-            
-            Text(subtitle)
-                .font(.system(size: 20))
-                .padding(.leading) // Add padding to align with the left edge
-                .foregroundColor(.primary)
+            HStack{
+                VStack(alignment: .leading){
+                    Text(title)
+                        .font(.largeTitle)
+                        .foregroundColor(.primary)
+                    
+                    Text(subtitle)
+                        .font(.system(size: 20))
+                        .foregroundColor(.primary)
+                }
+                .padding(.leading)
+                Image("admin")
+                    .resizable()
+                    .frame(height: 250)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(width: 760,height: 150)// Align VStack contents to the left
         .background(Color.white)
         .cornerRadius(16)
@@ -918,9 +931,6 @@ struct DoctorCard1: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(doctor.name)
                         .font(.headline)
-                    Text("Employee ID: \(doctor.position)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
                 }
             }
             
@@ -966,8 +976,6 @@ struct PatientCard1: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(patient.name)
                         .font(.headline)
-                    Text("Patient ID: \(patient.patientID)")
-                        .font(.subheadline)
                 }
             }
             
