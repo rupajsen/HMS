@@ -257,7 +257,7 @@ struct OverviewTabView: View {
                 VStack(alignment: .leading) {
                     GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
                         //.frame(width: 755, height: 150)
-                        .frame(maxWidth: .infinity)
+                        .frame(alignment: .leading)
                         .padding()
 
                     HStack {
@@ -271,9 +271,10 @@ struct OverviewTabView: View {
                         TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {})
                         
                         SummaryStatisticsView()
-                            .offset(y:55)
+                            .offset(y:-45)
                         
                     }
+                    .offset(y: -70)
                     .frame(maxWidth: .infinity)
                     .padding()
 
@@ -391,7 +392,7 @@ struct TotalBookingsCard: View {
                 .foregroundColor(.black)
                 .padding(.bottom, 10)
         }
-        .frame(width: 200)
+        .frame(width: 200, height: 120)
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
@@ -410,6 +411,13 @@ struct SummaryStatisticsView: View {
     
     var body: some View {
         VStack {
+            
+            PieChartView(total: appointmentsCount, completed: completedAppointmentsCount, pending: pendingAppointmentsCount)
+                .frame(width: 200, height: 200)
+                .offset(y: -40)
+
+
+
             // Summary Card
             VStack(alignment: .leading) {
                 Text("Summary")
@@ -530,6 +538,7 @@ struct PatientListView: View {
         }
         .background(Color(.systemGray6))
         .cornerRadius(12)
+        .offset(y:-170)
         
         .padding()
         .onAppear {
@@ -992,6 +1001,65 @@ struct Patient1 {
         self.bloodGlucose = data["bloodGlucose"] as? String ?? ""
     }
 }
+
+struct PieChartSlice: Shape {
+    var startAngle: Angle
+    var endAngle: Angle
+    var color: Color
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        path.move(to: center)
+        path.addArc(center: center, radius: rect.width / 2, startAngle: startAngle, endAngle: endAngle, clockwise: false)
+        path.closeSubpath()
+        return path
+    }
+    
+    var animatableData: AnimatablePair<Double, Double> {
+        get { AnimatablePair(startAngle.degrees, endAngle.degrees) }
+        set { startAngle.degrees = newValue.first; endAngle.degrees = newValue.second }
+    }
+}
+
+struct ColoredPieChartSlice: View {
+    var shape: PieChartSlice
+    var body: some View {
+        shape.fill(shape.color)
+    }
+}
+
+struct PieChartView: View {
+    var total: Int
+    var completed: Int
+    var pending: Int
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(0),
+                                                          endAngle: .degrees(self.angle(for: self.completed, total: self.total)), color:Color.gray.opacity(0.1)))
+                
+                ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(self.angle(for: self.completed, total: self.total)),
+                              endAngle: .degrees(self.angle(for: self.completed + self.pending, total: self.total)),
+                             color: Color.blue.opacity(0.15)))
+                
+                ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(self.angle(for: self.completed + self.pending, total: self.total)),
+                              endAngle: .degrees(360),
+                             color: .clear)) // Use a transparent color for the remaining space
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+        }
+    }
+    
+    private func angle(for value: Int, total: Int) -> Double {
+        guard total != 0 else { return 0 } // Prevent division by zero
+        let valueDouble = Double(value)
+        let totalDouble = Double(total)
+        return 360 * (valueDouble / totalDouble)
+    }
+}
+
 
 
 #Preview {

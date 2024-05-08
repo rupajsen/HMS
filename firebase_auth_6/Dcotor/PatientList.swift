@@ -4,22 +4,27 @@ import Firebase
 
 struct PatientList: View {
     @State private var patientHistory: [PatientHistory] = []
+    @State private var isLoading: Bool = false
     private var loggedInUserID: String? { Auth.auth().currentUser?.uid }
     
     var body: some View {
         NavigationView {
             VStack {
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)], spacing: 16) {
-                        ForEach(patientHistory, id: \.id) { history in
-                            NavigationLink(destination: PatientDetailsView(history: history)) {
-                                PatientCard(history: history)
-                                    .frame(maxHeight: .infinity) // Ensure cards expand to fill the grid cell
+                if isLoading {
+                    ProgressView("Loading...")
+                        .padding()
+                } else {
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 16)], spacing: 16) {
+                            ForEach(patientHistory, id: \.id) { history in
+                                NavigationLink(destination: PatientDetailsView(history: history)) {
+                                    PatientCard(history: history)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
-                            .buttonStyle(PlainButtonStyle()) // Remove default button style
                         }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .onAppear {
@@ -27,12 +32,14 @@ struct PatientList: View {
             }
             .navigationTitle("Appointment History")
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // Use StackNavigationViewStyle for iPad
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     func fetchPatientHistory() {
+        isLoading = true
         guard let loggedInUserID = loggedInUserID else {
             print("Logged-in user ID not found.")
+            isLoading = false
             return
         }
         
@@ -41,6 +48,7 @@ struct PatientList: View {
         db.collection("patienthistory")
             .whereField("doctorId", isEqualTo: loggedInUserID)
             .getDocuments { querySnapshot, error in
+                isLoading = false
                 if let error = error {
                     print("Error fetching patient history: \(error)")
                 } else {
