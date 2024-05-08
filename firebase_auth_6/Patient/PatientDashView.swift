@@ -82,7 +82,7 @@ struct PatientDashView: View {
                         VStack{
                             Text("Your upcoming Appointments")
                                 .font(.title2)
-                                .padding(.vertical)
+                                
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
@@ -91,7 +91,7 @@ struct PatientDashView: View {
                             VStack(alignment: .leading) {
                                 Text("Medication Entries")
                                     .font(.title2)
-                                    .padding(.vertical)
+                                    
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
                                 ScrollView(.horizontal) {
@@ -100,9 +100,11 @@ struct PatientDashView: View {
                                             ForEach(medicationEntries.indices, id: \.self) { index in
                                                 MedicationCard(entry: medicationEntries[index])
                                                     .padding()
-                                                    .background(Color.blue.opacity(0.2))
+                                                    .background(Color.white)
                                                     .cornerRadius(10)
                                                     .padding(.horizontal)
+                                                    .shadow(radius: 10)
+                                                    .frame(width:340 ,height: 160)
                                             }
                                         }
                                     }
@@ -230,17 +232,19 @@ struct MedicationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(entry["medicineName"] as? String ?? "")
-                .foregroundColor(.black).font(.title2).bold()
+                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99)).font(.title2).bold()
             
             Text("Dosage: \(entry["dosage"] as? String ?? "")")
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
             
             Text("Time: \(entry["time"] as? String ?? "")")
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
             
             Text("Additional Description: \(entry["additionalDescription"] as? String ?? "")")
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
         }
+        .frame(maxWidth: 300, maxHeight: 150)
+        
         .padding()
 //        .background(Color.blue.opacity(0.2))
         .cornerRadius(10)
@@ -256,4 +260,3 @@ struct PatientDashView_Previews: PreviewProvider {
         PatientDashView()
     }
 }
-

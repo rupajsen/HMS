@@ -13,68 +13,98 @@ struct Appointment: Identifiable {
 struct AppointmentCard: View {
     let appointment: Appointment
     var onCancel : (() -> Void)?
-
+    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.blue.opacity(0.2))
-                .frame(width: 300, height: 150)
+            Rectangle()
+                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                .frame(width: 350, height: 170)
+                .cornerRadius(25)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.blue, lineWidth: 1)
-                )
-            VStack(spacing: 10){
-                HStack(spacing: 10) {
-                    Image("doc")
-                        .resizable()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(Color.blue.opacity(0.2), lineWidth: 2)
-                        )
-                        .padding(.leading, 50)
-
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(appointment.name)
-                            .font(.title3).bold()
-                        Text(appointment.department)
-                            .font(.subheadline)
-                        Text(" \(appointment.time)")
-                            .frame(width: 90)
-                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                            .background(Color.blue.opacity(0.2))
-                            .foregroundColor(.blue)
-                            .cornerRadius(10)
-                            .font(.subheadline)
-
-                        Text("\(appointment.date)")
-                            .frame(width:90)
-                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                            .background(Color.blue.opacity(0.2))
-                            .foregroundColor(.blue)
-                            .cornerRadius(10)
-                            .font(.subheadline)
+                    HStack(spacing: 10) {
+                        Image("doc")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
+                            .padding(.bottom,80)
+                            .padding(.leading, 0)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.blue.opacity(0.2), lineWidth: 0)
+                            )
+                        
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(appointment.name)
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading) // Align from left edge
+                            
+                            Text(appointment.department)
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading) // Align from left edge
+                        }
+                        .frame(width: 130, height: 50)
+                        .padding(.leading, 0) // Add padding for spacing from the image
+                        .padding(.bottom,80)
                         Button(action: {
                             onCancel?() // Call the cancel closure when tapped
                         }) {
                             Text("Cancel")
-                                .foregroundColor(.red)
+                                .foregroundColor(.white)
                                 .font(.caption)
-                                .padding(.horizontal, 8) // Adjusted horizontal padding
-                                .padding(.vertical, 4) // Adjusted vertical padding
-                                .background(Color.white)
+                                 // Adjusted horizontal padding
+                                 // Adjusted vertical padding
+                                .background(Color(red: 0.05, green: 0.51, blue: 0.99)) // Matched appointment card theme color
+                                .cornerRadius(10)
+                                .padding(5)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.red, lineWidth: 1)
-                                )
-                        }}
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .stroke(Color.white, lineWidth: 1) // White border with small thickness
+                                                .padding(2) // Adjusted padding for the border
+                                        )
+                                .padding(.bottom, 100)
+                                .padding(.leading, 50)
+                                
+                                
+                                
+                        }
 
-                    .frame(maxWidth: .infinity)
-                }
-            }
-            .padding(.vertical,10)
+                    }
+                    .padding(.horizontal, 0)
+                    .padding(.top, 20)
+                )
+            
+            Rectangle()
+                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+                .frame(width: 300, height: 50)
+                .cornerRadius(26)
+                .overlay(
+                    HStack {
+                        Image(systemName: "calendar")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                        
+                        Text("\(appointment.date)")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                            .padding(.trailing,10)
+                        
+                        Image(systemName: "clock")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                        
+                        Text("\(appointment.time)")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                    }
+                    .padding(.horizontal, 20)
+                )
+                .padding(.top,20)
+                .offset(x: 0, y: 30) // Offset to overlap with the larger rectangle
         }
+        Spacer()
     }
 }
 
