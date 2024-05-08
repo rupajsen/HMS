@@ -103,7 +103,9 @@ struct PatientDashView: View {
                                                     .background(Color.white)
                                                     .cornerRadius(10)
                                                     .padding(.horizontal)
-                                                    .shadow(radius: 10)
+                                                 .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(Color.blue.opacity(0.2), lineWidth: 2))
                                                     .frame(width:340 ,height: 160)
                                             }
                                         }
@@ -232,7 +234,9 @@ struct MedicationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(entry["medicineName"] as? String ?? "")
-                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99)).font(.title2).bold()
+                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                .font(.title2)
+                .bold()
             
             Text("Dosage: \(entry["dosage"] as? String ?? "")")
                 .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
@@ -243,15 +247,17 @@ struct MedicationCard: View {
             Text("Additional Description: \(entry["additionalDescription"] as? String ?? "")")
                 .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
         }
-        .frame(maxWidth: 300, maxHeight: 150)
-        
+        .frame(maxWidth: 300, maxHeight: 95)
         .padding()
-//        .background(Color.blue.opacity(0.2))
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white) // Use a white background to prevent the shadow from being clipped
+//                ./*shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 0) // Add shadow with appropriate radius and offset*/
+        )
         .cornerRadius(10)
+        
     }
-    
 }
-
 
 
 
