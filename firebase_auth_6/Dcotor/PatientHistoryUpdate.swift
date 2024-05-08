@@ -12,33 +12,33 @@ struct PatientHistoryUpdate: View {
     @State private var followUpDate = Date()
     @State private var medicationEntries: [MedicationEntry] = [MedicationEntry(medicineName: "", dosage: "", time: "", additionalDescription: "")]
     @State private var reasonOfConsult: String = ""
+    @State private var patientName: String = ""
     @Environment(\.presentationMode) var presentationMode
 
-
     let appointment: AppointmentForDoctor
-    
+
     var body: some View {
-        NavigationView{
+        NavigationView {
             VStack {
                 Form {
                     Section(header: Text("Appointment Details")) {
-                        Text("Patient Name: \(appointment.userId)")
+                        Text("Patient Name: \(patientName)")
                         Text("Appointment Date: \(formatDate(appointment.date))")
                         Text("Appointment Time: \(appointment.time)")
                     }
-                    
+
                     Section(header: Text("Consultation Details")) {
                         TextField("Reason of Consult", text: $reasonOfConsult)
                         TextField("Diagnosis", text: $diagnosis)
                         DatePicker("Follow-up Date", selection: $followUpDate, displayedComponents: .date)
                     }
-                    
+
                     Section(header: Text("Medication")) {
                         ForEach(medicationEntries.indices, id: \.self) { index in
                             MedicationEntryView(medicationEntry: $medicationEntries[index])
                         }
                     }
-                    
+
                     VStack {
                         Button(action: {
                             medicationEntries.append(MedicationEntry(medicineName: "", dosage: "", time: "", additionalDescription: ""))
@@ -50,13 +50,13 @@ struct PatientHistoryUpdate: View {
                             }
                         }
                         .padding()
-                        
+
                     }
-                    
+
                     Section(header: Text("Additional Description")) {
                         TextField("Additional Description", text: $medicationEntries[0].additionalDescription)
                     }
-                    
+
                     Button(action: {
                         savePatientHistory()
                     }) {
@@ -69,20 +69,39 @@ struct PatientHistoryUpdate: View {
                     }
                 }
                 .padding()
-                
+
                 Spacer()
             }
             .navigationTitle("Add Treatment Plan")
             .navigationBarTitleDisplayMode(.automatic)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            fetchPatientName(userID: appointment.userId)
+        }
     }
-    
+
     func formatDate(_ date: Timestamp) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy"
         return dateFormatter.string(from: date.dateValue())
     }
+
+    func fetchPatientName(userID: String) {
+        let db = Firestore.firestore()
+        db.collection("users").document(userID).getDocument { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                if let patientName = data?["fullname"] as? String {
+                    self.patientName = patientName
+                }
+            } else {
+                print("Patient name not found")
+            }
+        }
+    }
+    
+   
     
     func savePatientHistory() {
         let db = Firestore.firestore()

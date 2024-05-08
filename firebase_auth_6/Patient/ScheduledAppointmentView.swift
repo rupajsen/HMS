@@ -418,3 +418,5 @@ struct PatientHistoryDetailView: View {
         .navigationBarTitle("Appointment Details", displayMode: .inline)
     }
 }
+
+
