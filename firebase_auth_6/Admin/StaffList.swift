@@ -494,7 +494,7 @@ struct SummaryRow: View {
 
 
 import SwiftUI
- // Import the SwiftUICharts library
+import FirebaseFirestore
 
 struct PatientListView: View {
     @State private var appointmentsData: [Date: Double] = [:]
@@ -503,122 +503,76 @@ struct PatientListView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            // Dropdown menu for selecting the graph option
-            Menu {
-                ForEach(0..<graphOptions.count) { index in
-                    Button(action: {
-                        selectedGraphOption = index
-                        fetchAppointmentsDataFromFirestore() // Update data when option changes
-                    }) {
-                        Text(graphOptions[index])
-                    }
-                }
-            } label: {
-                Text("Graph Option: \(graphOptions[selectedGraphOption])")
-                    .padding()
-            }
-            
             Text("Appointments")
                 .font(.headline)
-                .padding(.top)
+                .padding()
             
             Divider()
             
-            // Display the graph based on selectedGraphOption
-            switch selectedGraphOption {
-            case 0: // Day
-                if !appointmentsData.isEmpty {
-                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
-                    LineChartView(data: data, title: "Appointments", legend: "Appointments")
-                        .padding()
-                        .frame(height: 300)
-                        .frame(maxWidth: .infinity) // Take up full width
-                } else {
-                    Text("No data available")
-                        .foregroundColor(.gray)
-                        .padding()
-                }
-            case 1: // Week
-                if !appointmentsData.isEmpty {
-                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
-                    // Create a line chart for week view
-                    LineChartView(data: data, title: "Appointments - Weekly", legend: "Appointments")
-                        .padding()
-                        .frame(height: 300)
-                        .frame(maxWidth: .infinity) // Take up full width
-                } else {
-                    Text("No data available")
-                        .foregroundColor(.gray)
-                        .padding()
-                }
-
-            case 2: // Year
-                if !appointmentsData.isEmpty {
-                    let data = appointmentsData.sorted { $0.key < $1.key }.map { $0.value }
-                    // Create a line chart for year view
-                    LineChartView(data: data, title: "Appointments - Yearly", legend: "Appointments")
-                        .padding()
-                        .frame(height: 300)
-                        .frame(maxWidth: .infinity) // Take up full width
-                } else {
-                    Text("No data available")
-                        .foregroundColor(.gray)
-                        .padding()
-                }
-
-            default:
-                EmptyView()
+            // Display all graphs side by side
+            HStack(spacing: 20) {
+                
+                GraphView(data: getAppointmentsDataForGraph(option: 0), title: "Day")
+                    .frame(maxWidth: .infinity)
+                
+                
+                GraphView(data: getAppointmentsDataForGraph(option: 1), title: "Week")
+                    .frame(maxWidth: .infinity)
+                
+                
+                GraphView(data: getAppointmentsDataForGraph(option: 2), title: "Year")
+                    .frame(maxWidth: .infinity)
             }
+            .padding()
+            //.frame(maxHeight: 600)
+            
+            
         }
-        .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
+        
         .padding()
         .onAppear {
-            fetchAppointmentsDataFromFirestore()
+            fetchAppointmentsDataFromFirestore(for: selectedGraphOption)
         }
     }
     
     // Function to fetch appointments data from Firestore
-    func fetchAppointmentsDataFromFirestore() {
+    func fetchAppointmentsDataFromFirestore(for option: Int) {
         let db = Firestore.firestore()
         db.collection("appointments").getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error fetching appointments data: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let documents = querySnapshot?.documents else {
-                print("No appointment documents")
+            guard let documents = querySnapshot?.documents, error == nil else {
+                print("Error fetching appointments data:", error?.localizedDescription ?? "Unknown error")
                 return
             }
             
             // Parse the appointment data and count appointments for each date
             var appointmentsData: [Date: Double] = [:]
+            let calendar = Calendar.current
             for document in documents {
                 if let timestamp = document["date"] as? Timestamp {
                     // Convert Timestamp to Date
                     let date = timestamp.dateValue()
-                    // Get the date component without time
-                    let calendar = Calendar.current
-                    let components: Set<Calendar.Component> = [.year, .month, .day]
-                    let normalizedDate = calendar.date(from: calendar.dateComponents(components, from: date))
                     
-                    switch selectedGraphOption {
+                    // Depending on the selected graph option, count appointments
+                    switch option {
                     case 0: // Day
                         // For day option, count appointments for each date
-                        appointmentsData[normalizedDate!, default: 0] += 1
+                        appointmentsData[calendar.startOfDay(for: date), default: 0] += 1
+                        
                     case 1: // Week
                         // For week option, group appointments by week
-                        let weekOfYear = calendar.component(.weekOfYear, from: normalizedDate!)
-                        let year = calendar.component(.year, from: normalizedDate!)
+                        let weekOfYear = calendar.component(.weekOfYear, from: date)
+                        let year = calendar.component(.year, from: date)
                         let weekDate = calendar.date(from: DateComponents(year: year, weekOfYear: weekOfYear))
                         appointmentsData[weekDate!, default: 0] += 1
+                        
                     case 2: // Year
                         // For year option, group appointments by year
-                        let year = calendar.component(.year, from: normalizedDate!)
+                        let year = calendar.component(.year, from: date)
                         let yearDate = calendar.date(from: DateComponents(year: year))
                         appointmentsData[yearDate!, default: 0] += 1
+                        
                     default:
                         break
                     }
@@ -626,65 +580,57 @@ struct PatientListView: View {
             }
             
             // Update the appointmentsData state variable
-            self.appointmentsData = appointmentsData
+            DispatchQueue.main.async {
+                self.appointmentsData = appointmentsData
+            }
+        }
+    }
+
+    
+    // Function to get appointments data based on selected graph option
+    private func getAppointmentsDataForGraph(option: Int) -> [Double] {
+        let data = appointmentsData
+            .sorted { $0.key < $1.key }
+            .map { $0.value }
+        
+        switch option {
+        case 0: // Day
+            return data
+        case 1: // Week
+            // Filter appointments data for weekly view
+            return data.enumerated().compactMap { index, value in
+                index % 7 == 0 ? value : nil
+            }
+        case 2: // Year
+            // Filter appointments data for yearly view
+            return data.enumerated().compactMap { index, value in
+                index % 30 == 0 ? value : nil
+            }
+        default:
+            return []
         }
     }
 }
 
+struct GraphView: View {
+    let data: [Double]
+    let title: String
+    
+    var body: some View {
+        VStack {
+            if !data.isEmpty {
+                LineChartView(data: data, title: "\(title)", legend: "Appointments in \(title)")
+                    
+            } else {
+                Text("No data available")
+                    .foregroundColor(.gray)
+            }
+        }
+        
+    }
+}
 
 
-
-//
-//struct DoctorListView: View {
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 12) {
-//            HStack {
-//                Text("Doctors")
-//                    .font(.title2)
-//                    .foregroundColor(.primary)
-//                Spacer()
-//                // Add any action buttons here if needed
-//            }
-//
-//            Divider()
-//
-//            // Circular Pie Chart Placeholder
-//            ZStack {
-//                Circle()
-//                    .stroke(Color.blue.opacity(0.3), lineWidth: 12)
-//                    .frame(width: 150, height: 150)
-//                    .rotationEffect(.degrees(-90))
-//
-//                Circle()
-//                    .trim(from: 0, to: 0.7)
-//                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round))
-//                    .frame(width: 150, height: 150)
-//                    .rotationEffect(.degrees(-90))
-//
-//                Text("80%") // Placeholder text for percentage
-//                    .font(.title)
-//                    .foregroundColor(.blue)
-//            }
-//            .padding()
-//            .background(Color.white)
-//            .cornerRadius(75)
-//
-//            // Doctor list
-//            VStack(alignment: .leading, spacing: 8) {
-//                DoctorListItemm()
-//                Divider()
-//                DoctorListItemm()
-//                Divider()
-//                DoctorListItemm()
-//            }
-//        }
-//        .padding()
-//        .background(Color(.systemGray6))
-//        .cornerRadius(8)
-//        .padding()
-//        .frame(width: 320, height: 320)
-//    }
-//}
 
 
 struct DoctorListItemm: View {
