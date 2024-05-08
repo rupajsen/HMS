@@ -94,7 +94,7 @@ struct PatientDashView: View {
                                     
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
-                                ScrollView(.horizontal) {
+                                ScrollView(.horizontal,showsIndicators: false) {
                                     ScrollViewReader { proxy in
                                         HStack {
                                             ForEach(medicationEntries.indices, id: \.self) { index in

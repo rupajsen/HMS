@@ -16,7 +16,7 @@ struct TestView: View {
         
         VStack(alignment: .leading) {
             
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
                     ForEach(appointmentsBooked) { appointment in
                         AppointmentCard(appointment: appointment)

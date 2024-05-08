@@ -180,7 +180,7 @@ struct ScheduledAppointmentView: View {
             SearchBar(text: $searchText).padding()
             
 
-            ScrollView {
+            ScrollView (showsIndicators: false){
                 VStack {
                     ForEach(filteredAppointments) { appointment in
                                         if isTodayOrFuture(appointment.date) {
