@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 import Firebase
 
@@ -155,15 +153,13 @@ struct ScheduledAppointmentView: View {
             ScrollView {
                 VStack {
                     ForEach(filteredAppointments) { appointment in
-                        // AppointmentCard with cancel appointment action
-                        AppointmentCard(appointment: appointment) {
-                            // Set the appointment to delete
-                            self.appointmentToDelete = appointment
-                            // Show alert
-                            self.showAlert = true
-                        }
-                    }
-                }
+                                        if isTodayOrFuture(appointment.date) {
+                                            AppointmentCard(appointment: appointment) {
+                                                self.appointmentToDelete = appointment
+                                              self.showAlert = true
+                                            }
+                                        }
+                                    }                }
             }
         }
         .alert(isPresented: $showAlert) {
@@ -179,6 +175,15 @@ struct ScheduledAppointmentView: View {
         }
     }
 
+    private func isTodayOrFuture(_ dateString: String) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        if let appointmentDate = dateFormatter.date(from: dateString) {
+            return appointmentDate >= Date()
+        }
+        return false
+    }
+    
     private func appointmentHistoryView() -> some View {
         NavigationView { // Ensure that the view is embedded in a NavigationView
             VStack(alignment: .leading) {
@@ -417,6 +422,10 @@ struct PatientHistoryDetailView: View {
         }
         .navigationBarTitle("Appointment Details", displayMode: .inline)
     }
+}
+
+#Preview{
+    ScheduledAppointmentView()
 }
 
 
