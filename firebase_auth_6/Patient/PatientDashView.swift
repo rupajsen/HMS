@@ -176,7 +176,13 @@ struct PatientDashView: View {
                                 .background(Color.blue.opacity(0.2))
                                 .clipShape(Circle())
                                 .padding(.trailing)
-                                .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+                                .padding(.bottom, UIApplication.shared.connectedScenes
+                                    .compactMap { $0 as? UIWindowScene }
+                                    .first?
+                                    .windows
+                                    .first?
+                                    .safeAreaInsets
+                                    .bottom ?? 0)
                                 .offset(y:-50)
                         }
                     }

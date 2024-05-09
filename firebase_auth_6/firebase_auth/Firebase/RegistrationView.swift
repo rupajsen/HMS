@@ -23,17 +23,17 @@ struct RegistrationView: View {
     var body: some View {
         NavigationView{
             VStack {
-                //            Image("logo")
-                //                .resizable()
-                //                .scaledToFill()
-                //                .frame(width: 100, height: 120)
-                //                .padding(.vertical, 32)
                 
-                Text("InfyHealth")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top,50)
+                Image("logo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 300, height: 300)
+                
+//                Text("InfyHealth")
+//                    .font(.largeTitle)
+//                    .fontWeight(.bold)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.top,50)
                 
                 VStack(spacing: 24) {
                     InputView(text: $email, title: "Email address", placeholder: "name@example.com", isSecureField: false)
@@ -79,7 +79,7 @@ struct RegistrationView: View {
                     
                 }
                 .padding(.horizontal)
-                .padding(.top, 12)
+                //.padding(.top, 12)
                 
                 Button(action: {
                     Task {

@@ -7,8 +7,6 @@
 import SwiftUI
 import Firebase
 
-
-
 struct TestView: View {
     @State var userUID : String?
     @State var appointmentsBooked : [Appointment] = []
@@ -27,7 +25,7 @@ struct TestView: View {
         .onAppear{
             getUserUID()
             fetchAppointments(forUserID: userUID ?? "") { dataFetched, error in
-                print(dataFetched)
+                //print(dataFetched)
                 
                 self.appointmentsBooked = dataFetched ??     [Appointment(appointmentId: "12434", name: "Dr. Name : John Soliya", department: "Dept1 : General", time: "11:00 AM", date: "11/02/2023")]
             }
