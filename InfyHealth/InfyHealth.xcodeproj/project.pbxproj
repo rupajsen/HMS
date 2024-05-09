@@ -55,7 +55,7 @@
 		3F215E492BE4DFD100D24423 /* PatientDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientDashView.swift; sourceTree = "<group>"; };
 		3F215E4B2BE4E0BC00D24423 /* DocView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocView.swift; sourceTree = "<group>"; };
 		3F215E4F2BE4E25200D24423 /* AdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdView.swift; sourceTree = "<group>"; };
-		3F399D802BD971A7008AD694 /* firebase_auth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firebase_auth.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F399D802BD971A7008AD694 /* InfyHealth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfyHealth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F399D832BD971A7008AD694 /* InfyHealthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfyHealthApp.swift; sourceTree = "<group>"; };
 		3F399D852BD971A7008AD694 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F399D872BD971A9008AD694 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		3F399D812BD971A7008AD694 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3F399D802BD971A7008AD694 /* firebase_auth.app */,
+				3F399D802BD971A7008AD694 /* InfyHealth.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -220,9 +220,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3F399D7F2BD971A7008AD694 /* firebase_auth */ = {
+		3F399D7F2BD971A7008AD694 /* InfyHealth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3F399D8E2BD971A9008AD694 /* Build configuration list for PBXNativeTarget "firebase_auth" */;
+			buildConfigurationList = 3F399D8E2BD971A9008AD694 /* Build configuration list for PBXNativeTarget "InfyHealth" */;
 			buildPhases = (
 				3F399D7C2BD971A7008AD694 /* Sources */,
 				3F399D7D2BD971A7008AD694 /* Frameworks */,
@@ -232,7 +232,7 @@
 			);
 			dependencies = (
 			);
-			name = firebase_auth;
+			name = InfyHealth;
 			packageProductDependencies = (
 				3F399D9D2BD974AA008AD694 /* FirebaseAuth */,
 				3F399D9F2BD974AA008AD694 /* FirebaseDatabase */,
@@ -242,7 +242,7 @@
 				3F4A3C7B2BE9F87B0027D00C /* SwiftUICharts */,
 			);
 			productName = firebase_auth;
-			productReference = 3F399D802BD971A7008AD694 /* firebase_auth.app */;
+			productReference = 3F399D802BD971A7008AD694 /* InfyHealth.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -277,7 +277,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3F399D7F2BD971A7008AD694 /* firebase_auth */,
+				3F399D7F2BD971A7008AD694 /* InfyHealth */,
 			);
 		};
 /* End PBXProject section */
@@ -530,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3F399D8E2BD971A9008AD694 /* Build configuration list for PBXNativeTarget "firebase_auth" */ = {
+		3F399D8E2BD971A9008AD694 /* Build configuration list for PBXNativeTarget "InfyHealth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3F399D8F2BD971A9008AD694 /* Debug */,
