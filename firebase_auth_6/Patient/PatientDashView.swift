@@ -103,10 +103,8 @@ struct PatientDashView: View {
                                                     .background(Color.white)
                                                     .cornerRadius(10)
                                                     .padding(.horizontal)
-                                                 .overlay(
-                                                RoundedRectangle(cornerRadius: 12)
-                                                    .stroke(Color.blue.opacity(0.2), lineWidth: 2))
-                                                    .frame(width:340 ,height: 160)
+                                                 
+                                                    .frame(width:360 ,height: 150)
                                             }
                                         }
                                     }
@@ -232,32 +230,68 @@ struct MedicationCard: View {
     var entry: [String: Any]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(entry["medicineName"] as? String ?? "")
-                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
-                .font(.title2)
-                .bold()
+        HStack(spacing: 10) {
+            // Left Image
+            Image("med")
+                .resizable()
+                .frame(width: 50, height: 50)
+                
+                .padding(.trailing, 10)
             
-            Text("Dosage: \(entry["dosage"] as? String ?? "")")
-                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+            // Content VStack
+                VStack(alignment: .leading, spacing: 5) {
+                    // Title
+                    Text(entry["medicineName"] as? String ?? "")
+                        .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                        .font(.title3) // Adjusted font size
+                        .bold()
+                    
+                    Text("Dosage: \(entry["dosage"] as? String ?? "")")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
+                        .lineLimit(1)
+                    
+                    Text("Note: \(entry["additionalDescription"] as? String ?? "")")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
+                        .lineLimit(1)
+                    
+                    
+                }
+                .frame(width: 120)
+                
+               
+                    // Time
+                    
+                ZStack {
+                                    Circle()
+                        .fill(Color(red: 0.82, green: 0.93, blue: 1.2)) // Light blue background
+                                        .frame(width: 60, height: 60)
+                                    
+                                    Text(entry["time"] as? String ?? "")
+                                        .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99)) 
+                                        .bold()// Primary color
+                                        .font(.subheadline)
+                                        .padding(.horizontal, 5) // Padding to keep text inside the circle
+                                }
+                .padding(.leading,30)
+                
             
-            Text("Time: \(entry["time"] as? String ?? "")")
-                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
             
-            Text("Additional Description: \(entry["additionalDescription"] as? String ?? "")")
-                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+            // Spacer to make the card shorter
+             // Add spacer to push content to the left
         }
-        .frame(maxWidth: 300, maxHeight: 95)
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white) // Use a white background to prevent the shadow from being clipped
-//                ./*shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 0) // Add shadow with appropriate radius and offset*/
-        )
-        .cornerRadius(10)
-        
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Color.white) // Background color of the card
+        .cornerRadius(10) // Rounded corners
+        .shadow(radius: 2) // Shadow for depth
     }
 }
+
+
 
 
 
