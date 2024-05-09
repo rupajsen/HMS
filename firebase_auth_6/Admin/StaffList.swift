@@ -69,6 +69,7 @@ struct StaffList: View {
                             ForEach(filteredDoctors.indices, id: \.self) { index in
                                 DoctorCard1(doctor: filteredDoctors[index])
                             }
+                            .padding()
                         }
                     }
                 }
@@ -80,6 +81,7 @@ struct StaffList: View {
                             ForEach(filteredPatients.indices, id: \.self) { index in
                                 PatientCard1(patient: filteredPatients[index])
                             }
+                            .padding()
                         }
                     }
                 }
@@ -89,6 +91,7 @@ struct StaffList: View {
                         ForEach(appointments.indices, id: \.self) { index in
                             AppointmentCard1(appointment: appointments[index])
                         }
+                        .padding()
                     }
                 }
             }
@@ -500,14 +503,10 @@ struct SummaryRow: View {
     }
 }
 
-
-import SwiftUI
-import FirebaseFirestore
-
 struct PatientListView: View {
     @State private var appointmentsData: [Date: Double] = [:]
     @State private var selectedGraphOption = 0
-    let graphOptions = ["Day", "Week", "Year"]
+    let graphOptions = ["Day", "Week", "Month", "Year"] // Added "Month" to graph options
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -519,27 +518,23 @@ struct PatientListView: View {
             
             // Display all graphs side by side
             HStack(spacing: 20) {
-                
                 GraphView(data: getAppointmentsDataForGraph(option: 0), title: "Day")
                     .frame(maxWidth: .infinity)
-                
                 
                 GraphView(data: getAppointmentsDataForGraph(option: 1), title: "Week")
                     .frame(maxWidth: .infinity)
                 
+                GraphView(data: getAppointmentsDataForGraph(option: 2), title: "Month")
+                    .frame(maxWidth: .infinity)
                 
-                GraphView(data: getAppointmentsDataForGraph(option: 2), title: "Year")
+                GraphView(data: getAppointmentsDataForGraph(option: 3), title: "Year")
                     .frame(maxWidth: .infinity)
             }
             .padding()
-            //.frame(maxHeight: 600)
-            
-            
         }
         .background(Color(.systemGray6))
         .cornerRadius(12)
         .offset(y:-170)
-        
         .padding()
         .onAppear {
             fetchAppointmentsDataFromFirestore(for: selectedGraphOption)
@@ -576,7 +571,14 @@ struct PatientListView: View {
                         let weekDate = calendar.date(from: DateComponents(year: year, weekOfYear: weekOfYear))
                         appointmentsData[weekDate!, default: 0] += 1
                         
-                    case 2: // Year
+                    case 2: // Month
+                        // For month option, group appointments by month
+                        let month = calendar.component(.month, from: date)
+                        let year = calendar.component(.year, from: date)
+                        let monthDate = calendar.date(from: DateComponents(year: year, month: month))
+                        appointmentsData[monthDate!, default: 0] += 1
+                        
+                    case 3: // Year
                         // For year option, group appointments by year
                         let year = calendar.component(.year, from: date)
                         let yearDate = calendar.date(from: DateComponents(year: year))
@@ -594,10 +596,9 @@ struct PatientListView: View {
             }
         }
     }
-
     
-    // Function to get appointments data based on selected graph option
-    private func getAppointmentsDataForGraph(option: Int) -> [Double] {
+    // Function to get appointments data for a specific graph option
+    func getAppointmentsDataForGraph(option: Int) -> [Double] {
         let data = appointmentsData
             .sorted { $0.key < $1.key }
             .map { $0.value }
@@ -610,16 +611,22 @@ struct PatientListView: View {
             return data.enumerated().compactMap { index, value in
                 index % 7 == 0 ? value : nil
             }
-        case 2: // Year
-            // Filter appointments data for yearly view
+        case 2: // Month
+            // Filter appointments data for monthly view
             return data.enumerated().compactMap { index, value in
                 index % 30 == 0 ? value : nil
+            }
+        case 3: // Year
+            // Filter appointments data for yearly view
+            return data.enumerated().compactMap { index, value in
+                index % 365 == 0 ? value : nil
             }
         default:
             return []
         }
     }
 }
+
 
 struct GraphView: View {
     let data: [Double]
@@ -770,13 +777,17 @@ struct AppointmentCard1: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Circle()
-                    .fill(Color.gray)
+                Image(systemName: "calendar.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
+                    .foregroundColor(Color.blue.opacity(0.2))
+                    .clipShape(Circle())
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Doctor: \(doctorName)")
                         .font(.headline)
+                        .foregroundColor(.black)
                     Text("Patient: \(patientName)")
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -786,27 +797,33 @@ struct AppointmentCard1: View {
             Divider()
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Date: \(formattedDate)")
-                Text("Time: \(appointment.time)")
-                Text("Additional Info: \(appointment.additionalInfo)")
+                Text("Date:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(formattedDate)
+                    .foregroundColor(.gray)
+                Text("Time:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(appointment.time)
+                    .foregroundColor(.gray)
+                Text("Additional Info:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding(.top, 4)
+                Text(appointment.additionalInfo)
+                    .foregroundColor(.gray)
+                    .lineLimit(2)
+                    .transition(.opacity)
             }
             
             Spacer()
             
-            Button(action: {}) {
-                Text("View Details")
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
-            }
         }
         .padding()
         .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 3)
+        .cornerRadius(20) // Increased corner radius for a more rounded card
+        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 2) // Adjusted shadow color and radius
         .onAppear {
             fetchDoctorName()
             fetchPatientName()
@@ -875,48 +892,83 @@ struct Appointment1 {
 
 struct DoctorCard1: View {
     let doctor: Doctor1
+    @State private var isExpanded: Bool = false // State for expansion
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Circle()
-                    .fill(Color.gray)
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
+                    .foregroundColor(Color.blue.opacity(0.15))
+                    .clipShape(Circle())
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(doctor.name)
-                        .font(.headline)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                    Text(doctor.designation)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
             }
             
             Divider()
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Designation: \(doctor.designation)")
-                Text("Department: \(doctor.department)")
-                Text("Contact No.: \(doctor.contactNo)")
-                Text("Educational Details: \(doctor.educationalDetails)")
-                Text("Email: \(doctor.email)")
+                Text("Department:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(doctor.department)
+                    .foregroundColor(.gray)
+                Text("Contact No.:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(doctor.contactNo)
+                    .foregroundColor(.gray)
+                Text("Education:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding(.top, 4)
+                if isExpanded {
+                    Text(doctor.educationalDetails)
+                        .foregroundColor(.gray)
+                        .transition(.opacity)
+                } else {
+                    Text(doctor.educationalDetails)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                        .transition(.opacity)
+                }
+                Text("Email:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding(.top, 4)
+                if isExpanded {
+                    Text(doctor.email)
+                        .foregroundColor(.gray)
+                        .transition(.opacity)
+                } else {
+                    Text(doctor.email)
+                        .foregroundColor(.gray)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .transition(.opacity)
+                }
             }
             
             Spacer()
             
-            Button(action: {}) {
-                Text("View Details")
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
-            }
         }
         .padding()
         .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 3)
+        .cornerRadius(20) // Increased corner radius for a more rounded card
+        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 2) // Adjusted shadow color and radius
     }
 }
+
 
 struct PatientCard1: View {
     let patient: Patient1
@@ -924,42 +976,52 @@ struct PatientCard1: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Circle()
-                    .fill(Color.gray)
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
+                    .foregroundColor(Color.blue.opacity(0.15))
+                    .clipShape(Circle())
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(patient.name)
-                        .font(.headline)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
                 }
             }
             
             Divider()
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Weight: \(patient.weight) kg")
-                Text("Blood Pressure: \(patient.bloodPressure)")
-                Text("Blood Glucose: \(patient.bloodGlucose)")
+                Text("Weight:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text("\(patient.weight) kg")
+                    .foregroundColor(.gray)
+                Text("Blood Pressure:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(patient.bloodPressure)
+                    .foregroundColor(.gray)
+                Text("Blood Glucose:")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(patient.bloodGlucose)
+                    .foregroundColor(.gray)
             }
             
             Spacer()
             
-            Button(action: {}) {
-                Text("View Details")
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                    .shadow(color: Color.blue.opacity(0.5), radius: 3, x: 0, y: 2)
-            }
+            
         }
         .padding()
         .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 3)
+        .cornerRadius(20) // Increased corner radius for a more rounded card
+        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 2) // Adjusted shadow color and radius
     }
 }
+
 
 
 
