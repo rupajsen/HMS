@@ -14,7 +14,10 @@ struct PatientDashView: View {
     @State private var otherVitals: String = ""
     @State private var latestLabTestReports: String = ""
     @State private var showImagePicker: Bool = false
-    @State private var medicationEntries: [[String: Any]] = [] // Array to hold medication entries
+    @State private var medicationEntries: [[String: Any]] = []
+    @State private var followUpDateString: String = ""
+    @State private var doctorName: String = "" // State variable to hold doctor's name
+
 
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -86,11 +89,59 @@ struct PatientDashView: View {
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
+                            if !followUpDateString.isEmpty{
+                            VStack(alignment: .leading, spacing:0) {
+                                
+                                    HStack {
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(.white) // Calendar icon color
+                                        .font(.subheadline) // Calendar icon size
+                                    
+                                    if !followUpDateString.isEmpty {
+                                        Text("Follow-up Date: \(followUpDateString)")
+                                            .foregroundColor(.white)
+                                            .font(.subheadline)
+                                            .padding(.leading, 5)
+                                        // Adjust spacing
+                                    }
+                                }
+                                
+                                HStack{
+                                    Image("doc")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(Circle()) // Clip the image into a circle
+                                        .frame(width: 20, height: 20) // Size of the doctor image
+                                        .foregroundColor(Color(red: 0.82, green: 0.93, blue: 1.2))
+                                        .padding(.top,4)
+                                        .offset(x:-0)
+                                    Text("Doctor: \(doctorName)")
+                                        .foregroundColor(.white)
+                                        .padding(.top,5)
+                                        .font(.subheadline)
+                                        .padding(.trailing,0)
+                                        .offset(x:3)
+                                    // Adjust spacing
+                                    
+                                    
+                                }
+                                .offset(x:-100)
+                                .frame(width: 320, height: 30)
+                            }
+                            .padding(10)
+                            .background(Color(red: 0.03, green: 0.45, blue: 0.73)) // Light blue background
+                                    .cornerRadius(10) // Rounded corners
+                                    .shadow(radius: 2)
+                                    .frame(width: 325, height: 50)
+                            }
+                            
+                            
                             
                             
                             VStack(alignment: .leading) {
                                 Text("Medication Entries")
                                     .font(.title2)
+                                    .padding(.top,20)
                                     
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
@@ -110,6 +161,8 @@ struct PatientDashView: View {
                                     }
                                 }
                             }
+                            
+                            
                             
                             
                             HStack{
@@ -208,15 +261,43 @@ struct PatientDashView: View {
             .limit(to: 1)
 
         medicationHistoryRef.getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error fetching medication history: \(error)")
-                return
-            }
+                    if let error = error {
+                        print("Error fetching medication history: \(error)")
+                        return
+                    }
 
-            guard let document = querySnapshot?.documents.first else {
-                print("No documents found")
-                return
-            }
+                    guard let document = querySnapshot?.documents.first else {
+                        print("No documents found")
+                        return
+                    }
+
+                    // Fetch doctor ID
+                    guard let doctorId = document.data()["doctorId"] as? String else {
+                        print("Doctor ID not found in the document")
+                        return
+                    }
+
+                    // Fetch doctor's name using doctor ID
+                    let doctorRef = db.collection("users").document(doctorId)
+                    doctorRef.getDocument { (doctorSnapshot, doctorError) in
+                        if let doctorError = doctorError {
+                            print("Error fetching doctor details: \(doctorError)")
+                            return
+                        }
+
+                        guard let doctorData = doctorSnapshot?.data() else {
+                            print("Doctor details not found")
+                            return
+                        }
+
+                        // Fetch doctor's full name
+                        if let doctorFullName = doctorData["fullname"] as? String {
+                            print("Doctor Name: \(doctorFullName)")
+                            self.doctorName = doctorFullName // Assign doctor's name to state variable
+                        } else {
+                            print("Doctor full name not found")
+                        }
+                    }
 
             if let medicationEntries = document.data()["medicationEntries"] as? [[String: Any]] {
                 self.medicationEntries = medicationEntries
@@ -224,6 +305,15 @@ struct PatientDashView: View {
             } else {
                 print("No medication entries found in the document")
             }
+            if let followUpDate = document.data()["followUpDate"] as? Timestamp {
+                            let date = followUpDate.dateValue()
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "MMM d, yyyy "
+                            
+                            self.followUpDateString = dateFormatter.string(from: date)
+                            print("Follow-up Date: \(self.followUpDateString)")
+                        }
+
         }
     }
 
