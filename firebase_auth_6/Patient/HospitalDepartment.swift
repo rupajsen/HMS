@@ -60,13 +60,13 @@ struct HospitalDepartmentCardView: View {
                 Image(department.name.lowercased()) // Use department's imageName property
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 45, height: 45)
             }
-            .frame(maxWidth: .infinity, minHeight: 100)
+            .frame(maxWidth: .infinity, minHeight: 80)
             .background(Color(red: 0.82, green: 0.93, blue: 1.2))
             .cornerRadius(10)
             .clipShape(Circle())
-            .shadow(radius: 5)
+            .shadow(radius: 3)
             
             Text(department.name)
                 .foregroundColor(.black)

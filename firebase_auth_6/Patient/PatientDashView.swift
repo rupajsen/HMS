@@ -85,7 +85,7 @@ struct PatientDashView: View {
                         VStack{
                             Text("Your upcoming Appointments")
                                 .font(.title2)
-                                
+                                .padding(.leading)
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
@@ -156,6 +156,7 @@ struct PatientDashView: View {
                                 Text("Medication Entries")
                                     .font(.title2)
                                     .padding(.top,20)
+                                    .padding(.leading)
                                     
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
@@ -178,19 +179,23 @@ struct PatientDashView: View {
                             
                             
                             
-                            
-                            HStack{
-                                Text("Categories")
-                                    .font(.title2)
-                                    .padding(.vertical)
-                                    .frame(maxWidth: .infinity,alignment: .leading)
-                            }
-                            
+                            VStack{
+                                HStack{
+                                    Text("Categories")
+                                        .font(.title2)
+                                        .padding(.vertical)
+                                        .padding(.leading)
+                                        .frame(maxWidth: .infinity,alignment: .leading)
+                                }
+                                
                                 HospitalDepartment()
+                                    .frame(maxWidth: .infinity,alignment: .center)
+                                   // .offset(x:-20,y: -20)
+                            }
                             
                             
                         }
-                        .padding(20)
+                       // .padding(20)
                         .offset(y:-59)
                     }
                 }

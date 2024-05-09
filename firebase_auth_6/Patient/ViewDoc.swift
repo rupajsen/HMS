@@ -82,8 +82,10 @@ struct DoctorListItem: View {
             VStack(alignment: .leading) {
                 Text(doctor.name)
                     .font(.title3).bold()
+                    .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59))
                 Text(doctor.specialization)
                     .font(.subheadline)
+                    .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59))
                 
                 Button(action: {
                     print("Selected Doctor ID:", doctor.doctorId ?? "N/A")
@@ -93,8 +95,8 @@ struct DoctorListItem: View {
                         .font(.subheadline)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
-                        .background(Color.blue.opacity(0.2))
-                        .foregroundColor(.blue)
+                        .background(Color(red: 0.82, green: 0.93, blue: 1.2))
+                        .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                         .cornerRadius(10)
                 }
                 .sheet(isPresented: $isShowingAppointmentView) {
@@ -105,13 +107,10 @@ struct DoctorListItem: View {
             .frame(maxWidth: .infinity)
         }
         .padding()
-        .background(Color.blue.opacity(0.2))
+        .background(Color.white)
         .cornerRadius(10)
 //        .shadow(radius: 3)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.blue, lineWidth: 1)
-        )
+        .shadow(radius: 2)
         .frame(width: 300, height: 140)
     }
 }

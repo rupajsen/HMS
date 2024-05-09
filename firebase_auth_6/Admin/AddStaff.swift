@@ -87,6 +87,7 @@ struct AddStaff: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
+                        presentationMode.wrappedValue.dismiss()
                         signUpAndSaveData()
                     }) {
                         Text("Save")
@@ -99,14 +100,14 @@ struct AddStaff: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle()) // Full screen mode
-        .background(
-            NavigationLink(
-                destination: EmptyView(),
-                isActive: $isSavingComplete,
-                label: { EmptyView() }
-            )
-            .hidden()
-        )
+//        .background(
+//            NavigationLink(
+//                destination: EmptyView(),
+//                isActive: $isSavingComplete,
+//                label: { EmptyView() }
+//            )
+//            .hidden()
+//        )
     }
     
     func calculateHours(start: String, end: String) -> String {
