@@ -17,9 +17,11 @@ struct AppointmentCard: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
-                .frame(width: 350, height: 170)
+                .foregroundColor(Color.white)
+                .frame(width: 348, height: 170)
                 .cornerRadius(25)
+                .shadow(radius: 2)
+                .padding()
                 .overlay(
                     HStack(spacing: 10) {
                         Image("doc")
@@ -37,60 +39,60 @@ struct AppointmentCard: View {
                             Text(appointment.name)
                                 .font(.title)
                                 .bold()
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading) // Align from left edge
                             
                             Text(appointment.department)
                                 .font(.subheadline)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading) // Align from left edge
                         }
                         .frame(width: 130, height: 50)
                         .padding(.leading, 0) // Add padding for spacing from the image
                         .padding(.bottom,80)
                         Button(action: {
-                                                    onCancel?() // Call the cancel closure when tapped
-                                                }) {
-                                                    Image(systemName: "trash")
-                                                        .foregroundColor(.white)
-                                                        .font(Font.caption.weight(.bold)) // Adjusted font weight for better visibility
-                                                        .padding(10) // Adjusted padding to make the button larger
-                                                        .background(Color(red: 0.05, green: 0.51, blue: 0.99)) // Matched appointment card theme color
-                                                        .cornerRadius(10)
-                                                        .overlay(
-                                                            RoundedRectangle(cornerRadius: 10)
-                                                                .stroke(Color.white, lineWidth: 1) // White border with small thickness
-                                                        )
-                                                        .padding(.bottom, 100)
-                                                        .padding(.leading, 50)
-                                                }
+                                                                            onCancel?() // Call the cancel closure when tapped
+                                                                        }) {
+                                                                            Image(systemName: "trash")
+                                                                                .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                                                                                .font(Font.caption.weight(.bold)) // Adjusted font weight for better visibility
+                                                                                .padding(10) // Adjusted padding to make the button larger
+                                                                                .background(Color(red: 0.82, green: 0.93, blue: 1.2)) // Matched appointment card theme color
+                                                                                .cornerRadius(10)
+                                                                                .overlay(
+                                                                                    RoundedRectangle(cornerRadius: 10)
+                                                                                        .stroke(Color.white, lineWidth: 1) // White border with small thickness
+                                                                                )
+                                                                                .padding(.bottom, 100)
+                                                                                .padding(.leading, 50)
+                                                                        }
 
-                                            }
+                    }
                     .padding(.horizontal, 0)
-                    .padding(.top, 20)
+                    .padding(.top, 0)
                 )
             
             Rectangle()
-                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+                .foregroundColor(Color(red: 0.82, green: 0.93, blue: 1.2))
                 .frame(width: 300, height: 50)
                 .cornerRadius(26)
                 .overlay(
                     HStack {
                         Image(systemName: "calendar")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                             .font(.subheadline)
                         
                         Text("\(appointment.date)")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                             .font(.subheadline)
                             .padding(.trailing,10)
                         
                         Image(systemName: "clock")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                             .font(.subheadline)
                         
                         Text("\(appointment.time)")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                             .font(.subheadline)
                     }
                     .padding(.horizontal, 20)
@@ -219,6 +221,7 @@ struct ScheduledAppointmentView: View {
                         NavigationLink(destination: PatientHistoryDetailView(appointmentHistory: appointment)) {
                             AppointmentHistoryRow(appointment: appointment, searchText: historySearchText)
                                 .buttonStyle(PlainButtonStyle())
+                                
                                 
                         }
                     }
@@ -458,9 +461,11 @@ struct AppointmentHistoryRow: View {
 
             ZStack {
                 RoundedRectangle(cornerRadius: 25)
-                    .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                    .foregroundColor(Color.white)
                     .frame(width: 350, height: 170)
                     .cornerRadius(25)
+                    .shadow(radius: 2)
+                    .padding()
                     .overlay(
                         VStack(alignment: .leading, spacing:0) {
                             HStack {
@@ -475,38 +480,39 @@ struct AppointmentHistoryRow: View {
                                     )
                                 
                                 VStack(alignment: .leading, spacing: 0) {
-                                    Text("Doctor: \(appointment.doctorName)")
+                                    Text(appointment.doctorName)
                                         .font(.title)
                                         .bold()
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     
                                         Text("Diagnosis: \(appointment.diagnosis)")
                                             .font(.subheadline)
-                                                                                        .foregroundColor(.white)
+                                                                                        .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
                                     
                                 }
                                 .padding(.trailing, 30)
                             }
                             .padding(.top,10)
+                            .padding(.leading,30)
                             
                             
                             Rectangle()
-                                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+                                .foregroundColor(Color(red: 0.82, green: 0.93, blue: 1.2))
                                 .frame(width: 300, height: 50)
                                 .cornerRadius(26)
                                 .padding(.top,10)
-                                .padding(.leading,25)
+                                .padding(.leading,45)
                                 .overlay(
                                     HStack {
                                         Image(systemName: "calendar")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                                             .font(.subheadline)
                                             .padding(.top,10)
 
                                         
                                         Text("Date: \(dateFormatter.string(from: convertToDate(appointment.date)))")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                                             .font(.subheadline)
                                             .padding(.trailing,10)
                                             .padding(.top,10)
@@ -518,15 +524,19 @@ struct AppointmentHistoryRow: View {
                                                                     )
                                 
                         }
+                            
                         
                     )
+                    
             }
+            
             .padding(.horizontal, 20)
             
         } else {
             EmptyView()
         }
     }
+    
 
     private func convertToDate(_ dateString: String) -> Date {
         let formatter = DateFormatter()
@@ -566,5 +576,3 @@ struct PatientHistoryDetailView: View {
 #Preview{
     ScheduledAppointmentView()
 }
-
-

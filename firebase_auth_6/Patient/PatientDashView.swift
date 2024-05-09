@@ -34,7 +34,7 @@ struct PatientDashView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading) {
                         VStack{
                             Text("Patient View")
@@ -89,19 +89,32 @@ struct PatientDashView: View {
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
+                                
+                                .frame(width: 340, height: 170)
+                            
                             if !followUpDateString.isEmpty{
-                            VStack(alignment: .leading, spacing:0) {
+                                Text("Follow Up Appointment")
+                                    .font(.title2)
+                                    .padding(.bottom,15)
+                                    .padding(.top,15)
+                                    
+                                    .frame(maxWidth: .infinity,alignment: .leading)
+                                
+                                VStack(alignment: .leading, spacing:0) {
                                 
                                     HStack {
                                     Image(systemName: "calendar")
-                                        .foregroundColor(.white) // Calendar icon color
+                                        .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59)) // Calendar icon color
                                         .font(.subheadline) // Calendar icon size
                                     
                                     if !followUpDateString.isEmpty {
-                                        Text("Follow-up Date: \(followUpDateString)")
-                                            .foregroundColor(.white)
-                                            .font(.subheadline)
-                                            .padding(.leading, 5)
+                                        
+                                            
+                                            Text("\(followUpDateString)")
+                                                .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59)) // Change color as needed
+                                                .font(.subheadline)
+                                        
+
                                         // Adjust spacing
                                     }
                                 }
@@ -116,11 +129,11 @@ struct PatientDashView: View {
                                         .padding(.top,4)
                                         .offset(x:-0)
                                     Text("Doctor: \(doctorName)")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59))
                                         .padding(.top,5)
                                         .font(.subheadline)
                                         .padding(.trailing,0)
-                                        .offset(x:3)
+                                        .offset(x:-2)
                                     // Adjust spacing
                                     
                                     
@@ -129,7 +142,8 @@ struct PatientDashView: View {
                                 .frame(width: 320, height: 30)
                             }
                             .padding(10)
-                            .background(Color(red: 0.03, green: 0.45, blue: 0.73)) // Light blue background
+                            
+                            .background(Color.white) // Light blue background
                                     .cornerRadius(10) // Rounded corners
                                     .shadow(radius: 2)
                                     .frame(width: 325, height: 50)
@@ -176,7 +190,7 @@ struct PatientDashView: View {
                             
                             
                         }
-                        .padding()
+                        .padding(20)
                         .offset(y:-59)
                     }
                 }
@@ -336,7 +350,7 @@ struct MedicationCard: View {
                                         .frame(width: 60, height: 60)
                                     
                                     Text(entry["time"] as? String ?? "")
-                                        .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99)) 
+                                        .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                                         .bold()// Primary color
                                         .font(.subheadline)
                                         .padding(.horizontal, 5) // Padding to keep text inside the circle
