@@ -17,7 +17,11 @@ struct PatientDashView: View {
     @State private var medicationEntries: [[String: Any]] = []
     @State private var followUpDateString: String = ""
     @State private var doctorName: String = "" // State variable to hold doctor's name
-
+    @State private var isLoading = false// State variable to hold doctor's name
+    @State private var isSuggestionsSheetVisible = false
+    @State private var chatbotResponse: String = ""
+    let apiKey = "YOUR_API_KEY"
+    @State private var chat = ""
 
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -83,6 +87,45 @@ struct PatientDashView: View {
                         .offset(y:-59)
                         
                         VStack{
+                            Text("Consult our DocAi")
+                                                            .font(.title2)
+                                                            .padding(.leading)
+                                                            .frame(maxWidth: .infinity,alignment: .leading)
+                                                       
+                                                            
+                                                            
+                                                        HStack {
+                                                            ZStack {
+                                                                RoundedRectangle(cornerRadius: 15)
+                                                                    .foregroundColor(Color.white) // Light gray background
+                                                                    .shadow(radius: 2) // Shadow
+                                                                
+                                                                TextField("What issues are you facing", text: $chat)
+                                                                    .font(.custom("Inter", size: 15))
+                                                                    .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59)) // Text color
+                                                                    .padding(.leading, 23)
+                                                                    .padding(.trailing, 0)
+                                                                    .padding(.vertical, 10) // Add padding vertically
+                                                            }
+                                                            .frame(height: 50) // Adjust height
+                                                            
+                                                            Button(action: {
+                                                                sendPromptToChatGPT(prompt: chat)
+                                                            }) {
+                                                                Image(systemName: "paperplane.circle.fill") // Use system image for consistency
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fit)
+                                                                    .frame(width: 35, height: 35)
+                                                                    .padding(.trailing, 10)
+                                                                    .foregroundColor(.blue) // Button color
+                                                            }
+                                                        }
+                                                        .frame(maxWidth: .infinity)
+                                                        .padding(.horizontal, 20) // Add horizontal padding
+                                                        .sheet(isPresented: $isSuggestionsSheetVisible) {
+                                                            RecipeDisplayPage(chatbotResponse: chatbotResponse)
+                                                        }
+                            
                             Text("Your upcoming Appointments")
                                 .font(.title2)
                                 .padding(.leading)
@@ -238,6 +281,8 @@ struct PatientDashView: View {
         }
     }
     
+    
+    
 
     private func fetchLatestMedicationEntries() {
         guard let currentUser = Auth.auth().currentUser else {
@@ -308,9 +353,130 @@ struct PatientDashView: View {
 
         }
     }
+    private func sendPromptToChatGPT(prompt: String) {
+            isLoading = false
+            isSuggestionsSheetVisible = true
+            let prompt = chat + "\nYou are my personalized AI doctor, here to provide comprehensive guidance for my health concerns. As my AI doctor, your primary role is to suggest me which department to visit at Infyhealth hospital based on my symptoms. Please ensure to provide a detailed response with appropriate spacing to make it easier for me to read and understand.After suggesting the department, please provide recommendations on what actions I should take before visiting the doctor. Ensure to include spacing between different action points for clarity.Additionally, I would appreciate it if you could offer tips to overcome my health issues before my hospital visit. These tips should be spaced out appropriately for easy readability.Thank you for being my trusted AI doctor, guiding me towards better health outcomes!"
+                    
+            guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
+                print("Invalid URL")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+            
+            let parameters: [String: Any] = [
+                "model": "gpt-3.5-turbo",
+                "messages": [["role": "user", "content": prompt]]
+            ]
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            } catch {
+                print("Error serializing JSON: \(error)")
+                return
+            }
+            
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                guard let data = data, error == nil else {
+                    print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                do {
+                    let decodedResponse = try JSONDecoder().decode(ChatGPTResponse.self, from: data)
+                    
+                    if !decodedResponse.choices.isEmpty {
+                        let chatbotResponse = decodedResponse.choices[0].message.content
+                        DispatchQueue.main.async {
+                            self.chatbotResponse = chatbotResponse
+                            self.isSuggestionsSheetVisible = true
+                        }
+                    } else {
+                        print("Empty response choices")
+                    }
+                } catch {
+                    print("Error decoding response: \(error)")
+                }
+            }.resume()
+        }
 
 
 
+    }
+    struct RecipeDisplayPage: View {
+        var chatbotResponse: String
+
+        var body: some View {
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("DocAi")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                        .padding(.top, 20)
+                    
+                    ForEach(chatbotResponse.components(separatedBy: "\n"), id: \.self) { step in
+                        if !step.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            RecipeStepView(step: step)
+                                .padding(.horizontal)
+                        }                }
+                }
+                .padding()
+            }
+            .navigationBarTitle("DocBot", displayMode: .inline)
+        }
+    }
+
+struct RecipeStepView: View {
+    
+    var step: String
+    
+    
+    
+    var body: some View {
+        
+        HStack {
+            
+            Image(systemName: "circle.fill")
+            
+                .foregroundColor(.blue)
+            
+                .font(.system(size: 10))
+            
+                .padding(.trailing, 5)
+            
+            
+            
+            Text(step)
+            
+                .font(.body)
+            
+                .foregroundColor(.black)
+            
+            
+            
+            Spacer()
+            
+        }
+        
+        .padding(.vertical, 5)
+        
+        .padding(.horizontal, 10)
+        
+        .background(Color.gray.opacity(0.1))
+        
+        .cornerRadius(10)
+        
+    }
+    
 }
 
 
@@ -380,7 +546,55 @@ struct MedicationCard: View {
 }
 
 
+struct Choice: Codable {
 
+    let text: String
+
+}
+
+struct ChatGPTResponse: Decodable {
+
+    let choices: [ChatGPTChoice]
+
+}
+
+
+
+struct ChatGPTChoice: Decodable {
+
+    let message: ChatGPTMessage
+
+}
+
+
+
+struct ChatGPTMessage: Decodable {
+
+    let role: String
+
+    let content: String
+
+}
+
+struct ChatGPTErrorResponse: Decodable {
+
+    let error: ChatGPTError
+
+}
+
+
+
+struct ChatGPTError: Decodable {
+
+    let message: String
+
+    let type: String
+
+    let param: String?
+
+    let code: String
+
+}
 
 
 struct PatientDashView_Previews: PreviewProvider {
