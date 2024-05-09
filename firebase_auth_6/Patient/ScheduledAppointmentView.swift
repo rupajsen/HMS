@@ -139,6 +139,7 @@ struct ScheduledAppointmentView: View {
     @State private var searchText: String = ""
     @State private var appointmentToDelete: Appointment?
     @State private var showAlert = false
+    @State private var historySearchText: String = ""
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -175,7 +176,7 @@ struct ScheduledAppointmentView: View {
     }
 
     private func upcomingAppointmentsView() -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
 
             SearchBar(text: $searchText).padding()
             
@@ -215,29 +216,44 @@ struct ScheduledAppointmentView: View {
     }
     
     private func appointmentHistoryView() -> some View {
-        NavigationView { // Ensure that the view is embedded in a NavigationView
-            VStack(alignment: .leading) {
-                List(appointmentHistory) { appointment in
-                    NavigationLink(destination: PatientHistoryDetailView(appointmentHistory: appointment)) {
-                        VStack(alignment: .leading) {
-                            Text("Doctor: \(appointment.doctorName)")
-                            Text("Date: \(appointment.date)")
-                            Text("Diagnosis: \(appointment.diagnosis)")
+        NavigationView {
+            VStack(alignment: .center) {
+                SearchBar(text: $historySearchText).padding()
+
+                ScrollView {
+                    ForEach(filteredHistoryAppointments) { appointment in
+                        NavigationLink(destination: PatientHistoryDetailView(appointmentHistory: appointment)) {
+                            AppointmentHistoryRow(appointment: appointment, searchText: historySearchText)
+                                .buttonStyle(PlainButtonStyle())
+                                
                         }
                     }
                 }
-                .backgroundStyle(.white)
-                .padding()
             }
-        }
-        .onAppear {
-            fetchAppointmentHistory(forUserID: userUID ?? "") { dataFetched, error in
-                if let fetchedHistory = dataFetched {
-                    self.appointmentHistory = fetchedHistory
+            
+            .onAppear {
+                fetchAppointmentHistory(forUserID: userUID ?? "") { dataFetched, error in
+                    if let fetchedHistory = dataFetched {
+                        self.appointmentHistory = fetchedHistory
+                    }
                 }
             }
         }
     }
+
+
+    private var filteredHistoryAppointments: [AppointmentHistory] {
+        if historySearchText.isEmpty {
+            return appointmentHistory
+        } else {
+            return appointmentHistory.filter {
+                $0.doctorName.localizedCaseInsensitiveContains(historySearchText) ||
+                $0.date.localizedCaseInsensitiveContains(historySearchText) ||
+                $0.diagnosis.localizedCaseInsensitiveContains(historySearchText)
+            }
+        }
+    }
+
 
     private var filteredAppointments: [Appointment] {
         if searchText.isEmpty {
@@ -333,6 +349,7 @@ struct ScheduledAppointmentView: View {
             for document in querySnapshot!.documents {
                 let data = document.data()
                 let doctorID = data["doctorId"] as? String ?? ""
+                let time = data["time"] as? String ?? ""
                 let date = data["date"] as? Timestamp ?? Timestamp(date: Date())
                 let diagnosis = data["diagnosis"] as? String ?? ""
 
@@ -347,7 +364,7 @@ struct ScheduledAppointmentView: View {
 
                     let formattedDate = formatter.string(from: date.dateValue())
 
-                    let appointment = AppointmentHistory(doctorName: doctorName, date: formattedDate, diagnosis: diagnosis)
+                    let appointment = AppointmentHistory(doctorName: doctorName, date: formattedDate, diagnosis: diagnosis, time: time)
                     history.append(appointment)
 
                     if history.count == querySnapshot!.documents.count {
@@ -429,11 +446,109 @@ struct ScheduledAppointmentView: View {
     }
 }
 
+struct AppointmentHistoryRow: View {
+    let appointment: AppointmentHistory
+    let searchText: String
+
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter
+    }
+
+    var body: some View {
+        if searchText.isEmpty ||
+            appointment.doctorName.localizedCaseInsensitiveContains(searchText) ||
+            dateFormatter.string(from: convertToDate(appointment.date)).localizedCaseInsensitiveContains(searchText) ||
+            appointment.diagnosis.localizedCaseInsensitiveContains(searchText) {
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 25)
+                    .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
+                    .frame(width: 350, height: 170)
+                    .cornerRadius(25)
+                    .overlay(
+                        VStack(alignment: .leading, spacing:0) {
+                            HStack {
+                                Image("doc")
+                                    .resizable()
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(Circle())
+                                    .padding(.leading, 20)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.blue.opacity(0.2), lineWidth: 0)
+                                    )
+                                
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text("Doctor: \(appointment.doctorName)")
+                                        .font(.title)
+                                        .bold()
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                        Text("Diagnosis: \(appointment.diagnosis)")
+                                            .font(.subheadline)
+                                                                                        .foregroundColor(.white)
+                                    
+                                }
+                                .padding(.trailing, 30)
+                            }
+                            .padding(.top,10)
+                            
+                            
+                            Rectangle()
+                                .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.5))
+                                .frame(width: 300, height: 50)
+                                .cornerRadius(26)
+                                .padding(.top,10)
+                                .padding(.leading,25)
+                                .overlay(
+                                    HStack {
+                                        Image(systemName: "calendar")
+                                            .foregroundColor(.white)
+                                            .font(.subheadline)
+                                            .padding(.top,10)
+
+                                        
+                                        Text("Date: \(dateFormatter.string(from: convertToDate(appointment.date)))")
+                                            .foregroundColor(.white)
+                                            .font(.subheadline)
+                                            .padding(.trailing,10)
+                                            .padding(.top,10)
+                                        
+                                        
+                                        
+                                        
+                                    }
+                                                                    )
+                                
+                        }
+                        
+                    )
+            }
+            .padding(.horizontal, 20)
+            
+        } else {
+            EmptyView()
+        }
+    }
+
+    private func convertToDate(_ dateString: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy" // Change to match your date format
+        return formatter.date(from: dateString) ?? Date()
+    }
+}
+
+
+
 struct AppointmentHistory: Identifiable {
     var id = UUID()
     var doctorName: String
     var date: String
     var diagnosis: String
+    var time: String
 }
 
 struct PatientHistoryDetailView: View {
