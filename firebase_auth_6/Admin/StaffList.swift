@@ -261,6 +261,7 @@ struct OverviewTabView: View {
                     GreetingCard(title: "Hello, Admin", subtitle: "Welcome to your dashboard")
                         //.frame(width: 755, height: 150)
                         .frame(alignment: .leading)
+                        .offset(y:25)
                         .padding()
 
                     HStack {
@@ -274,10 +275,10 @@ struct OverviewTabView: View {
                         TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {})
                         
                         SummaryStatisticsView()
-                            .offset(y:-45)
+                            .offset(y:-35)
                         
                     }
-                    .offset(y: -70)
+                    .offset(y: -80)
                     .frame(maxWidth: .infinity)
                     .padding()
 
@@ -534,7 +535,7 @@ struct PatientListView: View {
         }
         .background(Color(.systemGray6))
         .cornerRadius(12)
-        .offset(y:-170)
+        .offset(y:-180)
         .padding()
         .onAppear {
             fetchAppointmentsDataFromFirestore(for: selectedGraphOption)
@@ -994,21 +995,54 @@ struct PatientCard1: View {
             Divider()
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Weight:")
-                    .font(.headline)
-                    .foregroundColor(.black)
-                Text("\(patient.weight) kg")
-                    .foregroundColor(.gray)
-                Text("Blood Pressure:")
-                    .font(.headline)
-                    .foregroundColor(.black)
-                Text(patient.bloodPressure)
-                    .foregroundColor(.gray)
-                Text("Blood Glucose:")
-                    .font(.headline)
-                    .foregroundColor(.black)
-                Text(patient.bloodGlucose)
-                    .foregroundColor(.gray)
+                Text("Name:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text(patient.name)
+                                .foregroundColor(.gray)
+                            
+//                            Text("Date of Birth:")
+//                                .font(.headline)
+//                                .foregroundColor(.black)
+//                            Text("\(formattedDate(patient.dob))")
+//                                .foregroundColor(.gray)
+                            
+                            Text("Gender:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text(patient.gender)
+                                .foregroundColor(.gray)
+                            
+                            Text("Allergies:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text(patient.allergies)
+                                .foregroundColor(.gray)
+                            
+                            Text("Blood Group:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text(patient.bloodGroup)
+                                .foregroundColor(.gray)
+                            
+                            Text("Weight:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text("\(patient.weight) kg")
+                                .foregroundColor(.gray)
+                            
+                            Text("Height:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text("\(patient.height) cm")
+                                .foregroundColor(.gray)
+                            
+                            Text("Blood Pressure:")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text(patient.bloodPressure)
+                                .foregroundColor(.gray)
+                            
             }
             
             Spacer()
@@ -1051,18 +1085,29 @@ struct Doctor1 {
 struct Patient1 {
     let name: String
     let patientID: String
+    let dob: Date
+    let gender: String
+    let allergies: String
+    let bloodGroup: String
     let weight: String
+    let height: String
     let bloodPressure: String
     let bloodGlucose: String
-    
+
     init(data: [String: Any]) {
         self.name = data["fullname"] as? String ?? ""
         self.patientID = data["id"] as? String ?? ""
+        self.dob = data["dob"] as? Date ?? Date()
+        self.gender = data["gender"] as? String ?? ""
+        self.allergies = data["allergies"] as? String ?? ""
+        self.bloodGroup = data["bloodGroup"] as? String ?? ""
         self.weight = data["weight"] as? String ?? ""
+        self.height = data["height"] as? String ?? ""
         self.bloodPressure = data["bloodPressure"] as? String ?? ""
         self.bloodGlucose = data["bloodGlucose"] as? String ?? ""
     }
 }
+
 
 struct PieChartSlice: Shape {
     var startAngle: Angle
