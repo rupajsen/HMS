@@ -40,6 +40,7 @@
 		3F5723C32BE3606A00FCE093 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */; };
 		3FB3F0B82BDA47EC004C0790 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B72BDA47EC004C0790 /* AccountView.swift */; };
 		3FB3F0BA2BDABD0A004C0790 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */; };
+		3FFDD8122BECC32200DB73ED /* HospitalDepartment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFDD8112BECC32100DB73ED /* HospitalDepartment.swift */; };
 		840346912BDA1D32000D6055 /* DoctorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346902BDA1D32000D6055 /* DoctorDetailView.swift */; };
 		840346932BDA1D7E000D6055 /* ViewDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346922BDA1D7E000D6055 /* ViewDoc.swift */; };
 		840346952BDA1D9E000D6055 /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840346942BDA1D9E000D6055 /* AppointmentView.swift */; };
@@ -77,6 +78,7 @@
 		3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FB3F0B72BDA47EC004C0790 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
+		3FFDD8112BECC32100DB73ED /* HospitalDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDepartment.swift; sourceTree = "<group>"; };
 		840346902BDA1D32000D6055 /* DoctorDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetailView.swift; sourceTree = "<group>"; };
 		840346922BDA1D7E000D6055 /* ViewDoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDoc.swift; sourceTree = "<group>"; };
 		840346942BDA1D9E000D6055 /* AppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				3F4B3F452BE0134E0034768D /* TestView.swift */,
 				3F19AA212BDBC901009B4D6C /* ScheduledAppointmentView.swift */,
 				84467EBF2BE4BC320090A238 /* ReportView.swift */,
+				3FFDD8112BECC32100DB73ED /* HospitalDepartment.swift */,
 			);
 			path = Patient;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				3F399DB12BD9756D008AD694 /* DoctorView.swift in Sources */,
 				3F215E4C2BE4E0BC00D24423 /* DocView.swift in Sources */,
 				3F4B3F4B2BE024540034768D /* StaffList.swift in Sources */,
+				3FFDD8122BECC32200DB73ED /* HospitalDepartment.swift in Sources */,
 				3F399D862BD971A7008AD694 /* ContentView.swift in Sources */,
 				840346952BDA1D9E000D6055 /* AppointmentView.swift in Sources */,
 				3F4B3F4A2BE024540034768D /* AddStaff.swift in Sources */,
