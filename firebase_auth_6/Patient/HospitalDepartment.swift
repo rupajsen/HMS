@@ -105,6 +105,7 @@ struct DepartmentDetailSheet: View {
             }
             .padding()
         }
+        .background(Color.blue.opacity(0.10))
     }
 }
 
