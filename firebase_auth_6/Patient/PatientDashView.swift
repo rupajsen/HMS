@@ -166,42 +166,13 @@ struct PatientDashView: View {
                             
                             
                             HStack{
-                                Text("Doctor Speciality")
+                                Text("Categories")
                                     .font(.title2)
                                     .padding(.vertical)
                                     .frame(maxWidth: .infinity,alignment: .leading)
                             }
                             
-                            VStack(alignment: .leading) {
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack {
-                                        ForEach(popularDoctors) { doctor in
-                                            VStack {
-                                                if let photoName = doctor.photo {
-                                                    Image(photoName)
-                                                        .resizable()
-                                                        .frame(width: 80, height: 80)
-                                                        .clipShape(Circle())
-                                                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                                                        .shadow(radius: 5)
-                                                        .padding(.bottom, 8)
-                                                }
-                                                Text(doctor.name)
-                                                    .font(.headline)
-                                                Text(doctor.specialization)
-                                                    .font(.subheadline)
-                                            }
-                                            .padding()
-                                            .background(Color.blue.opacity(0.2))
-                                            .cornerRadius(10)
-                                            .padding(.horizontal, 8)
-                                            
-                                        }
-                                        
-                                        
-                                    }
-                                }
-                            }
+                                HospitalDepartment()
                             
                             
                         }
