@@ -170,26 +170,6 @@ struct StaffList: View {
         }
     }
 
-//    func fetchAppointmentsFromFirestore() {
-//        let db = Firestore.firestore()
-//        db.collection("appointments").getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                print("Error fetching appointments: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            guard let documents = querySnapshot?.documents else {
-//                print("No documents")
-//                return
-//            }
-//
-//            self.appointments = documents.compactMap { queryDocumentSnapshot in
-//                let data = queryDocumentSnapshot.data()
-//                return Appointment1(data: data)
-//            }
-//
-//        }
-//    }
     
     func fetchAppointmentsFromFirestore() {
         let db = Firestore.firestore()
@@ -275,12 +255,12 @@ struct OverviewTabView: View {
                         TotalBookingsCard(title: "Doctors Available", value: "\(totalDoctorsCount)", buttonAction: {})
                         
                         SummaryStatisticsView()
-                            .offset(y:-35)
+                            .offset(y:-45)
                         
                     }
-                    .offset(y: -80)
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                    .offset(x:-26, y: -90)
+                    .frame(maxWidth: .infinity,alignment: .center)
+                   
 
                     // Summary Statistics
 
@@ -418,7 +398,8 @@ struct SummaryStatisticsView: View {
             
             PieChartView(total: appointmentsCount, completed: completedAppointmentsCount, pending: pendingAppointmentsCount)
                 .frame(width: 200, height: 200)
-                .offset(y: -40)
+                .padding(.bottom, 5)
+              //  .offset(y: -40)
 
 
 
@@ -427,9 +408,9 @@ struct SummaryStatisticsView: View {
                 Text("Summary")
                     .font(.headline)
                 Divider()
-                SummaryRow(status: "Total Appointments", count: "\(appointmentsCount)", color: .yellow)
-                SummaryRow(status: "Completed Appointments", count: "\(completedAppointmentsCount)", color: .green)
-                SummaryRow(status: "Pending Appointments", count: "\(pendingAppointmentsCount)", color: .red)
+                SummaryRow(status: "Total Appointments", count: "\(appointmentsCount)", color: Color.red.opacity(0.3))
+                SummaryRow(status: "Completed Appointments", count: "\(completedAppointmentsCount)", color: Color.green.opacity(0.5))
+                SummaryRow(status: "Pending Appointments", count: "\(pendingAppointmentsCount)", color: Color.blue.opacity(0.3))
                 // Add other SummaryRows for different status types here
             }
             .frame(width: 260)
@@ -535,7 +516,7 @@ struct PatientListView: View {
         }
         .background(Color(.systemGray6))
         .cornerRadius(12)
-        .offset(y:-180)
+        .offset(y:-200)
         .padding()
         .onAppear {
             fetchAppointmentsDataFromFirestore(for: selectedGraphOption)
@@ -1145,11 +1126,11 @@ struct PieChartView: View {
         GeometryReader { geometry in
             ZStack {
                 ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(0),
-                                                          endAngle: .degrees(self.angle(for: self.completed, total: self.total)), color:Color.gray.opacity(0.1)))
+                                                          endAngle: .degrees(self.angle(for: self.completed, total: self.total)), color:Color.green.opacity(0.3)))
                 
                 ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(self.angle(for: self.completed, total: self.total)),
                               endAngle: .degrees(self.angle(for: self.completed + self.pending, total: self.total)),
-                             color: Color.blue.opacity(0.15)))
+                             color: Color.blue.opacity(0.3)))
                 
                 ColoredPieChartSlice(shape: PieChartSlice(startAngle: .degrees(self.angle(for: self.completed + self.pending, total: self.total)),
                               endAngle: .degrees(360),
