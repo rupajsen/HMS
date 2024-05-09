@@ -49,29 +49,23 @@ struct AppointmentCard: View {
                         .padding(.leading, 0) // Add padding for spacing from the image
                         .padding(.bottom,80)
                         Button(action: {
-                            onCancel?() // Call the cancel closure when tapped
-                        }) {
-                            Text("Cancel")
-                                .foregroundColor(.white)
-                                .font(.caption)
-                                 // Adjusted horizontal padding
-                                 // Adjusted vertical padding
-                                .background(Color(red: 0.05, green: 0.51, blue: 0.99)) // Matched appointment card theme color
-                                .cornerRadius(10)
-                                .padding(5)
-                                .overlay(
-                                            RoundedRectangle(cornerRadius: 5)
-                                                .stroke(Color.white, lineWidth: 1) // White border with small thickness
-                                                .padding(2) // Adjusted padding for the border
-                                        )
-                                .padding(.bottom, 100)
-                                .padding(.leading, 50)
-                                
-                                
-                                
-                        }
+                                                    onCancel?() // Call the cancel closure when tapped
+                                                }) {
+                                                    Image(systemName: "trash")
+                                                        .foregroundColor(.white)
+                                                        .font(Font.caption.weight(.bold)) // Adjusted font weight for better visibility
+                                                        .padding(10) // Adjusted padding to make the button larger
+                                                        .background(Color(red: 0.05, green: 0.51, blue: 0.99)) // Matched appointment card theme color
+                                                        .cornerRadius(10)
+                                                        .overlay(
+                                                            RoundedRectangle(cornerRadius: 10)
+                                                                .stroke(Color.white, lineWidth: 1) // White border with small thickness
+                                                        )
+                                                        .padding(.bottom, 100)
+                                                        .padding(.leading, 50)
+                                                }
 
-                    }
+                                            }
                     .padding(.horizontal, 0)
                     .padding(.top, 20)
                 )

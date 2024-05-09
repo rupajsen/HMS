@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3F19AA202BDBC0C5009B4D6C /* DepartmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F19AA1F2BDBC0C5009B4D6C /* DepartmentView.swift */; };
 		3F19AA222BDBC901009B4D6C /* ScheduledAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F19AA212BDBC901009B4D6C /* ScheduledAppointmentView.swift */; };
-		3F1BABD72BEB550B00EB45CC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F1BABD62BEB550B00EB45CC /* GoogleService-Info.plist */; };
 		3F215E4A2BE4DFD100D24423 /* PatientDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E492BE4DFD100D24423 /* PatientDashView.swift */; };
 		3F215E4C2BE4E0BC00D24423 /* DocView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E4B2BE4E0BC00D24423 /* DocView.swift */; };
 		3F215E502BE4E25200D24423 /* AdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E4F2BE4E25200D24423 /* AdView.swift */; };
@@ -47,12 +46,12 @@
 		84467EC02BE4BC320090A238 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84467EBF2BE4BC320090A238 /* ReportView.swift */; };
 		8453FF622BE24AE9008CDEE7 /* DocNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF612BE24AE9008CDEE7 /* DocNav.swift */; };
 		8453FF662BE25B2D008CDEE7 /* PatientHistoryUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */; };
+		84728F0D2BECD66C00D1918C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84728F0C2BECD66C00D1918C /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3F19AA1F2BDBC0C5009B4D6C /* DepartmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentView.swift; sourceTree = "<group>"; };
 		3F19AA212BDBC901009B4D6C /* ScheduledAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledAppointmentView.swift; sourceTree = "<group>"; };
-		3F1BABD62BEB550B00EB45CC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F215E492BE4DFD100D24423 /* PatientDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientDashView.swift; sourceTree = "<group>"; };
 		3F215E4B2BE4E0BC00D24423 /* DocView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocView.swift; sourceTree = "<group>"; };
 		3F215E4F2BE4E25200D24423 /* AdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdView.swift; sourceTree = "<group>"; };
@@ -85,6 +84,7 @@
 		84467EBF2BE4BC320090A238 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		8453FF612BE24AE9008CDEE7 /* DocNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocNav.swift; sourceTree = "<group>"; };
 		8453FF652BE25B2D008CDEE7 /* PatientHistoryUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHistoryUpdate.swift; sourceTree = "<group>"; };
+		84728F0C2BECD66C00D1918C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +136,7 @@
 			children = (
 				3F399D932BD97392008AD694 /* Firebase */,
 				3F399D872BD971A9008AD694 /* Assets.xcassets */,
-				3F1BABD62BEB550B00EB45CC /* GoogleService-Info.plist */,
+				84728F0C2BECD66C00D1918C /* GoogleService-Info.plist */,
 				3F399D892BD971A9008AD694 /* Preview Content */,
 			);
 			path = firebase_auth;
@@ -288,8 +288,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */,
-				3F1BABD72BEB550B00EB45CC /* GoogleService-Info.plist in Resources */,
 				3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */,
+				84728F0D2BECD66C00D1918C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
