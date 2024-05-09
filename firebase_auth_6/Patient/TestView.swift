@@ -12,15 +12,16 @@ struct TestView: View {
     @State var appointmentsBooked : [Appointment] = []
     var body: some View {
         
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             
             ScrollView(.horizontal,showsIndicators: false) {
-                HStack {
+                HStack (alignment: .center){
                     ForEach(appointmentsBooked) { appointment in
                         AppointmentCard(appointment: appointment)
                     }
                 }
-            }.frame(width:350)
+                
+            }.frame(width:380)
         }
         .onAppear{
             getUserUID()
