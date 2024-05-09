@@ -17,9 +17,10 @@ struct DocDashView: View {
                     HStack(spacing: 20) {
                         DashboardCard(title: "Appointments", count: "\(filteredAppointments().count)", color: .blue, isFirstCard: true, isSecondCard: false, isThirdCard: false)
                         DashboardCard(title: "Completed appointments", count: "\(patientHistoryCount)", color: .green, isFirstCard: false, isSecondCard: true, isThirdCard: false)
-                        DashboardCard(title: "Visitors", count: "2,479", color: .purple, isFirstCard: false, isSecondCard: false, isThirdCard: true)
+                        DashboardCard(title: "Visitors", count: "247", color: .purple, isFirstCard: false, isSecondCard: false, isThirdCard: true)
                     }
-                    .padding(.leading, 50)
+                    .frame(maxWidth: .infinity)
+                    .padding()
                     
                     Text("Appointments")
                         .font(.headline)
@@ -308,7 +309,7 @@ struct DashboardCard: View {
         .frame(width: 346, height: 158)
         .background(Color.white)
         .cornerRadius(10)
-        .shadow(color: Color(red: 0.85, green: 0.87, blue: 0.91), radius: 9, x: -8, y: 12)
+        .shadow(color: Color(red: 0.85, green: 0.87, blue: 0.91), radius: 5)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .inset(by: 0.5)
@@ -325,4 +326,7 @@ struct AppointmentForDoctor {
     let userId: String
 }
 
+#Preview{
+    DocDashView()
+}
 
