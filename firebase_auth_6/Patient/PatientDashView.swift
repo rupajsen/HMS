@@ -86,18 +86,19 @@ struct PatientDashView: View {
                             Text("Your upcoming Appointments")
                                 .font(.title2)
                                 .padding(.leading)
+                                .padding(.top,15)
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
-                                
+                                .padding(.top,-10)
                                 .frame(width: 340, height: 170)
                             
                             if !followUpDateString.isEmpty{
                                 Text("Follow Up Appointment")
                                     .font(.title2)
                                     .padding(.bottom,15)
-                                    .padding(.top,15)
-                                    
+                                    .padding(.top,10)
+                                    .padding(.leading)
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
                                 VStack(alignment: .leading, spacing:0) {
@@ -157,7 +158,6 @@ struct PatientDashView: View {
                                     .font(.title2)
                                     .padding(.top,20)
                                     .padding(.leading)
-                                    
                                     .frame(maxWidth: .infinity,alignment: .leading)
                                 
                                 ScrollView(.horizontal,showsIndicators: false) {
@@ -169,12 +169,13 @@ struct PatientDashView: View {
                                                     .background(Color.white)
                                                     .cornerRadius(10)
                                                     .padding(.horizontal)
-                                                 
                                                     .frame(width:360 ,height: 150)
                                             }
                                         }
                                     }
                                 }
+                                .padding(.top,-20)
+                                .padding(.leading)
                             }
                             
                             
@@ -183,15 +184,16 @@ struct PatientDashView: View {
                                 HStack{
                                     Text("Categories")
                                         .font(.title2)
-                                        .padding(.vertical)
                                         .padding(.leading)
                                         .frame(maxWidth: .infinity,alignment: .leading)
                                 }
                                 
                                 HospitalDepartment()
                                     .frame(maxWidth: .infinity,alignment: .center)
+                                    .padding(.top,-20)
                                    // .offset(x:-20,y: -20)
                             }
+                            .padding(.top,-5)
                             
                             
                         }
