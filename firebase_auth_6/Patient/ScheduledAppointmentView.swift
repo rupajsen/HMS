@@ -447,6 +447,8 @@ struct AppointmentHistoryRow: View {
     let appointment: AppointmentHistory
     let searchText: String
 
+    @State private var isShowingDetail = false // Track sheet presentation
+
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy"
@@ -488,14 +490,12 @@ struct AppointmentHistoryRow: View {
                                     
                                         Text("Diagnosis: \(appointment.diagnosis)")
                                             .font(.subheadline)
-                                                                                        .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
-                                    
+                                            .foregroundColor(Color(red: 0.03, green: 0.31, blue: 0.59).opacity(0.8))
                                 }
                                 .padding(.trailing, 30)
                             }
                             .padding(.top,10)
                             .padding(.leading,30)
-                            
                             
                             Rectangle()
                                 .foregroundColor(Color(red: 0.82, green: 0.93, blue: 1.2))
@@ -509,34 +509,28 @@ struct AppointmentHistoryRow: View {
                                             .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                                             .font(.subheadline)
                                             .padding(.top,10)
-
                                         
                                         Text("Date: \(dateFormatter.string(from: convertToDate(appointment.date)))")
                                             .foregroundColor(Color(red: 0.05, green: 0.51, blue: 0.99))
                                             .font(.subheadline)
                                             .padding(.trailing,10)
                                             .padding(.top,10)
-                                        
-                                        
-                                        
-                                        
                                     }
-                                                                    )
-                                
+                                )
                         }
-                            
-                        
                     )
-                    
+                    .onTapGesture {
+                        isShowingDetail.toggle() // Toggle sheet presentation on tap
+                    }
             }
-            
+            .sheet(isPresented: $isShowingDetail) {
+                PatientHistoryDetailView(appointmentHistory: appointment)
+            }
             .padding(.horizontal, 20)
-            
         } else {
             EmptyView()
         }
     }
-    
 
     private func convertToDate(_ dateString: String) -> Date {
         let formatter = DateFormatter()
@@ -544,6 +538,7 @@ struct AppointmentHistoryRow: View {
         return formatter.date(from: dateString) ?? Date()
     }
 }
+
 
 
 
