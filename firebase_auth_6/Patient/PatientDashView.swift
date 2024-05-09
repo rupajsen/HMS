@@ -90,6 +90,7 @@ struct PatientDashView: View {
                             Text("Consult our DocAi")
                                                             .font(.title2)
                                                             .padding(.leading)
+                                                            .padding(.top)
                                                             .frame(maxWidth: .infinity,alignment: .leading)
                                                        
                                                             
@@ -121,6 +122,7 @@ struct PatientDashView: View {
                                                             }
                                                         }
                                                         .frame(maxWidth: .infinity)
+                                                        .padding(.top,-10)
                                                         .padding(.horizontal, 20) // Add horizontal padding
                                                         .sheet(isPresented: $isSuggestionsSheetVisible) {
                                                             RecipeDisplayPage(chatbotResponse: chatbotResponse)
@@ -129,7 +131,7 @@ struct PatientDashView: View {
                             Text("Your upcoming Appointments")
                                 .font(.title2)
                                 .padding(.leading)
-                                .padding(.top,15)
+                                .padding(.top)
                                 .frame(maxWidth: .infinity,alignment: .leading)
                             
                             TestView()
