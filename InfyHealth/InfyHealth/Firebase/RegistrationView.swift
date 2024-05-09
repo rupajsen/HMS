@@ -65,17 +65,17 @@ struct RegistrationView: View {
                         .font(.system(size: 14))
                         .foregroundStyle(.blue)
                     
-                    //                HStack(spacing:130){
-                    //                    Text("Select Role")
-                    //                    // Picker for roles
-                    //                    Picker("Select Role", selection: $selectedRole) {
-                    //                        ForEach(roles, id: \.self) { role in
-                    //                            Text(role)
-                    //                        }
-                    //                    }
-                    //                    .pickerStyle(.menu)
-                    //                    .padding(.horizontal)
-                    //                }
+//                                    HStack(spacing:130){
+//                                        Text("Select Role")
+//                                        // Picker for roles
+//                                        Picker("Select Role", selection: $selectedRole) {
+//                                            ForEach(roles, id: \.self) { role in
+//                                                Text(role)
+//                                            }
+//                                        }
+//                                        .pickerStyle(.menu)
+//                                        .padding(.horizontal)
+//                                    }
                     
                 }
                 .padding(.horizontal)

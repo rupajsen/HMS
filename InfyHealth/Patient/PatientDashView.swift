@@ -174,17 +174,17 @@ struct PatientDashView: View {
                                         .foregroundColor(Color(red: 0.82, green: 0.93, blue: 1.2))
                                         .padding(.top,4)
                                         .offset(x:-0)
-                                    Text("Doctor: \(doctorName)")
+                                    Text("\(doctorName)")
                                         .foregroundColor(Color(red: 0.03, green: 0.3, blue: 0.59))
                                         .padding(.top,5)
                                         .font(.subheadline)
                                         .padding(.trailing,0)
-                                        .offset(x:-2)
+                                        .offset(x:-0)
                                     // Adjust spacing
                                     
                                     
                                 }
-                                .offset(x:-100)
+                                .offset(x:-115)
                                 .frame(width: 320, height: 30)
                             }
                             .padding(10)

@@ -12,8 +12,7 @@
 		3F215E4A2BE4DFD100D24423 /* PatientDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E492BE4DFD100D24423 /* PatientDashView.swift */; };
 		3F215E4C2BE4E0BC00D24423 /* DocView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E4B2BE4E0BC00D24423 /* DocView.swift */; };
 		3F215E502BE4E25200D24423 /* AdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F215E4F2BE4E25200D24423 /* AdView.swift */; };
-		3F26C7652BED46AE00A56EAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F26C7642BED46AE00A56EAD /* GoogleService-Info.plist */; };
-		3F399D842BD971A7008AD694 /* firebase_authApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399D832BD971A7008AD694 /* firebase_authApp.swift */; };
+		3F399D842BD971A7008AD694 /* InfyHealthApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399D832BD971A7008AD694 /* InfyHealthApp.swift */; };
 		3F399D862BD971A7008AD694 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F399D852BD971A7008AD694 /* ContentView.swift */; };
 		3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F399D872BD971A9008AD694 /* Assets.xcassets */; };
 		3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F399D8A2BD971A9008AD694 /* Preview Assets.xcassets */; };
@@ -37,6 +36,7 @@
 		3F4B3F4B2BE024540034768D /* StaffList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F482BE024540034768D /* StaffList.swift */; };
 		3F4B3F512BE024620034768D /* DocDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F4C2BE024620034768D /* DocDashView.swift */; };
 		3F4B3F532BE024620034768D /* PatientList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4B3F4E2BE024620034768D /* PatientList.swift */; };
+		3F55065A2BED61AE009FAF9A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F5506592BED61AE009FAF9A /* GoogleService-Info.plist */; };
 		3F5723C32BE3606A00FCE093 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */; };
 		3FB3F0B82BDA47EC004C0790 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B72BDA47EC004C0790 /* AccountView.swift */; };
 		3FB3F0BA2BDABD0A004C0790 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */; };
@@ -55,9 +55,8 @@
 		3F215E492BE4DFD100D24423 /* PatientDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientDashView.swift; sourceTree = "<group>"; };
 		3F215E4B2BE4E0BC00D24423 /* DocView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocView.swift; sourceTree = "<group>"; };
 		3F215E4F2BE4E25200D24423 /* AdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdView.swift; sourceTree = "<group>"; };
-		3F26C7642BED46AE00A56EAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F399D802BD971A7008AD694 /* firebase_auth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firebase_auth.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F399D832BD971A7008AD694 /* firebase_authApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = firebase_authApp.swift; sourceTree = "<group>"; };
+		3F399D832BD971A7008AD694 /* InfyHealthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfyHealthApp.swift; sourceTree = "<group>"; };
 		3F399D852BD971A7008AD694 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F399D872BD971A9008AD694 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F399D8A2BD971A9008AD694 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		3F4B3F482BE024540034768D /* StaffList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffList.swift; sourceTree = "<group>"; };
 		3F4B3F4C2BE024620034768D /* DocDashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocDashView.swift; sourceTree = "<group>"; };
 		3F4B3F4E2BE024620034768D /* PatientList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientList.swift; sourceTree = "<group>"; };
+		3F5506592BED61AE009FAF9A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F5723C22BE3606A00FCE093 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FB3F0B72BDA47EC004C0790 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		3FB3F0B92BDABD0A004C0790 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
@@ -117,8 +117,8 @@
 				3F19AA1F2BDBC0C5009B4D6C /* DepartmentView.swift */,
 				3F399D852BD971A7008AD694 /* ContentView.swift */,
 				840346902BDA1D32000D6055 /* DoctorDetailView.swift */,
-				3F399D832BD971A7008AD694 /* firebase_authApp.swift */,
-				3F399D822BD971A7008AD694 /* firebase_auth */,
+				3F399D832BD971A7008AD694 /* InfyHealthApp.swift */,
+				3F399D822BD971A7008AD694 /* InfyHealth */,
 				3F399D812BD971A7008AD694 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,15 +131,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3F399D822BD971A7008AD694 /* firebase_auth */ = {
+		3F399D822BD971A7008AD694 /* InfyHealth */ = {
 			isa = PBXGroup;
 			children = (
 				3F399D932BD97392008AD694 /* Firebase */,
 				3F399D872BD971A9008AD694 /* Assets.xcassets */,
-				3F26C7642BED46AE00A56EAD /* GoogleService-Info.plist */,
+				3F5506592BED61AE009FAF9A /* GoogleService-Info.plist */,
 				3F399D892BD971A9008AD694 /* Preview Content */,
 			);
-			path = firebase_auth;
+			path = InfyHealth;
 			sourceTree = "<group>";
 		};
 		3F399D892BD971A9008AD694 /* Preview Content */ = {
@@ -260,7 +260,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3F399D7B2BD971A7008AD694 /* Build configuration list for PBXProject "firebase_auth" */;
+			buildConfigurationList = 3F399D7B2BD971A7008AD694 /* Build configuration list for PBXProject "InfyHealth" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -289,7 +289,7 @@
 			files = (
 				3F399D8B2BD971A9008AD694 /* Preview Assets.xcassets in Resources */,
 				3F399D882BD971A9008AD694 /* Assets.xcassets in Resources */,
-				3F26C7652BED46AE00A56EAD /* GoogleService-Info.plist in Resources */,
+				3F55065A2BED61AE009FAF9A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,7 +328,7 @@
 				3F4B3F4A2BE024540034768D /* AddStaff.swift in Sources */,
 				3F4B3F462BE0134E0034768D /* TestView.swift in Sources */,
 				3FB3F0BA2BDABD0A004C0790 /* EditAccountView.swift in Sources */,
-				3F399D842BD971A7008AD694 /* firebase_authApp.swift in Sources */,
+				3F399D842BD971A7008AD694 /* InfyHealthApp.swift in Sources */,
 				3F19AA222BDBC901009B4D6C /* ScheduledAppointmentView.swift in Sources */,
 				3F215E4A2BE4DFD100D24423 /* PatientDashView.swift in Sources */,
 			);
@@ -463,7 +463,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"firebase_auth/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"InfyHealth/Preview Content\"";
 				DEVELOPMENT_TEAM = M86WV5Z73X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -479,7 +479,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupajsen.firebase-auth";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rupajsen.infyhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -494,7 +494,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"firebase_auth/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"InfyHealth/Preview Content\"";
 				DEVELOPMENT_TEAM = M86WV5Z73X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -510,7 +510,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupajsen.firebase-auth";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rupajsen.infyhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -521,7 +521,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3F399D7B2BD971A7008AD694 /* Build configuration list for PBXProject "firebase_auth" */ = {
+		3F399D7B2BD971A7008AD694 /* Build configuration list for PBXProject "InfyHealth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3F399D8C2BD971A9008AD694 /* Debug */,
